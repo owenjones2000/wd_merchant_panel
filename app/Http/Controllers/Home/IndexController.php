@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Home;
 use App\Models\Icon;
 use App\Models\Permission;
 use App\Models\Role;
-use App\Models\User;
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -47,15 +47,10 @@ class IndexController extends Controller
     public function data(Request $request)
     {
         $model = $request->get('model');
-        $hidden_ids = [1, 2];
+        $hidden_ids = [1];
         switch (strtolower($model)) {
             case 'user':
                 $query = new User();
-                $query = $query->whereIn(
-                    'id',
-                    \App\User::query()
-                        ->select('id')->get()
-                );
                 if(!in_array($request->user()->id, $hidden_ids)){
                     $query = $query->whereNotIn('id', $hidden_ids);
                 }
@@ -63,7 +58,7 @@ class IndexController extends Controller
             case 'role':
                 $query = new Role();
                 if(!in_array($request->user()->id, $hidden_ids)){
-                    $query = $query->whereNotIn('id', [1, 6]);
+                    $query = $query->whereNotIn('id', [1]);
                 }
                 break;
             case 'permission':

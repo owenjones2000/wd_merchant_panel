@@ -4,14 +4,13 @@ namespace App\Http\Controllers\Home;
 
 use App\Http\Requests\UserCreateRequest;
 use App\Http\Requests\UserUpdateRequest;
-use App\Models\Project;
-use App\Models\User;
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Role;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -45,14 +44,12 @@ class UserController extends Controller
     {
         $data =  $request->all();
         $data['uuid'] = \Faker\Provider\Uuid::uuid();
-        $data['password'] = bcrypt($data['password']);
+        $data['password_hash'] = Hash::make($data['password']);
         $result = DB::transaction(function () use($data) {
             $user = User::firstOrCreate(
                     ['username' => $data['username']],
                     $data
                 );
-            $data['id'] = $user['id'];
-            \App\Models\Material\User::create($data);
             return true;
         }, 3);
         if ($result){
@@ -99,13 +96,11 @@ class UserController extends Controller
                 $user = User::findOrFail($id);
                 $data = $request->except('password');
                 if ($request->get('password')){
-                    $data['password'] = bcrypt($request->get('password'));
+                    $data['password_hash'] = Hash::make($request->get('password'));
                 }
                 $user->update($data);
-                $user_data = Arr::only($data, ['username', 'phone', 'realname', 'email']);
-                \App\Models\Material\User::query()->findOrFail($user['id'])->update($user_data);
             }, 3);
-            return redirect()->to(route('home.user.edit',[$id]))->with(['status'=>'更新用户成功']);
+            //return redirect()->to(route('home.user.edit',[$id]))->with(['status'=>'更新用户成功']);
         }catch(\Exception $ex) {
             return redirect()->to(route('home.user'))->withErrors('系统错误');
         }
