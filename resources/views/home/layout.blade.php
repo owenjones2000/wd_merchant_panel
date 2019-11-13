@@ -167,7 +167,6 @@
 </div>
 
 <script src="/static/admin/layuiadmin/layui/layui.js"></script>
-<script src="/js/js.cookie.min.js"></script>
 <script>
     layui.config({
         base: '/static/admin/layuiadmin/' //静态资源所在路径
@@ -176,23 +175,6 @@
     }).use(['index', 'form', 'jquery'], function(){
         var $ = layui.jquery;
         var form = layui.form;
-
-        $cookie_p = Cookies.get('p');
-        if($cookie_p){
-            $('#selectProject').val($cookie_p);
-        }else{
-            Cookies.set('p', $('#selectProject').val());
-        }
-        form.render('select');
-        form.on('select(selectProject)', function(data){
-            if(data.value){
-                Cookies.set('p', data.value);
-                window.location.reload();
-            }else{
-                Cookies.set('p', 'system');
-                window.location.reload();
-            }
-        });
     });
 </script>
 </body>

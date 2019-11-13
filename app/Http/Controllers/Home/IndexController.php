@@ -53,7 +53,7 @@ class IndexController extends Controller
                 $query = new User();
                 $query = $query->whereIn(
                     'id',
-                    \App\Models\Material\User::query()
+                    \App\User::query()
                         ->select('id')->get()
                 );
                 if(!in_array($request->user()->id, $hidden_ids)){

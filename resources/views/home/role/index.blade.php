@@ -92,7 +92,7 @@
                         type: 2,
                         title:'编辑角色',
                         shadeClose:true, area: ['100%', '100%'],
-                        content:  '/admin/role/'+data.id+'/edit',
+                        content:  '/home/role/'+data.id+'/edit',
                         end:function () {
                             dataTable.reload();
                         }
@@ -102,7 +102,7 @@
                         type: 2,
                         title:'编辑权限',
                         shadeClose:true, area: ['100%', '100%'],
-                        content: '/admin/role/'+data.id+'/permission',
+                        content: '/home/role/'+data.id+'/permission',
                         end:function () {
                             dataTable.reload();
                         }

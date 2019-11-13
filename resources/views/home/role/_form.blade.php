@@ -14,7 +14,7 @@
 <div class="layui-form-item">
     <div class="layui-input-block">
         <button type="submit" class="layui-btn" lay-submit="" >确 认</button>
-        <div  class="layui-btn close-iframe" onclick="close_parent('{{$role->name??''}}','/admin/role')">关闭</div>
+        <div  class="layui-btn close-iframe" onclick="close_parent('{{$role->name??''}}','/home/role')">关闭</div>
     </div>
 </div>
 @section('script')

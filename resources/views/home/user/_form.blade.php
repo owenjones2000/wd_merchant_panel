@@ -43,7 +43,7 @@
 <div class="layui-form-item">
     <div class="layui-input-block">
         <button type="submit" class="layui-btn" lay-submit="" lay-filter="formDemo">确 认</button>
-        <div  class="layui-btn close-iframe" onclick="close_parent('{{$user->username ??''}}','/admin/user')">关闭</div>
+        <div  class="layui-btn close-iframe" onclick="close_parent('{{$user->username ??''}}','/home/user')">关闭</div>
     </div>
 </div>
 @section('script')

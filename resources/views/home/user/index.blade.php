@@ -101,7 +101,7 @@
                         type: 2,
                         title:'编辑用户',
                         shadeClose:true, area: ['100%', '100%'],
-                        content: '/admin/user/'+data.id+'/edit',
+                        content: '/home/user/'+data.id+'/edit',
                         end:function () {
                             dataTable.reload();
                         }
@@ -111,7 +111,7 @@
                         type: 2,
                         title:'编辑角色',
                         shadeClose:true, area: ['100%', '100%'],
-                        content: '/admin/user/'+data.id+'/role',
+                        content: '/home/user/'+data.id+'/role',
                         end:function () {
                             dataTable.reload();
                         }
@@ -121,7 +121,7 @@
                         type: 2,
                         title:'编辑权限',
                         shadeClose:true, area: ['100%', '100%'],
-                        content: '/admin/user/'+data.id+'/permission',
+                        content: '/home/user/'+data.id+'/permission',
                         end:function () {
                             dataTable.reload();
                         }

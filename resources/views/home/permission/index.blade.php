@@ -57,7 +57,7 @@
                 ,page: true
                 ,done: function(res, curr, count){
                     //接口回调，处理一些和表格相关的辅助事项
-                   $("#add_permission").attr('href','/admin/permission/create?parent_id='+res.parent_id);
+                   $("#add_permission").attr('href','/home/permission/create?parent_id='+res.parent_id);
                     //接口回调，处理一些和表格相关的辅助事项
                     if(res.data.length==0 && count>0){
                         var page_now;
@@ -105,7 +105,7 @@
                         type: 2,
                         title:'编辑权限',
                         shadeClose:true, area: ['100%', '100%'],
-                        content:  '/admin/permission/'+data.id+'/edit',
+                        content:  '/home/permission/'+data.id+'/edit',
                         end:function () {
                             dataTable.reload();
                         }
