@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Advertise;
 
 use App\Models\Advertise\App;
+use App\Models\Advertise\Bid;
 use App\Models\Advertise\Campaign;
+use App\Models\Advertise\DailyBudget;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -87,7 +89,11 @@ class CampaignController extends Controller
      */
     public function edit($id)
     {
+        /** @var Campaign $campaign */
         $campaign = Campaign::query()->where(['id' => $id, 'main_user_id' => Auth::user()->getMainId()])->firstOrFail();
+        //$campaign->dailyBudgets()->save(new DailyBudget());
+        var_dump($campaign['bids']->toArray());
+        die;
         $apps = App::query()->where('main_user_id', Auth::user()->getMainId())->get();
         return view('advertise.campaign.edit',compact('campaign', 'apps'));
     }

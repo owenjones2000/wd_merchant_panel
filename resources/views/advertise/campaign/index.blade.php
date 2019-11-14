@@ -34,7 +34,7 @@
                 </div>
             </script>
             <script type="text/html" id="appTpl">
-                @{{ d.app.name }}
+                @{{ d.app.name }} (@{{ d.app.os }})
             </script>
             <script type="text/html" id="status">
                 @{{# if(d.status){ }}

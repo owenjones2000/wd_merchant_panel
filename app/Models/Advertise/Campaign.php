@@ -3,6 +3,7 @@ namespace App\Models\Advertise;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use PHPUnit\Framework\Constraint\Count;
 
 class Campaign extends Model
 {
@@ -14,5 +15,18 @@ class Campaign extends Model
 
     public function app(){
         return $this->belongsTo(App::class, 'app_id', 'id');
+    }
+
+    public function countries(){
+        return $this->belongsToMany(Country::class, 'campaign_country',
+            'campaign_id','country_id');
+    }
+
+    public function bids(){
+        return $this->morphMany(Bid::class, 'bidding');
+    }
+
+    public function dailyBudgets(){
+        return $this->morphMany(DailyBudget::class, 'budgeting');
     }
 }
