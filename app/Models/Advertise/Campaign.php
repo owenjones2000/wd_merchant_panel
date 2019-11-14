@@ -13,6 +13,10 @@ class Campaign extends Model
 
     protected $fillable = ['name', 'status', 'app_id', 'main_user_id'];
 
+    /**
+     * 所属应用
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function app(){
         return $this->belongsTo(App::class, 'app_id', 'id');
     }

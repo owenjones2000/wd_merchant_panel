@@ -9,7 +9,7 @@
 <div class="layui-form-item">
     <label class="layui-form-label">平台</label>
     <div class="layui-input-block">
-        <select name="app_id" lay-filter="os">
+        <select name="app_id" lay-filter="app">
             @foreach($apps as $app_item)
                 <option @if(isset($campaign['app_id']) && $campaign['app_id'] == $app_item['id']) selected @endif value="{{$app_item['id']}}">{{$app_item['name']}}</option>
             @endforeach
