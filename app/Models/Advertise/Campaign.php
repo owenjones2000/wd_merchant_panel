@@ -17,16 +17,35 @@ class Campaign extends Model
         return $this->belongsTo(App::class, 'app_id', 'id');
     }
 
+    /**
+     * 投放国家
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function countries(){
         return $this->belongsToMany(Country::class, 'campaign_country',
             'campaign_id','country_id');
     }
 
-    public function bids(){
-        return $this->morphMany(Bid::class, 'bidding');
+    /**
+     * 三方跟踪链接
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function trackUrls(){
+        return $this->hasMany(TrackUrl::class, 'campaign_id', 'id');
     }
 
+    /**
+     * 日预算
+     */
     public function dailyBudgets(){
         return $this->morphMany(DailyBudget::class, 'budgeting');
+    }
+
+    /**
+     * 出价
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function bids(){
+        return $this->morphMany(Bid::class, 'bidding');
     }
 }
