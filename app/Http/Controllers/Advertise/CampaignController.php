@@ -91,9 +91,6 @@ class CampaignController extends Controller
     {
         /** @var Campaign $campaign */
         $campaign = Campaign::query()->where(['id' => $id, 'main_user_id' => Auth::user()->getMainId()])->firstOrFail();
-        //$campaign->dailyBudgets()->save(new DailyBudget());
-        var_dump($campaign['bids']->toArray());
-        die;
         $apps = App::query()->where('main_user_id', Auth::user()->getMainId())->get();
         return view('advertise.campaign.edit',compact('campaign', 'apps'));
     }
