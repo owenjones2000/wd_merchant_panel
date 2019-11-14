@@ -22,9 +22,9 @@ class AdController extends Controller
         return view('advertise.campaign.ad.index', compact('campaign'));
     }
 
-    public function data(Request $request)
+    public function data(Request $request, $campaign_id)
     {
-        $ad_query = Ad::query();
+        $ad_query = Ad::query()->where('campaign_id', $campaign_id);
         if(!empty($request->get('name'))){
             $ad_query->where('name', 'like', '%'.$request->get('name').'%');
         }
