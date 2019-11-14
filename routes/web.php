@@ -119,13 +119,10 @@ Route::group(['namespace'=>'Advertise','prefix'=>'advertise','middleware'=>['aut
     // 活动管理
     Route::group(['prefix'=>'campaign', 'middleware' => 'permission:advertise.campaign'], function () {
         Route::get('data', 'CampaignController@data')->name('advertise.campaign.data');
-        Route::get('', 'CampaignController@index')->name('advertise.campaign');
-        //添加
-        Route::get('create', 'CampaignController@create')->name('advertise.campaign.create')->middleware('permission:advertise.campaign.create');
-        Route::post('store', 'CampaignController@store')->name('advertise.campaign.store')->middleware('permission:advertise.campaign.create');
+        Route::get('list', 'CampaignController@index')->name('advertise.campaign');
         //编辑
-        Route::get('{id}/edit', 'CampaignController@edit')->name('advertise.campaign.edit')->middleware('permission:advertise.campaign.edit');
-        Route::put('{id}/update', 'CampaignController@update')->name('advertise.campaign.update')->middleware('permission:advertise.campaign.edit');
+        Route::get('{id?}', 'CampaignController@edit')->name('advertise.campaign.edit')->middleware('permission:advertise.campaign.edit');
+        Route::post('{id?}', 'CampaignController@save')->name('advertise.campaign.save')->middleware('permission:advertise.campaign.edit');
         //删除
         Route::delete('destroy', 'CampaignController@destroy')->name('advertise.campaign.destroy')->middleware('permission:advertise.campaign.destroy');
 

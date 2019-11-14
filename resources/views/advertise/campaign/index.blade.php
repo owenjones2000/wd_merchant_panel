@@ -102,7 +102,7 @@
                         layer.open({
                             type: 2,
                             shadeClose: true, area: ['80%', '80%'],
-                            content: '/advertise/campaign/'+data.id+'/edit',
+                            content: '/advertise/campaign/'+data.id,
                             end: function () {
                                 dataTable.reload();
                             }
@@ -162,7 +162,7 @@
                     layer.open({
                         type: 2,
                         shadeClose: true, area: ['80%', '80%'],
-                        content: "{{route('advertise.campaign.create') }}",
+                        content: "{{route('advertise.campaign.edit') }}",
                         end: function () {
                             dataTable.reload();
                         }

@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Advertise;
 use App\Models\Advertise\App;
 use App\Models\Advertise\Bid;
 use App\Models\Advertise\Campaign;
+use App\Models\Advertise\Country;
 use App\Models\Advertise\DailyBudget;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use PHPUnit\Framework\Constraint\Count;
 
 class CampaignController extends Controller
 {
@@ -40,37 +42,6 @@ class CampaignController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        $apps = App::query()->where('main_user_id', Auth::user()->getMainId())->get();
-        return view('advertise.campaign.create', compact('apps'));
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $this->validate($request,[
-            'name'  => 'required|string|unique:campaign,name',
-        ]);
-        $create_arr = $request->all();
-        $create_arr['status'] = isset($create_arr['status']) ? 1 : 0;
-        $create_arr['main_user_id'] = Auth::user()->getMainId();
-        if (Campaign::create($create_arr)){
-            return redirect(route('advertise.campaign.create'))->with(['status'=>'添加完成']);
-        }
-        return redirect(route('advertise.campaign.create'))->with(['status'=>'系统错误']);
-    }
-
-    /**
      * Display the specified resource.
      *
      * @param  int  $id
@@ -87,12 +58,22 @@ class CampaignController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id = null)
     {
-        /** @var Campaign $campaign */
-        $campaign = Campaign::query()->where(['id' => $id, 'main_user_id' => Auth::user()->getMainId()])->firstOrFail();
-        $apps = App::query()->where('main_user_id', Auth::user()->getMainId())->get();
-        return view('advertise.campaign.edit',compact('campaign', 'apps'));
+        if(empty($id)){
+            $campaign = new Campaign();
+        }else{
+            /** @var Campaign $campaign */
+            $campaign = Campaign::query()
+                ->where(['id' => $id, 'main_user_id' => Auth::user()->getMainId()])
+                ->firstOrFail();
+        }
+
+        $apps = App::query()
+            ->where('main_user_id', Auth::user()->getMainId())
+            ->get();
+        $countries = Country::query()->get();
+        return view('advertise.campaign.edit',compact('campaign', 'apps', 'countries'));
     }
 
     /**
@@ -102,15 +83,16 @@ class CampaignController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function save(Request $request, $id = null)
     {
         $this->validate($request,[
             'name'  => 'required|string|unique:campaign,name,'.$id,
         ]);
-        $campaign = Campaign::query()->where(['id' => $id, 'main_user_id' => Auth::user()->getMainId()])->firstOrFail();
-        $update_arr = $request->only(['name','app_id', 'status']);
-        $update_arr['status'] = isset($update_arr['status']) ? 1 : 0;
-        if ($campaign->update($update_arr)){
+
+        $params = $request->only(['name','app_id', 'status', 'countries']);
+        $params['id'] = $id;
+        $params['status'] = isset($params['status']) ? 1 : 0;
+        if (Campaign::Make(Auth::user(), $params)){
             return redirect(route('advertise.campaign.edit', [$id]))->with(['status'=>'更新成功']);
         }
         return redirect(route('advertise.campaign.edit', [$id]))->withErrors(['status'=>'系统错误']);

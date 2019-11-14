@@ -1,4 +1,8 @@
 {{csrf_field()}}
+@section('style')
+    <link rel="stylesheet" href="/static/admin/layuiadmin/style/formSelects-v4.css" media="all">
+@endsection
+
 <div class="layui-form-item">
     <label for="" class="layui-form-label">名称</label>
     <div class="layui-input-block">
@@ -25,6 +29,21 @@
 </div>
 
 <div class="layui-form-item">
+    <label class="layui-form-label">国家</label>
+    <div class="layui-input-block">
+        <select name="countries" xm-select="selectCountries" xm-select-search="">
+            @foreach($countries as $country)
+                <option
+                        @if($campaign->countries->contains($country)) selected @endif
+                value="{{ $country->id }}">
+                    {{ $country->name }}({{ $country->code }})
+                </option>
+            @endforeach
+        </select>
+    </div>
+</div>
+
+<div class="layui-form-item">
     <div class="layui-input-block">
         <button type="submit" class="layui-btn" lay-submit="">确 认</button>
         <button class="layui-btn close-iframe">关闭</button>
@@ -33,4 +52,5 @@
 
 @section('script')
     @include('layout.common_edit')
+    @include('advertise.campaign._js')
 @endsection
