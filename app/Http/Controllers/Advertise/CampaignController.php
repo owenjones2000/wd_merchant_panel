@@ -22,11 +22,11 @@ class CampaignController extends Controller
 
     public function data(Request $request)
     {
-        $campaign_query = Campaign::query();
+        $campaign_query = Campaign::query()->where('main_user_id', Auth::user()->getMainId());
         if(!empty($request->get('name'))){
             $campaign_query->where('name', 'like', '%'.$request->get('name').'%');
         }
-        $res = $campaign_query->orderBy($request->get('field','status'),$request->get('order','desc'))->orderBy('name','asc')->paginate($request->get('limit',30))->toArray();
+        $res = $campaign_query->with('app')->orderBy($request->get('field','status'),$request->get('order','desc'))->orderBy('name','asc')->paginate($request->get('limit',30))->toArray();
 
         $data = [
             'code' => 0,
@@ -87,7 +87,7 @@ class CampaignController extends Controller
      */
     public function edit($id)
     {
-        $campaign = Campaign::findOrFail($id);
+        $campaign = Campaign::query()->where(['id' => $id, 'main_user_id' => Auth::user()->getMainId()])->firstOrFail();
         $apps = App::query()->where('main_user_id', Auth::user()->getMainId())->get();
         return view('advertise.campaign.edit',compact('campaign', 'apps'));
     }
@@ -103,10 +103,9 @@ class CampaignController extends Controller
     {
         $this->validate($request,[
             'name'  => 'required|string|unique:campaign,name,'.$id,
-            'bundle_id'  => 'required|unique:campaign,bundle_id,'.$id,
         ]);
-        $campaign = Campaign::findOrFail($id);
-        $update_arr = $request->only(['name','bundle_id', 'os', 'status']);
+        $campaign = Campaign::query()->where(['id' => $id, 'main_user_id' => Auth::user()->getMainId()])->firstOrFail();
+        $update_arr = $request->only(['name','app_id', 'status']);
         $update_arr['status'] = isset($update_arr['status']) ? 1 : 0;
         if ($campaign->update($update_arr)){
             return redirect(route('advertise.campaign.edit', [$id]))->with(['status'=>'更新成功']);

@@ -33,6 +33,9 @@
                     @endcan
                 </div>
             </script>
+            <script type="text/html" id="appTpl">
+                @{{ d.app.name }}
+            </script>
             <script type="text/html" id="status">
                 @{{# if(d.status){ }}
                     <span class="layui-bg-green">启用</span>
@@ -72,6 +75,7 @@
                         {checkbox: true,fixed: true}
                         ,{field: 'id', title: 'ID', sort: true,width:80}
                         ,{field: 'name', title: '名称'}
+                        ,{field: 'app.name', title: '应用', templet: '#appTpl'}
                         ,{field: 'status', title: '状态', templet: '#status'}
                         ,{field: 'created_at', title: '创建于'}
                         ,{field: 'updated_at', title: '更新于'}
