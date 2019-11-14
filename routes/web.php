@@ -98,3 +98,21 @@ Route::group(['namespace'=>'Home','prefix'=>'home','middleware'=>['auth','operat
     });
 
 });
+
+//投放管理
+Route::group(['namespace'=>'Advertise','prefix'=>'advertise','middleware'=>['auth','operation.log','permission:system.manage']],function (){
+
+    // 应用管理
+    Route::group(['prefix'=>'app', 'middleware' => 'permission:advertise.app'], function () {
+        Route::get('data', 'AppController@data')->name('advertise.app.data');
+        Route::get('', 'AppController@index')->name('advertise.app');
+        //添加
+        Route::get('create', 'AppController@create')->name('advertise.app.create')->middleware('permission:advertise.app.create');
+        Route::post('store', 'AppController@store')->name('advertise.app.store')->middleware('permission:advertise.app.create');
+        //编辑
+        Route::get('{id}/edit', 'AppController@edit')->name('advertise.app.edit')->middleware('permission:advertise.app.edit');
+        Route::put('{id}/update', 'AppController@update')->name('advertise.app.update')->middleware('permission:advertise.app.edit');
+        //删除
+        Route::delete('destroy', 'AppController@destroy')->name('advertise.app.destroy')->middleware('permission:advertise.app.destroy');
+    });
+});

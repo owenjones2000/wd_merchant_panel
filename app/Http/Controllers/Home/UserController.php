@@ -148,14 +148,7 @@ class UserController extends Controller
     public function assignRole(Request $request,$id)
     {
         $user = User::findOrFail($id);
-        $role_ids = $request->get('roles',[]);
-        $roles = [];
-        $cookie_p = Cookie::get('p', '');
-        $project = Project::get($cookie_p);
-        $role_pivot = ['project' => $project['code']];
-        foreach ($role_ids as $role_id){
-            $roles[$role_id] = $role_pivot;
-        }
+        $roles = $request->get('roles',[]);
         if ($user->roles()->sync($roles)){
            return redirect()->to(route('home.user.role',[$id]))->with(['status'=>'更新用户角色成功']);
         }
