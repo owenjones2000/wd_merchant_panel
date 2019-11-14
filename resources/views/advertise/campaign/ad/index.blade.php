@@ -4,31 +4,28 @@
     <div class="layui-card">
         <div class="layui-card-header layuiadmin-card-header-auto">
             <div class="layui-btn-group ">
-                @can('advertise.campaign.destroy')
+                @can('advertise.campaign.ad.destroy')
                     <button class="layui-btn layui-btn-sm layui-btn-danger" id="listDelete">删 除</button>
                 @endcan
-                @can('advertise.campaign.create')
-                    <button class="layui-btn layui-btn-sm" id="campaign_add">添 加</button>
+                @can('advertise.campaign.ad.create')
+                    <button class="layui-btn layui-btn-sm" id="ad_add">添 加</button>
                 @endcan
             </div>
             <div class="layui-form" >
                 <div class="layui-input-inline">
                     <input type="text" name="name" id="name" placeholder="名称" class="layui-input">
                 </div>
-                <button class="layui-btn" id="campaignSearchBtn">搜 索</button>
+                <button class="layui-btn" id="adSearchBtn">搜 索</button>
             </div>
         </div>
         <div class="layui-card-body">
             <table id="dataTable" lay-filter="dataTable"></table>
             <script type="text/html" id="options">
                 <div class="layui-btn-group">
-                    @can('advertise.campaign.ad')
-                        <a class="layui-btn layui-btn-sm" lay-event="ad">广告</a>
-                    @endcan
-                    @can('advertise.campaign.edit')
+                    @can('advertise.campaign.ad.edit')
                         <a class="layui-btn layui-btn-sm" lay-event="edit">编辑</a>
                     @endcan
-                    @can('advertise.campaign.destroy')
+                    @can('advertise.campaign.ad.destroy')
                         <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除</a>
                     @endcan
                 </div>
@@ -45,7 +42,7 @@
 @endsection
 
 @section('script')
-    @can('advertise.campaign')
+    @can('advertise.campaign.ad')
         <script>
             layui.use(['layer','table','form'],function () {
                 var layer = layui.layer;
@@ -56,7 +53,7 @@
                     elem: '#dataTable'
                     ,autoSort: false
                     ,height: 500
-                    ,url: "{{ route('advertise.campaign.data') }}" //数据接口
+                    ,url: "{{ route('advertise.campaign.ad.data', [$campaign['id']]) }}" //数据接口
                     ,page: true //开启分页
                     ,done: function(res, curr, count){
                         //接口回调，处理一些和表格相关的辅助事项
@@ -85,7 +82,7 @@
                         ,layEvent = obj.event; //获得 lay-event 对应的值
                     if(layEvent === 'del'){
                         layer.confirm('确认删除吗？', function(index){
-                            $.post("{{ route('advertise.campaign.destroy') }}",{_method:'delete',ids:[data.id]},function (result) {
+                            $.post("{{ route('advertise.campaign.ad.destroy', [$campaign['id']]) }}",{_method:'delete',ids:[data.id]},function (result) {
                                 if (result.code==0){
                                     obj.del(); //删除对应行（tr）的DOM结构
                                 }
@@ -98,16 +95,7 @@
                         layer.open({
                             type: 2,
                             shadeClose: true, area: ['80%', '80%'],
-                            content: '/advertise/campaign/'+data.id+'/edit',
-                            end: function () {
-                                dataTable.reload();
-                            }
-                        });
-                    } else if(layEvent === 'ad'){
-                        layer.open({
-                            type: 2,
-                            shadeClose: true, area: ['80%', '80%'],
-                            content: '/advertise/campaign/'+data.id+'/ad',
+                            content: '/advertise/campaign/{{$campaign['id']}}/ad/'+data.id+'/edit',
                             end: function () {
                                 dataTable.reload();
                             }
@@ -141,7 +129,7 @@
                     }
                     if (ids.length>0){
                         layer.confirm('确认删除吗？', function(index){
-                            $.post("{{ route('advertise.campaign.destroy') }}",{_method:'delete',ids:ids},function (result) {
+                            $.post("{{ route('advertise.campaign.ad.destroy', [$campaign['id']]) }}",{_method:'delete',ids:ids},function (result) {
                                 if (result.code==0){
                                     dataTable.reload()
                                 }
@@ -154,11 +142,11 @@
                     }
                 });
 
-                $('#campaign_add').on('click',function () {
+                $('#ad_add').on('click',function () {
                     layer.open({
                         type: 2,
                         shadeClose: true, area: ['80%', '80%'],
-                        content: "{{route('advertise.campaign.create') }}",
+                        content: "{{route('advertise.campaign.ad.create', [$campaign['id']]) }}",
                         end: function () {
                             dataTable.reload();
                         }
@@ -166,7 +154,7 @@
                 });
 
                 //搜索
-                $("#campaignSearchBtn").click(function () {
+                $("#adSearchBtn").click(function () {
                     var name = $("#name").val();
                     var type = $("#type").val();
                     dataTable.reload({

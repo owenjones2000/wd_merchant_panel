@@ -3,30 +3,32 @@
 namespace App\Http\Controllers\Advertise;
 
 use App\Models\Advertise\App;
+use App\Models\Advertise\Ad;
 use App\Models\Advertise\Campaign;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
-class CampaignController extends Controller
+class AdController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($campaign_id)
     {
-        return view('advertise.campaign.index');
+        $campaign = Campaign::findOrFail($campaign_id);
+        return view('advertise.campaign.ad.index', compact('campaign'));
     }
 
     public function data(Request $request)
     {
-        $campaign_query = Campaign::query();
+        $ad_query = Ad::query();
         if(!empty($request->get('name'))){
-            $campaign_query->where('name', 'like', '%'.$request->get('name').'%');
+            $ad_query->where('name', 'like', '%'.$request->get('name').'%');
         }
-        $res = $campaign_query->orderBy($request->get('field','status'),$request->get('order','desc'))->orderBy('name','asc')->paginate($request->get('limit',30))->toArray();
+        $res = $ad_query->orderBy($request->get('field','status'),$request->get('order','desc'))->orderBy('name','asc')->paginate($request->get('limit',30))->toArray();
 
         $data = [
             'code' => 0,
@@ -42,10 +44,10 @@ class CampaignController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($campaign_id)
     {
-        $apps = App::query()->where('main_user_id', Auth::user()->getMainId())->get();
-        return view('advertise.campaign.create', compact('apps'));
+        $campaign = Campaign::findOrFail($campaign_id);
+        return view('advertise.campaign.ad.create', compact('campaign'));
     }
 
     /**
@@ -54,18 +56,19 @@ class CampaignController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $campaign_id)
     {
         $this->validate($request,[
-            'name'  => 'required|string|unique:campaign,name',
+            'name'  => 'required|string|unique:ad,name',
         ]);
         $create_arr = $request->all();
         $create_arr['status'] = isset($create_arr['status']) ? 1 : 0;
-        $create_arr['main_user_id'] = Auth::user()->getMainId();
-        if (Campaign::create($create_arr)){
-            return redirect(route('advertise.campaign.create'))->with(['status'=>'添加完成']);
+        $campaign = Campaign::findOrFail($campaign_id);
+        $create_arr['campaign_id'] = $campaign['id'];
+        if (Ad::create($create_arr)){
+            return redirect(route('advertise.campaign.ad.create', [$campaign_id]))->with(['status'=>'添加完成']);
         }
-        return redirect(route('advertise.campaign.create'))->with(['status'=>'系统错误']);
+        return redirect(route('advertise.campaign.ad.create', [$campaign_id]))->with(['status'=>'系统错误']);
     }
 
     /**
@@ -85,11 +88,10 @@ class CampaignController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($campaign_id, $id)
     {
-        $campaign = Campaign::findOrFail($id);
-        $apps = App::query()->where('main_user_id', Auth::user()->getMainId())->get();
-        return view('advertise.campaign.edit',compact('campaign', 'apps'));
+        $ad = Ad::query()->where(['id' => $id, 'campaign_id' => $campaign_id])->firstOrFail();
+        return view('advertise.campaign.ad.edit',compact('ad'));
     }
 
     /**
@@ -99,19 +101,18 @@ class CampaignController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $campaign_id, $id)
     {
         $this->validate($request,[
-            'name'  => 'required|string|unique:campaign,name,'.$id,
-            'bundle_id'  => 'required|unique:campaign,bundle_id,'.$id,
+            'name'  => 'required|string|unique:ad,name,'.$id,
         ]);
-        $campaign = Campaign::findOrFail($id);
+        $ad = Ad::query()->where(['id' => $id, 'campaign_id' => $campaign_id])->firstOrFail();
         $update_arr = $request->only(['name','bundle_id', 'os', 'status']);
         $update_arr['status'] = isset($update_arr['status']) ? 1 : 0;
-        if ($campaign->update($update_arr)){
-            return redirect(route('advertise.campaign.edit', [$id]))->with(['status'=>'更新成功']);
+        if ($ad->update($update_arr)){
+            return redirect(route('advertise.campaign.ad.edit', [$ad['campaign_id'], $ad['id']]))->with(['status'=>'更新成功']);
         }
-        return redirect(route('advertise.campaign.edit', [$id]))->withErrors(['status'=>'系统错误']);
+        return redirect(route('advertise.campaign.ad.edit', [$ad['campaign_id'], $ad['id']]))->withErrors(['status'=>'系统错误']);
     }
 
     /**
@@ -126,7 +127,7 @@ class CampaignController extends Controller
         if (empty($ids)){
             return response()->json(['code'=>1,'msg'=>'请选择删除项']);
         }
-        if (Campaign::destroy($ids)){
+        if (Ad::destroy($ids)){
             return response()->json(['code'=>0,'msg'=>'删除成功']);
         }
         return response()->json(['code'=>1,'msg'=>'删除失败']);
