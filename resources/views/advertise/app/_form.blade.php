@@ -27,7 +27,7 @@
 <div class="layui-form-item">
     <label class="layui-form-label">状态</label>
     <div class="layui-input-block">
-        <input type="checkbox" name="status" @if(isset($apps->status) && $apps->status) checked @endif lay-skin="switch" lay-filter="switchStatus" lay-text="启用|停用">
+        <input type="checkbox" name="status" @if($apps->status??true) checked @endif lay-skin="switch" lay-filter="switchStatus" lay-text="启用|停用">
     </div>
 </div>
 

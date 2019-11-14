@@ -4,7 +4,6 @@ namespace App;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -13,6 +12,10 @@ class User extends Authenticatable
     use Notifiable,HasRoles,SoftDeletes;
 
 //    protected $table = 'ua_users';
+
+    public function getMainId(){
+        return $this->main_user_id > 0 ? $this->main_user_id : $this->id;
+    }
 
     public function getAuthPassword()
     {

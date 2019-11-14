@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Advertise;
 use App\Models\Advertise\App;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class AppController extends Controller
 {
@@ -59,6 +60,7 @@ class AppController extends Controller
         ]);
         $create_arr = $request->all();
         $create_arr['status'] = isset($create_arr['status']) ? 1 : 0;
+        $create_arr['main_user_id'] = Auth::user()->getMainId();
         if (App::create($create_arr)){
             return redirect(route('advertise.app.create'))->with(['status'=>'添加完成']);
         }

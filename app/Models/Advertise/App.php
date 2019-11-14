@@ -10,5 +10,5 @@ class App extends Model
 
     protected $table = 'app';
 
-    protected $fillable = ['name', 'bundle_id', 'os', 'status'];
+    protected $fillable = ['name', 'bundle_id', 'os', 'status', 'main_user_id'];
 }
