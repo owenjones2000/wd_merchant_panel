@@ -88,7 +88,8 @@ class CampaignController extends Controller
         $this->validate($request,[
             'name'  => 'required|string|unique:campaign,name,'.$id,
         ]);
-
+        print_r($request->input());
+return ;
         $params = $request->only(['name','app_id', 'status', 'countries']);
         $params['id'] = $id;
         $params['status'] = isset($params['status']) ? 1 : 0;
