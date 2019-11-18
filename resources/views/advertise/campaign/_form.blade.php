@@ -126,10 +126,12 @@
                             @if(!$is_budget_by_all_country)
                                 @foreach($campaign->dailyBudgets as $budget)
                             <li data-index="{{$budget['country']['id']}}">
+                                <div class="layui-form-item">
                                 <label class="layui-form-label">{{$budget['country']['name']}}</label>
                                 <div class="layui-input-inline">
                                     <input type="hidden" name="budget[{{$budget['country']['id']}}][country]" value="{{ $budget['amount'] }}">
                                     <input type="text" name="budget[{{$budget['country']['id']}}][amount]" value="{{ $budget['amount'] }}" placeholder="$" autocomplete="off" class="layui-input" >
+                                </div>
                                 </div>
                             </li>
                                 @endforeach
@@ -164,10 +166,12 @@
                             @if(!$is_bid_by_all_country)
                                 @foreach($campaign->bids as $bid)
                                     <li data-index="{{$bid['country']['id']}}">
-                                        <label class="layui-form-label">{{$bid['country']['name']}}</label>
+                                        <div class="layui-form-item">
+                                        <label class="layui-form-label">{{$bid['country']['name']}}({{$bid['country']['code']}})</label>
                                         <div class="layui-input-inline">
                                             <input type="hidden" name="bid[{{$bid['country']['id']}}][country]" value="{{ $bid['amount'] }}">
                                             <input type="text" name="bid[{{$bid['country']['id']}}][amount]" value="{{ $bid['amount'] }}" placeholder="$" autocomplete="off" class="layui-input" >
+                                        </div>
                                         </div>
                                     </li>
                                 @endforeach
