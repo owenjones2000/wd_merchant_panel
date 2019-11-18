@@ -5,17 +5,17 @@
         <div class="layui-card-header layuiadmin-card-header-auto">
             <div class="layui-btn-group ">
                 @can('advertise.campaign.ad.destroy')
-                    <button class="layui-btn layui-btn-sm layui-btn-danger" id="listDelete">删 除</button>
+                    <button class="layui-btn layui-btn-sm layui-btn-danger" id="listDelete">Remove</button>
                 @endcan
                 @can('advertise.campaign.ad.create')
-                    <button class="layui-btn layui-btn-sm" id="ad_add">添 加</button>
+                    <button class="layui-btn layui-btn-sm" id="ad_add">Create Ad</button>
                 @endcan
             </div>
             <div class="layui-form" >
                 <div class="layui-input-inline">
-                    <input type="text" name="name" id="name" placeholder="名称" class="layui-input">
+                    <input type="text" name="name" id="name" placeholder="Name" class="layui-input">
                 </div>
-                <button class="layui-btn" id="adSearchBtn">搜 索</button>
+                <button class="layui-btn" id="adSearchBtn">Search</button>
             </div>
         </div>
         <div class="layui-card-body">
@@ -23,18 +23,18 @@
             <script type="text/html" id="options">
                 <div class="layui-btn-group">
                     @can('advertise.campaign.ad.edit')
-                        <a class="layui-btn layui-btn-sm" lay-event="edit">编辑</a>
+                        <a class="layui-btn layui-btn-sm" lay-event="edit">Edit</a>
                     @endcan
                     @can('advertise.campaign.ad.destroy')
-                        <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除</a>
+                        <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">Remove</a>
                     @endcan
                 </div>
             </script>
             <script type="text/html" id="status">
                 @{{# if(d.status){ }}
-                    <span class="layui-bg-green">启用</span>
+                    <span class="layui-bg-green">Enabled</span>
                 @{{# } else { }}
-                    <span class="layui-bg-red">禁用</span>
+                    <span class="layui-bg-red">Disabled</span>
                 @{{# } }}
             </script>
         </div>
@@ -68,10 +68,10 @@
                     ,cols: [[ //表头
                         {checkbox: true,fixed: true}
                         ,{field: 'id', title: 'ID', sort: true,width:80}
-                        ,{field: 'name', title: '名称'}
-                        ,{field: 'status', title: '状态', templet: '#status'}
-                        ,{field: 'created_at', title: '创建于'}
-                        ,{field: 'updated_at', title: '更新于'}
+                        ,{field: 'name', title: 'Name'}
+                        ,{field: 'status', title: 'Status', templet: '#status'}
+                        ,{field: 'created_at', title: 'Created'}
+                        ,{field: 'updated_at', title: 'Updated'}
                         ,{fixed: 'right', width: 220, align:'center', toolbar: '#options'}
                     ]]
                 });
@@ -94,8 +94,9 @@
                     } else if(layEvent === 'edit'){
                         layer.open({
                             type: 2,
+                            title: '',
                             shadeClose: true, area: ['80%', '80%'],
-                            content: '/advertise/campaign/{{$campaign['id']}}/ad/'+data.id+'/edit',
+                            content: '/advertise/campaign/{{$campaign['id']}}/ad/'+data.id,
                             end: function () {
                                 dataTable.reload();
                             }
@@ -120,7 +121,7 @@
                 //按钮批量删除
                 $("#listDelete").click(function () {
                     var ids = []
-                    var hasCheck = table.checkStatus('dataTable')
+                    var hasCheck = table.checkStatus('dataTable');
                     var hasCheckData = hasCheck.data
                     if (hasCheckData.length>0){
                         $.each(hasCheckData,function (index,element) {
@@ -145,8 +146,9 @@
                 $('#ad_add').on('click',function () {
                     layer.open({
                         type: 2,
+                        title: '',
                         shadeClose: true, area: ['80%', '80%'],
-                        content: "{{route('advertise.campaign.ad.create', [$campaign['id']]) }}",
+                        content: "{{route('advertise.campaign.ad.edit', [$campaign['id']]) }}",
                         end: function () {
                             dataTable.reload();
                         }

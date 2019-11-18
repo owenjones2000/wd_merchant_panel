@@ -5,10 +5,10 @@
         <div class="layui-card-header layuiadmin-card-header-auto">
             <div class="layui-btn-group ">
                 @can('advertise.campaign.destroy')
-                    <button class="layui-btn layui-btn-sm layui-btn-danger" id="listDelete">Remove Campaign</button>
+                    <button class="layui-btn layui-btn-sm layui-btn-danger" id="listDelete">Remove</button>
                 @endcan
                 @can('advertise.campaign.create')
-                    <button class="layui-btn layui-btn-sm" id="campaign_add">Add Campaign</button>
+                    <button class="layui-btn layui-btn-sm" id="campaign_add">Create Campaign</button>
                 @endcan
             </div>
             <div class="layui-form" >
@@ -38,9 +38,9 @@
             </script>
             <script type="text/html" id="status">
                 @{{# if(d.status){ }}
-                    <span class="layui-bg-green">Enable</span>
+                    <span class="layui-bg-green">Enabled</span>
                 @{{# } else { }}
-                    <span class="layui-bg-red">Disable</span>
+                    <span class="layui-bg-red">Disabled</span>
                 @{{# } }}
             </script>
         </div>
@@ -111,8 +111,9 @@
                     } else if(layEvent === 'ad'){
                         layer.open({
                             type: 2,
-                            shadeClose: true, area: ['80%', '80%'],
-                            content: '/advertise/campaign/'+data.id+'/ad',
+                            title: '',
+                            shadeClose: true, area: ['90%', '90%'],
+                            content: '/advertise/campaign/'+data.id+'/ad/list',
                             end: function () {
                                 dataTable.reload();
                             }
