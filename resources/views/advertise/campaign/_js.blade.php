@@ -28,7 +28,7 @@
         }, true);
 
         // 单选框初始化
-        form.on('radio(radioBudget)', function(data){
+        form.on('radio(radioByCountry)', function(data){
             // 关闭所有折叠
             $(data.elem.parentNode.parentNode).find('.layui-colla-content').removeClass('layui-show');
             // 打开当前选中折叠

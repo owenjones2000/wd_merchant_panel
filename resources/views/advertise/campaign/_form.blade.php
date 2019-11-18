@@ -57,7 +57,7 @@
         <div class="layui-colla-content @if(!$is_track_by_all_country) layui-show @endif">
             <div class="layui-input-block">
                 <div>
-                    <input type="radio" name="track_by_country" value="0" title="Single URL for all countries" @if($is_track_by_all_country) checked="" @endif lay-filter="radioBudget">
+                    <input type="radio" name="track_by_country" value="0" title="Single URL for all countries" @if($is_track_by_all_country) checked="" @endif lay-filter="radioByCountry">
                     <div class="layui-colla-content @if($is_track_by_all_country) layui-show @endif">
                         <div class="layui-form-item">
                             <label class="layui-form-label"></label>
@@ -75,7 +75,7 @@
                 </div>
 
                 <div>
-                    <input type="radio" name="track_by_country" value="1" title="URL by Country" @if(!$is_track_by_all_country) checked="" @endif lay-filter="radioBudget">
+                    <input type="radio" name="track_by_country" value="1" title="URL by Country" @if(!$is_track_by_all_country) checked="" @endif lay-filter="radioByCountry">
                     <div class="layui-colla-content @if(!$is_track_by_all_country) layui-show @endif">
                         <ul id="track">
                             @if(!$is_track_by_all_country)
@@ -112,7 +112,7 @@
         <div class="layui-colla-content">
             <div class="layui-input-block">
                 <div>
-                    <input type="radio" name="budget_by_country" value="0" title="Single daily budget for all Countries" @if($is_budget_by_all_country) checked="" @endif lay-filter="radioBudget">
+                    <input type="radio" name="budget_by_country" value="0" title="Single daily budget for all Countries" @if($is_budget_by_all_country) checked="" @endif lay-filter="radioByCountry">
                     <div class="layui-colla-content @if($is_budget_by_all_country) layui-show @endif">
                         <input type="hidden" name="budget[0][country]" value="0">
                         <input type="text" name="budget[0][amount]" value="{{ $budget_for_all_country['amount']??'' }}" placeholder="$" autocomplete="off" class="layui-input" >
@@ -120,7 +120,7 @@
                 </div>
 
                 <div>
-                    <input type="radio" name="budget_by_country" value="1" title="Daily budget by Country" @if(!$is_budget_by_all_country) checked="" @endif lay-filter="radioBudget">
+                    <input type="radio" name="budget_by_country" value="1" title="Daily budget by Country" @if(!$is_budget_by_all_country) checked="" @endif lay-filter="radioByCountry">
                     <div class="layui-colla-content @if(!$is_budget_by_all_country) layui-show @endif">
                         <ul id="budget">
                             @if(!$is_budget_by_all_country)
@@ -152,7 +152,7 @@
         <div class="layui-colla-content">
             <div class="layui-input-block">
                 <div>
-                    <input type="radio" name="bid_by_country" value="0" title="CPI Bid for all Countries" @if($is_bid_by_all_country) checked="" @endif lay-filter="radioBudget">
+                    <input type="radio" name="bid_by_country" value="0" title="CPI Bid for all Countries" @if($is_bid_by_all_country) checked="" @endif lay-filter="radioByCountry">
                     <div class="layui-colla-content @if($is_bid_by_all_country) layui-show @endif">
                         <input type="hidden" name="bid[0][country]" value="0">
                         <input type="text" name="bid[0][amount]" value="{{ $bid_for_all_country['amount']??'' }}" placeholder="$" autocomplete="off" class="layui-input" >
@@ -160,7 +160,7 @@
                 </div>
 
                 <div>
-                    <input type="radio" name="bid_by_country" value="1" title="CPI Bid by Country" @if(!$is_bid_by_all_country) checked="" @endif lay-filter="radioBudget">
+                    <input type="radio" name="bid_by_country" value="1" title="CPI Bid by Country" @if(!$is_bid_by_all_country) checked="" @endif lay-filter="radioByCountry">
                     <div class="layui-colla-content @if(!$is_bid_by_all_country) layui-show @endif">
                         <ul id="bid">
                             @if(!$is_bid_by_all_country)
@@ -186,8 +186,8 @@
 <div class="layui-form-item"></div>
 <div class="layui-form-item">
     <div class="layui-input-block">
-        <button type="submit" class="layui-btn" lay-submit="">确 认</button>
-        <button class="layui-btn close-iframe">关闭</button>
+        <button type="submit" class="layui-btn" lay-submit="">Save</button>
+        <button class="layui-btn layui-btn-primary close-iframe">Cancel</button>
     </div>
 </div>
 
