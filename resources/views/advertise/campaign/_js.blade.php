@@ -6,7 +6,7 @@
         var form = layui.form;
 
         // 多选初始化
-        formSelects.render('selectCountries', {placeholder:'国家'});
+        formSelects.render('selectCountries', {placeholder:'Countries'});
 
         // 初始化分国列表
         var countries = formSelects.value('selectCountries');

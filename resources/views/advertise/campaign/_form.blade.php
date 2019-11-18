@@ -3,17 +3,17 @@
     <link rel="stylesheet" href="/static/admin/layuiadmin/style/formSelects-v4.css" media="all">
 @endsection
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-    <legend>基础信息</legend>
+    <legend>Basic info</legend>
 </fieldset>
 <div class="layui-form-item">
-    <label for="" class="layui-form-label">名称</label>
+    <label for="" class="layui-form-label">Name</label>
     <div class="layui-input-block">
-        <input type="text" name="name" value="{{ $campaign->name ?? old('name') }}" lay-verify="required" placeholder="请输入名称" autocomplete="off" class="layui-input" >
+        <input type="text" name="name" value="{{ $campaign->name ?? old('name') }}" lay-verify="required" placeholder="" autocomplete="off" class="layui-input" >
     </div>
 </div>
 
 <div class="layui-form-item">
-    <label class="layui-form-label">应用</label>
+    <label class="layui-form-label">App</label>
     <div class="layui-input-block">
         <select name="app_id" lay-filter="app">
             @foreach($apps as $app_item)
@@ -24,14 +24,14 @@
 </div>
 
 <div class="layui-form-item">
-    <label class="layui-form-label">状态</label>
+    <label class="layui-form-label">Status</label>
     <div class="layui-input-block">
-        <input type="checkbox" name="status" @if($campaign->status??true) checked @endif lay-skin="switch" lay-filter="switchStatus" lay-text="启用|停用">
+        <input type="checkbox" name="status" @if($campaign->status??true) checked @endif lay-skin="switch" lay-filter="switchStatus" lay-text="Enable|Disable">
     </div>
 </div>
 
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-    <legend>投放目标</legend>
+    <legend>Targeting</legend>
 </fieldset>
 <div class="layui-collapse">
     <div class="layui-colla-item">
