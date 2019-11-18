@@ -1,4 +1,4 @@
-@extends('home.base')
+@extends('layout.base')
 
 @section('content')
     <style>
@@ -97,6 +97,6 @@
             });
         });
     </script>
-    @include('home.common_edit')
+    @include('layout.common_edit')
 @endsection
 

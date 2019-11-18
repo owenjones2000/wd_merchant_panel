@@ -82,6 +82,6 @@
 </div>
 @section('script')
     @include('home.permission._js')
-    @include('home.common_edit')
+    @include('layout.common_edit')
 @endsection
 

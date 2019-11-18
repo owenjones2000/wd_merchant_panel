@@ -1,4 +1,4 @@
-@extends('home.base')
+@extends('layout.base')
 
 @section('content')
     <style>
@@ -33,7 +33,7 @@
     </div>
 @endsection
 @section('script')
-    @include('home.common_edit')
+    @include('layout.common_edit')
 @endsection
 
 

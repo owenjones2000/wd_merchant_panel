@@ -47,5 +47,5 @@
     </div>
 </div>
 @section('script')
-    @include('home.common_edit')
+    @include('layout.common_edit')
 @endsection

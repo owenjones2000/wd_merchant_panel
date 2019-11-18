@@ -1,4 +1,4 @@
-@extends('home.base')
+@extends('layout.base')
 
 @section('content')
     <div class="layui-elem-quote">更新用户</div>
