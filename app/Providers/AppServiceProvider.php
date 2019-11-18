@@ -24,7 +24,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         //左侧菜单
-        view()->composer('home.layout',function($view){
+        view()->composer('layout.layout',function($view){
             $menus = \App\Models\Permission::with([
                 'childs'=>function($query){$query->with('icon')->orderBy('sort','asc');}
                 ,'icon'])->where('parent_id',0)->orderBy('sort','desc')->get();

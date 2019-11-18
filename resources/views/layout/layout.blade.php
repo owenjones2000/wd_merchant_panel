@@ -32,7 +32,7 @@
                 <li class="layui-nav-item" lay-unselect>
                     <a href="javascript:;" layadmin-event="refresh" title="刷新">
                         <i class="layui-icon layui-icon-refresh-3"></i>
-                        <cite>刷新</cite>
+                        <cite>Refresh</cite>
                     </a>
                 </li>
               {{--  <li class="layui-nav-item layui-hide-xs" lay-unselect>
@@ -67,7 +67,7 @@
                 <li class="layui-nav-item layui-hide-xs" lay-unselect>
                     <a href="javascript:;" layadmin-event="fullscreen">
                         <i class="layui-icon layui-icon-screen-full"></i>
-                        <cite>全屏</cite>
+                        <cite>Full screen</cite>
                     </a>
                 </li>
                 <li class="layui-nav-item" lay-unselect>
@@ -75,11 +75,11 @@
                         <cite>{{auth()->user()->realname}}</cite>
                     </a>
                     <dl class="layui-nav-child">
-                        <dd><a lay-href="{{route('home.user.edit',['id'=>auth()->user()->id])}}">基本资料</a></dd>
+                        <dd><a lay-href="{{route('home.user.edit',['id'=>auth()->user()->id])}}">Account</a></dd>
                         <!--dd><a id="change-password">修改密码</a></dd-->
                         {{--<dd><a lay-href="{{route('home.message.mine')}}">我的消息</a></dd>--}}
                         <hr>
-                        <dd><a href="{{route('home.logout')}}">安全退出</a></dd>
+                        <dd><a href="{{route('home.logout')}}">Log out</a></dd>
                     </dl>
                 </li>
 
@@ -101,7 +101,7 @@
                         <dd data-name="console">
                             <a lay-href="{{route('home.index')}}">
                                 <i class="layui-icon layui-icon-home"></i>
-                                <cite>系统控制台</cite>
+                                <cite>Dashboard</cite>
                             </a>
                         </dd>
                     </li>
@@ -139,9 +139,9 @@
                     <li class="layui-nav-item" lay-unselect>
                         <a href="javascript:;"></a>
                         <dl class="layui-nav-child layui-anim-fadein">
-                            <dd layadmin-event="closeThisTabs"><a href="javascript:;">关闭当前标签页</a></dd>
-                            <dd layadmin-event="closeOtherTabs"><a href="javascript:;">关闭其它标签页</a></dd>
-                            <dd layadmin-event="closeAllTabs"><a href="javascript:;">关闭全部标签页</a></dd>
+                            <dd layadmin-event="closeThisTabs"><a href="javascript:;">Close current tab</a></dd>
+                            <dd layadmin-event="closeOtherTabs"><a href="javascript:;">Close other tabs</a></dd>
+                            <dd layadmin-event="closeAllTabs"><a href="javascript:;">Close all tabs</a></dd>
                         </dl>
                     </li>
                 </ul>
@@ -149,7 +149,7 @@
 
             <div class="layui-tab" lay-unauto lay-allowClose="true" lay-filter="layadmin-layout-tabs">
                 <ul class="layui-tab-title" id="LAY_app_tabsheader">
-                    <li lay-id="{{route('home.index')}}" lay-attr="{{route('home.index')}}" class="layui-this"><i class="layui-icon layui-icon-home"></i>&nbsp;系统控制台</li>
+                    <li lay-id="{{route('home.index')}}" lay-attr="{{route('home.index')}}" class="layui-this"><i class="layui-icon layui-icon-home"></i>&nbsp;Dashboard</li>
                 </ul>
             </div>
         </div>
