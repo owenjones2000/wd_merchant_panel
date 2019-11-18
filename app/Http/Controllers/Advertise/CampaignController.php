@@ -3,14 +3,11 @@
 namespace App\Http\Controllers\Advertise;
 
 use App\Models\Advertise\App;
-use App\Models\Advertise\Bid;
 use App\Models\Advertise\Campaign;
 use App\Models\Advertise\Country;
-use App\Models\Advertise\DailyBudget;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use PHPUnit\Framework\Constraint\Count;
 
 class CampaignController extends Controller
 {
@@ -88,9 +85,7 @@ class CampaignController extends Controller
         $this->validate($request,[
             'name'  => 'required|string|unique:campaign,name,'.$id,
         ]);
-        print_r($request->input());
-return ;
-        $params = $request->only(['name','app_id', 'status', 'countries']);
+        $params = $request->all();
         $params['id'] = $id;
         $params['status'] = isset($params['status']) ? 1 : 0;
         if (Campaign::Make(Auth::user(), $params)){

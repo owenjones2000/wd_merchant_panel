@@ -11,9 +11,17 @@ class Bid extends Model
 
     protected $table = 'bid';
 
-    protected $fillable = ['type', 'value', 'country_id'];
+    protected $fillable = ['type', 'amount', 'country_id'];
 
     public function bidding(){
         return $this->morphTo();
+    }
+
+    /**
+     * 指定国家
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function country(){
+        return $this->belongsTo(Country::class, 'country_id', 'id');
     }
 }

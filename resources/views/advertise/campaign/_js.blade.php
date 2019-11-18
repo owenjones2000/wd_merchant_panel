@@ -8,6 +8,12 @@
         // 多选初始化
         formSelects.render('selectCountries', {placeholder:'国家'});
 
+        // 初始化分国列表
+        var countries = formSelects.value('selectCountries');
+        updateCountryList('#track', countries);
+        updateCountryList('#budget', countries);
+        updateCountryList('#bid', countries);
+
         formSelects.on('selectCountries', function(id, vals, val, isAdd, isDisabled){
             //id:           点击select的id
             //vals:         当前select已选中的值
@@ -33,7 +39,7 @@
             var ul = $(elem);
             ul.children().each(function(){
                 var li_index = $(this).data('index');
-                if(-1 === countries.findIndex(obj => obj.value === li_index)){
+                if(-1 === countries.findIndex(obj => obj.value == li_index)){
                     this.remove();
                 }
             }, countries);
@@ -50,11 +56,16 @@
                 case '#track':
                     return $([
                         '<li data-index="'+ obj.value +'">',
+                        '<input type="hidden" name="track['+ obj.value +'][country]" value="'+ obj.value +'">',
                         '<div class="layui-form-item">',
                         '<label class="layui-form-label">'+ obj.name +'</label>',
-                        '<div class="layui-input-inline">',
-                        '<input type="hidden" name="track['+ obj.value +'][country]" value="'+ obj.value +'">',
-                        '<input type="text" name="track['+ obj.value +'][amount]" value="" placeholder="$" autocomplete="off" class="layui-input" >',
+                        '<div class="layui-input-block">',
+                        '<input type="text" name="track['+ obj.value +'][impression]" value="" placeholder="impression url" autocomplete="off" class="layui-input" >',
+                        '</div>',
+                        '</div>',
+                        '<div class="layui-form-item">',
+                        '<div class="layui-input-block">',
+                        '<input type="text" name="track['+ obj.value +'][click]" value="" placeholder="click url" autocomplete="off" class="layui-input" >',
                         '</div>',
                         '</div>',
                         '</li>',

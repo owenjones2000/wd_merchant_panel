@@ -11,9 +11,17 @@ class DailyBudget extends Model
 
     protected $table = 'daily_budget';
 
-    protected $fillable = ['value', 'country_id'];
+    protected $fillable = ['amount', 'country_id'];
 
     public function budgeting(){
         return $this->morphTo();
+    }
+
+    /**
+     * 指定国家
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function country(){
+        return $this->belongsTo(Country::class, 'country_id', 'id');
     }
 }

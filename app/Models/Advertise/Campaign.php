@@ -46,27 +46,77 @@ class Campaign extends Model
                 $campaign->countries()->sync($countries);
             }
 
-//            if(empty($params['refers'])){
-//                $campaign->refers()->sync([]);
-//            }else{
-//                $refer_campaign_id_list = is_array($params['refers']) ?
-//                    $params['refers'] : explode(',', $params['refers']);
-//                $refers = Material::query()
-//                    ->whereIn('id', $refer_campaign_id_list)
-//                    ->where('type', $campaign->type)
-//                    ->where('app_id', $campaign['app_id'])
-//                    ->pluck('id');
-//                $campaign->refers()->sync($refers);
-//            }
-//
-//            if($campaign->type == Material::Material_Type_Video
-//                && !empty($params['videos']) && is_array($params['videos'])) {
-//                $campaign->updateVideos($user, $params['videos']);
-//            }
-//            if($campaign->type == Material::Material_Type_Text
-//                && !empty($params['texts']) && is_array($params['texts'])) {
-//                $campaign->updateTexts($user, $params['texts']);
-//            }
+            if(isset($params['track_by_country']) && isset($params['track'])){
+                $campaign->trackUrls()->delete();
+                if($params['track_by_country']){
+                    $track_list = [];
+                    foreach($params['track'] as $track){
+                        if(!empty($track['country'])
+                            && (!empty($track['impression']) || !empty($track['click']))) {
+                            $track_list[] = new TrackUrl([
+                                'impression' => $track['impression'],
+                                'click' => $track['click'],
+                                'country_id' => $track['country'],
+                            ]);
+                        }
+                    }
+                    $campaign->trackUrls()->saveMany($track_list);
+                }else{
+                    if(!empty($track['impression']) || !empty($track['click'])) {
+                        $campaign->trackUrls()->save(new TrackUrl([
+                            'impression' => $params['track'][0]['impression'] ?? '',
+                            'click' => $params['track'][0]['click'] ?? '',
+                            'country_id' => 0,
+                        ]));
+                    }
+                }
+            }
+
+            if(isset($params['budget_by_country']) && isset($params['budget'])){
+                $campaign->dailyBudgets()->delete();
+                if($params['budget_by_country']){
+                    $budget_list = [];
+                    foreach($params['budget'] as $budget){
+                        if(!empty($budget['country']) && !empty($budget['amount'])) {
+                            $budget_list[] = new DailyBudget([
+                                'amount' => $budget['amount'],
+                                'country_id' => $budget['country'],
+                            ]);
+                        }
+                    }
+                    $campaign->dailyBudgets()->saveMany($budget_list);
+                }else{
+                    if(empty($params['bid'][0]['amount'])) {
+                        $campaign->dailyBudgets()->save(new DailyBudget([
+                            'amount' => $params['budget'][0]['amount'] ?? 0,
+                            'country_id' => 0,
+                        ]));
+                    }
+                }
+            }
+
+            if(isset($params['bid_by_country']) && isset($params['bid'])){
+                $campaign->bids()->delete();
+                if($params['bid_by_country']){
+                    $bid_list = [];
+                    foreach($params['bid'] as $bid){
+                        if(!empty($bid['country']) && !empty($bid['amount'])) {
+                            $bid_list[] = new Bid([
+                                'amount' => $bid['amount'],
+                                'country_id' => $bid['country'],
+                            ]);
+                        }
+                    }
+                    $campaign->bids()->saveMany($bid_list);
+                }else{
+                    if(empty($params['bid'][0]['amount'])){
+                        $campaign->bids()->save(new Bid([
+                            'amount' => $params['bid'][0]['amount'] ?? 0,
+                            'country_id' => 0,
+                        ]));
+                    }
+                }
+            }
 
             return $campaign;
         }, 3);
