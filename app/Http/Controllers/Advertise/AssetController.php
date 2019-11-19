@@ -60,8 +60,8 @@ class AssetController extends Controller
 
     private function decideAssetType($file){
         $ffprobe = FFProbe::create([
-            'ffmpeg.binaries'  => '/usr/local/bin/ffmpeg',
-            'ffprobe.binaries' => '/usr/local/bin/ffprobe'
+            'ffmpeg.binaries'  => env('FFMPEG_BIN_PATH','/usr/local/bin/ffmpeg'),
+            'ffprobe.binaries' => env('FFPROBE_BIN_PATH','/usr/local/bin/ffprobe')
         ]);
         $video_info = $ffprobe->streams($file)->videos()->first()->all();
         $width = Arr::get($video_info, 'width');
