@@ -11,7 +11,7 @@
             var uploadListIns = upload.render({
             elem: '#upload'
             ,accept: 'file'
-            //,exts: 'mp4|webm|jpg'
+            ,exts: 'mp4'
             ,url: '{{ route('advertise.asset.process') }}'
             ,multiple: true
             ,auto: true
