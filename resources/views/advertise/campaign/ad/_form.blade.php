@@ -14,6 +14,35 @@
     </div>
 </div>
 
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+    <legend>Creative Set</legend>
+</fieldset>
+
+<div class="layui-form-item">
+    <div class="layui-upload-drag" id="upload">
+        <i class="layui-icon"></i>
+        <p>点击上传，或将文件拖拽到此处</p>
+    </div>
+</div>
+
+<div class="layui-collapse" id="fileList">
+    @foreach($ad->assets as $asset)
+    <div class="layui-colla-item" data-type="{{$asset['type_id']}}">
+        <h2 class="layui-colla-title">{{ \App\Models\Advertise\AssetType::get($asset['type_id'])['name'] }}</h2>
+        <div class="layui-colla-content">
+            <video width="300px" height="auto" controls="controls">
+                <source src="/storage/{{ $asset['file_path'] }}">
+            </video>
+            <input type="hidden" name="asset[{{$asset['type_id']}}][id]" value="{{ $asset['id'] }}">
+            <input type="hidden" name="asset[{{$asset['type_id']}}][type]" value="{{ $asset['type_id'] }}">
+        </div>
+    </div>
+    @endforeach
+</div>
+
+<div class="layui-form-item">
+</div>
+
 <div class="layui-form-item">
     <div class="layui-input-block">
         <button type="submit" class="layui-btn" lay-submit="">Save</button>
@@ -23,4 +52,5 @@
 
 @section('script')
     @include('layout.common_edit')
+    @include('advertise.campaign.ad._js')
 @endsection

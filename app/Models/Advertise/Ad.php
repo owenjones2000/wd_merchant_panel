@@ -30,91 +30,33 @@ class Ad extends Model
             }
             $ad->fill($params);
             $ad->saveOrFail();
-//            if(empty($params['countries'])){
-//                $ad->countries()->sync([]);
-//            }else{
-//                $country_id_list = is_array($params['countries']) ?
-//                    $params['countries'] : explode(',', $params['countries']);
-//                $countries = Country::query()
-//                    ->whereIn('id', $country_id_list)
-//                    ->pluck('id');
-//                $ad->countries()->sync($countries);
-//            }
-//
-//            if(isset($params['track_by_country']) && isset($params['track'])){
-//                $ad->trackUrls()->delete();
-//                if($params['track_by_country']){
-//                    $track_list = [];
-//                    foreach($params['track'] as $track){
-//                        if(!empty($track['country'])
-//                            && (!empty($track['impression']) || !empty($track['click']))) {
-//                            $track_list[] = new TrackUrl([
-//                                'impression' => $track['impression'],
-//                                'click' => $track['click'],
-//                                'country_id' => $track['country'],
-//                            ]);
-//                        }
-//                    }
-//                    $ad->trackUrls()->saveMany($track_list);
-//                }else{
-//                    if(!empty($track['impression']) || !empty($track['click'])) {
-//                        $ad->trackUrls()->save(new TrackUrl([
-//                            'impression' => $params['track'][0]['impression'] ?? '',
-//                            'click' => $params['track'][0]['click'] ?? '',
-//                            'country_id' => 0,
-//                        ]));
-//                    }
-//                }
-//            }
-//
-//            if(isset($params['budget_by_country']) && isset($params['budget'])){
-//                $ad->dailyBudgets()->delete();
-//                if($params['budget_by_country']){
-//                    $budget_list = [];
-//                    foreach($params['budget'] as $budget){
-//                        if(!empty($budget['country']) && !empty($budget['amount'])) {
-//                            $budget_list[] = new DailyBudget([
-//                                'amount' => $budget['amount'],
-//                                'country_id' => $budget['country'],
-//                            ]);
-//                        }
-//                    }
-//                    $ad->dailyBudgets()->saveMany($budget_list);
-//                }else{
-//                    if(empty($params['bid'][0]['amount'])) {
-//                        $ad->dailyBudgets()->save(new DailyBudget([
-//                            'amount' => $params['budget'][0]['amount'] ?? 0,
-//                            'country_id' => 0,
-//                        ]));
-//                    }
-//                }
-//            }
-//
-//            if(isset($params['bid_by_country']) && isset($params['bid'])){
-//                $ad->bids()->delete();
-//                if($params['bid_by_country']){
-//                    $bid_list = [];
-//                    foreach($params['bid'] as $bid){
-//                        if(!empty($bid['country']) && !empty($bid['amount'])) {
-//                            $bid_list[] = new Bid([
-//                                'amount' => $bid['amount'],
-//                                'country_id' => $bid['country'],
-//                            ]);
-//                        }
-//                    }
-//                    $ad->bids()->saveMany($bid_list);
-//                }else{
-//                    if(empty($params['bid'][0]['amount'])){
-//                        $ad->bids()->save(new Bid([
-//                            'amount' => $params['bid'][0]['amount'] ?? 0,
-//                            'country_id' => 0,
-//                        ]));
-//                    }
-//                }
-//            }
+
+            if(isset($params['asset'])){
+                $asset_id_list = array_column($params['asset'], 'type', 'id');
+                $ad->assets()
+                    ->whereNotIn('id', array_keys($asset_id_list))
+                    ->where('ad_id', $ad['id'])
+                    ->update([
+                        'ad_id' => null
+                    ]);
+                Asset::query()
+                    ->whereIn('id', array_keys($asset_id_list))
+                    ->whereNull('ad_id')
+                    ->update([
+                        'ad_id' => $ad['id']
+                    ]);
+            }
 
             return $ad;
         }, 3);
         return $ad;
+    }
+
+    /**
+     * 素材
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function assets(){
+        return $this->hasMany(Asset::class, 'ad_id', 'id');
     }
 }

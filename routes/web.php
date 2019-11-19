@@ -100,7 +100,7 @@ Route::group(['namespace'=>'Home','prefix'=>'home','middleware'=>['auth','operat
 });
 
 //投放管理
-Route::group(['namespace'=>'Advertise','prefix'=>'advertise','middleware'=>['auth','operation.log','permission:system.manage']],function (){
+Route::group(['namespace'=>'Advertise','prefix'=>'advertise','middleware'=>['auth','operation.log','permission:advertise.manage']],function (){
 
     // 应用管理
     Route::group(['prefix'=>'app', 'middleware' => 'permission:advertise.app'], function () {
@@ -137,4 +137,8 @@ Route::group(['namespace'=>'Advertise','prefix'=>'advertise','middleware'=>['aut
             Route::delete('destroy', 'AdController@destroy')->name('advertise.campaign.ad.destroy')->middleware('permission:advertise.campaign.ad.destroy');
         });
     });
+
+    //文件
+    Route::post('Asset', 'AssetController@processMediaFiles')->name('advertise.asset.process');
+
 });
