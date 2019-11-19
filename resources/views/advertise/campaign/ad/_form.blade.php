@@ -21,7 +21,7 @@
 <div class="layui-form-item">
     <div class="layui-upload-drag" id="upload">
         <i class="layui-icon"></i>
-        <p>点击上传，或将文件拖拽到此处</p>
+        <p>Drag & Drop your files or Browse</p>
     </div>
 </div>
 
