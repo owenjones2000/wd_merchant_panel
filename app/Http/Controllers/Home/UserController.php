@@ -8,6 +8,7 @@ use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Role;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -42,6 +43,10 @@ class UserController extends Controller
      */
     public function store(UserCreateRequest $request)
     {
+        $user = Auth::user();
+        if($user['main_user_id'] > 0){
+            return redirect()->to(route('home.user'))->withErrors('');
+        }
         $data =  $request->all();
         $data['uuid'] = \Faker\Provider\Uuid::uuid();
         $data['password_hash'] = Hash::make($data['password']);

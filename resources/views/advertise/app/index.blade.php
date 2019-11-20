@@ -5,17 +5,17 @@
         <div class="layui-card-header layuiadmin-card-header-auto">
             <div class="layui-btn-group ">
                 @can('advertise.app.destroy')
-                    <button class="layui-btn layui-btn-sm layui-btn-danger" id="listDelete">删 除</button>
+                    <button class="layui-btn layui-btn-sm layui-btn-danger" id="listDelete">Remove Selected</button>
                 @endcan
-                @can('advertise.app.create')
-                    <button class="layui-btn layui-btn-sm" id="app_add">添 加</button>
+                @can('advertise.app.edit')
+                    <button class="layui-btn layui-btn-sm" id="app_add">Add</button>
                 @endcan
             </div>
             <div class="layui-form" >
                 <div class="layui-input-inline">
-                    <input type="text" name="name" id="name" placeholder="名称" class="layui-input">
+                    <input type="text" name="name" id="name" placeholder="name" class="layui-input">
                 </div>
-                <button class="layui-btn" id="appSearchBtn">搜 索</button>
+                <button class="layui-btn" id="appSearchBtn">Search</button>
             </div>
         </div>
         <div class="layui-card-body">
@@ -23,18 +23,18 @@
             <script type="text/html" id="options">
                 <div class="layui-btn-group">
                     @can('advertise.app.edit')
-                        <a class="layui-btn layui-btn-sm" lay-event="edit">编辑</a>
+                        <a class="layui-btn layui-btn-sm" lay-event="edit">Edit</a>
                     @endcan
                     @can('advertise.app.destroy')
-                        <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除</a>
+                        <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">Remove</a>
                     @endcan
                 </div>
             </script>
             <script type="text/html" id="status">
                 @{{# if(d.status){ }}
-                    <span class="layui-bg-green">启用</span>
+                    <span class="layui-bg-green">Enabled</span>
                 @{{# } else { }}
-                    <span class="layui-bg-red">禁用</span>
+                    <span class="layui-bg-red">Disabled</span>
                 @{{# } }}
             </script>
         </div>
@@ -68,12 +68,12 @@
                     ,cols: [[ //表头
                         {checkbox: true,fixed: true}
                         ,{field: 'id', title: 'ID', sort: true,width:80}
-                        ,{field: 'name', title: '名称'}
-                        ,{field: 'bundle_id', title: '包名'}
-                        ,{field: 'os', title: '平台'}
-                        ,{field: 'status', title: '状态', templet: '#status'}
-                        ,{field: 'created_at', title: '创建于'}
-                        ,{field: 'updated_at', title: '更新于'}
+                        ,{field: 'name', title: 'Name'}
+                        ,{field: 'bundle_id', title: 'Package Name'}
+                        ,{field: 'os', title: 'Platform'}
+                        ,{field: 'status', title: 'Status', templet: '#status'}
+                        ,{field: 'created_at', title: 'Created'}
+                        ,{field: 'updated_at', title: 'Updated'}
                         ,{fixed: 'right', width: 220, align:'center', toolbar: '#options'}
                     ]]
                 });
@@ -96,6 +96,7 @@
                     } else if(layEvent === 'edit'){
                         layer.open({
                             type: 2,
+                            title: '',
                             shadeClose: true, area: ['80%', '80%'],
                             content: '/advertise/app/'+data.id+'/edit',
                             end: function () {
@@ -147,6 +148,7 @@
                 $('#app_add').on('click',function () {
                     layer.open({
                         type: 2,
+                        title: '',
                         shadeClose: true, area: ['80%', '80%'],
                         content: "{{route('advertise.app.create') }}",
                         end: function () {

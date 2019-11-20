@@ -3,7 +3,7 @@
 @section('content')
     <div class="layui-card">
         <div class="layui-card-header layuiadmin-card-header-auto">
-            <h2>更新用户</h2>
+            <h2>User Edit</h2>
         </div>
         <div class="layui-card-body">
             <form class="layui-form" action="{{route('home.user.update',['id'=>$user])}}" method="post">
@@ -14,6 +14,3 @@
         </div>
     </div>
 @endsection
-
-
-

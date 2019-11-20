@@ -52,50 +52,50 @@ Route::group(['namespace'=>'Home','prefix'=>'home','middleware'=>['auth','operat
         Route::delete('user/destroy','UserController@destroy')->name('home.user.destroy')->middleware('permission:system.user.destroy');
 
         //分配角色
-        Route::get('user/{id}/role','UserController@role')->name('home.user.role')->middleware('permission:system.user.role');
-        Route::put('user/{id}/assignRole','UserController@assignRole')->name('home.user.assignRole')->middleware('permission:system.user.role');
+//        Route::get('user/{id}/role','UserController@role')->name('home.user.role')->middleware('permission:system.user.role');
+//        Route::put('user/{id}/assignRole','UserController@assignRole')->name('home.user.assignRole')->middleware('permission:system.user.role');
         //分配权限
         Route::get('user/{id}/permission','UserController@permission')->name('home.user.permission')->middleware('permission:system.user.permission');
         Route::put('user/{id}/assignPermission','UserController@assignPermission')->name('home.user.assignPermission')->middleware('permission:system.user.permission');
     });
 
     //角色管理
-    Route::group(['middleware'=>'permission:system.role'],function (){
-        Route::get('role','RoleController@index')->name('home.role');
-        //添加
-        Route::get('role/create','RoleController@create')->name('home.role.create')->middleware('permission:system.role.create');
-        Route::post('role/store','RoleController@store')->name('home.role.store')->middleware('permission:system.role.create');
-        //编辑
-        Route::get('role/{id}/edit','RoleController@edit')->name('home.role.edit')->middleware('permission:system.role.edit');
-        Route::put('role/{id}/update','RoleController@update')->name('home.role.update')->middleware('permission:system.role.edit');
-        //删除
-        Route::delete('role/destroy','RoleController@destroy')->name('home.role.destroy')->middleware('permission:system.role.destroy');
-        //分配权限
-        Route::get('role/{id}/permission','RoleController@permission')->name('home.role.permission')->middleware('permission:system.role.permission');
-        Route::put('role/{id}/assignPermission','RoleController@assignPermission')->name('home.role.assignPermission')->middleware('permission:system.role.permission');
-    });
+//    Route::group(['middleware'=>'permission:system.role'],function (){
+//        Route::get('role','RoleController@index')->name('home.role');
+//        //添加
+//        Route::get('role/create','RoleController@create')->name('home.role.create')->middleware('permission:system.role.create');
+//        Route::post('role/store','RoleController@store')->name('home.role.store')->middleware('permission:system.role.create');
+//        //编辑
+//        Route::get('role/{id}/edit','RoleController@edit')->name('home.role.edit')->middleware('permission:system.role.edit');
+//        Route::put('role/{id}/update','RoleController@update')->name('home.role.update')->middleware('permission:system.role.edit');
+//        //删除
+//        Route::delete('role/destroy','RoleController@destroy')->name('home.role.destroy')->middleware('permission:system.role.destroy');
+//        //分配权限
+//        Route::get('role/{id}/permission','RoleController@permission')->name('home.role.permission')->middleware('permission:system.role.permission');
+//        Route::put('role/{id}/assignPermission','RoleController@assignPermission')->name('home.role.assignPermission')->middleware('permission:system.role.permission');
+//    });
     //权限管理
-    Route::group(['middleware'=>'permission:system.permission'],function (){
-        Route::get('permission','PermissionController@index')->name('home.permission');
-        //添加
-        Route::get('permission/create','PermissionController@create')->name('home.permission.create')->middleware('permission:system.permission.create');
-        Route::post('permission/store','PermissionController@store')->name('home.permission.store')->middleware('permission:system.permission.create');
-        //编辑
-        Route::get('permission/{id}/edit','PermissionController@edit')->name('home.permission.edit')->middleware('permission:system.permission.edit');
-        Route::put('permission/{id}/update','PermissionController@update')->name('home.permission.update')->middleware('permission:system.permission.edit');
-        //删除
-        Route::delete('permission/destroy','PermissionController@destroy')->name('home.permission.destroy')->middleware('permission:system.permission.destroy');
-    });
+//    Route::group(['middleware'=>'permission:system.permission'],function (){
+//        Route::get('permission','PermissionController@index')->name('home.permission');
+//        //添加
+//        Route::get('permission/create','PermissionController@create')->name('home.permission.create')->middleware('permission:system.permission.create');
+//        Route::post('permission/store','PermissionController@store')->name('home.permission.store')->middleware('permission:system.permission.create');
+//        //编辑
+//        Route::get('permission/{id}/edit','PermissionController@edit')->name('home.permission.edit')->middleware('permission:system.permission.edit');
+//        Route::put('permission/{id}/update','PermissionController@update')->name('home.permission.update')->middleware('permission:system.permission.edit');
+//        //删除
+//        Route::delete('permission/destroy','PermissionController@destroy')->name('home.permission.destroy')->middleware('permission:system.permission.destroy');
+//    });
     //登录日志管理
-    Route::group(['middleware' => 'permission:system.login_log'], function () {
-        Route::get('login_log', 'LoginLogController@index')->name('home.login_log');
-        Route::delete('login_log/destroy', 'LoginLogController@destroy')->name('home.login_log.destroy')->middleware('permission:system.login_log.destroy');
-    });
+//    Route::group(['middleware' => 'permission:system.login_log'], function () {
+//        Route::get('login_log', 'LoginLogController@index')->name('home.login_log');
+//        Route::delete('login_log/destroy', 'LoginLogController@destroy')->name('home.login_log.destroy')->middleware('permission:system.login_log.destroy');
+//    });
     //操作日志管理
-    Route::group(['middleware' => 'permission:system.operation_log'], function () {
-        Route::get('operation_log', 'OperationLogController@index')->name('home.operation_log');
-        Route::delete('operation_log/destroy', 'OperationLogController@destroy')->name('home.operation_log.destroy')->middleware('permission:system.operation_log.destroy');
-    });
+//    Route::group(['middleware' => 'permission:system.operation_log'], function () {
+//        Route::get('operation_log', 'OperationLogController@index')->name('home.operation_log');
+//        Route::delete('operation_log/destroy', 'OperationLogController@destroy')->name('home.operation_log.destroy')->middleware('permission:system.operation_log.destroy');
+//    });
 
 });
 
@@ -107,8 +107,8 @@ Route::group(['namespace'=>'Advertise','prefix'=>'advertise','middleware'=>['aut
         Route::get('data', 'AppController@data')->name('advertise.app.data');
         Route::get('', 'AppController@index')->name('advertise.app');
         //添加
-        Route::get('create', 'AppController@create')->name('advertise.app.create')->middleware('permission:advertise.app.create');
-        Route::post('store', 'AppController@store')->name('advertise.app.store')->middleware('permission:advertise.app.create');
+        Route::get('create', 'AppController@create')->name('advertise.app.create')->middleware('permission:advertise.app.edit');
+        Route::post('store', 'AppController@store')->name('advertise.app.store')->middleware('permission:advertise.app.edit');
         //编辑
         Route::get('{id}/edit', 'AppController@edit')->name('advertise.app.edit')->middleware('permission:advertise.app.edit');
         Route::put('{id}/update', 'AppController@update')->name('advertise.app.update')->middleware('permission:advertise.app.edit');

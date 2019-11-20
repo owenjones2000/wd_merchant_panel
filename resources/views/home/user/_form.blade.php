@@ -42,8 +42,8 @@
 </div>
 <div class="layui-form-item">
     <div class="layui-input-block">
-        <button type="submit" class="layui-btn" lay-submit="" lay-filter="formDemo">Submit</button>
-        <div  class="layui-btn close-iframe" onclick="close_parent('{{$user->username ??''}}','/home/user')">Close</div>
+        <button type="submit" class="layui-btn" lay-submit="" lay-filter="formDemo">Save</button>
+        <div  class="layui-btn layui-btn-primary close-iframe">Close</div>
     </div>
 </div>
 @section('script')

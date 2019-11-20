@@ -6,10 +6,10 @@
         <div class="layui-card-header layuiadmin-card-header-auto">
             <div class="layui-btn-group">
                 @can('system.user.destroy')
-                <button class="layui-btn layui-btn-sm layui-btn-danger" id="listDelete">删 除</button>
+                <button class="layui-btn layui-btn-sm layui-btn-danger" id="listDelete">Remove Selected User</button>
                 @endcan
                 @can('system.user.create')
-                <a class="layui-btn layui-btn-sm" href="{{ route('home.user.create') }}">添 加</a>
+                <a class="layui-btn layui-btn-sm" id="user_add">Add User</a>
                 @endcan
             </div>
         </div>
@@ -19,16 +19,16 @@
             <script type="text/html" id="options">
                 <div class="layui-btn-group">
                     @can('system.user.create')
-                    <a class="layui-btn layui-btn-sm" lay-event="edit">编辑</a>
+                    <a class="layui-btn layui-btn-sm" lay-event="edit">Edit</a>
                     @endcan
                     @can('system.user.role')
-                    <a class="layui-btn layui-btn-sm" lay-event="role">角色</a>
+                    {{--<a class="layui-btn layui-btn-sm" lay-event="role">Role</a>--}}
                     @endcan
                     @can('system.user.permission')
-                    <a class="layui-btn layui-btn-sm" lay-event="permission">权限</a>
+                    <a class="layui-btn layui-btn-sm" lay-event="permission">Permission</a>
                     @endcan
                     @can('system.user.destroy')
-                    <a class="layui-btn layui-btn-danger layui-btn-sm " lay-event="del">删除</a>
+                    <a class="layui-btn layui-btn-danger layui-btn-sm " lay-event="del">Remove</a>
                     @endcan
                 </div>
             </script>
@@ -71,12 +71,12 @@
                 ,cols: [[ //表头
                     {checkbox: true,fixed: true}
                     ,{field: 'id', title: 'ID', sort: true,width:80}
-                    ,{field: 'username', title: '登录账号'}
-                    ,{field: 'realname', title: '真实姓名'}
-                    ,{field: 'email', title: '电子邮箱'}
-                    ,{field: 'phone', title: '联系电话'}
-                    ,{field: 'created_at', title: '创建时间'}
-                    ,{field: 'updated_at', title: '更新时间'}
+                    ,{field: 'username', title: 'Login Account'}
+                    ,{field: 'realname', title: 'Real Name'}
+                    ,{field: 'email', title: 'Email'}
+                    ,{field: 'phone', title: 'Phone'}
+                    ,{field: 'created_at', title: 'Created'}
+                    ,{field: 'updated_at', title: 'Updated'}
                     ,{fixed: 'right', width: 320, align:'center', toolbar: '#options'}
                 ]]
             });
@@ -99,7 +99,7 @@
                 } else if(layEvent === 'edit'){
                     layer.open({
                         type: 2,
-                        title:'编辑用户',
+                        title:'User Edit',
                         shadeClose:true, area: ['100%', '100%'],
                         content: '/home/user/'+data.id+'/edit',
                         end:function () {
@@ -109,7 +109,7 @@
                 } else if (layEvent === 'role'){
                     layer.open({
                         type: 2,
-                        title:'编辑角色',
+                        title:'Role Edit',
                         shadeClose:true, area: ['100%', '100%'],
                         content: '/home/user/'+data.id+'/role',
                         end:function () {
@@ -119,7 +119,7 @@
                 } else if (layEvent === 'permission'){
                     layer.open({
                         type: 2,
-                        title:'编辑权限',
+                        title:'Permission Edit',
                         shadeClose:true, area: ['100%', '100%'],
                         content: '/home/user/'+data.id+'/permission',
                         end:function () {
@@ -129,11 +129,23 @@
                 }
             });
 
+            $('#user_add').on('click',function () {
+                layer.open({
+                    type: 2,
+                    title: '',
+                    shadeClose: true, area: ['80%', '80%'],
+                    content: "{{route('home.user.create') }}",
+                    end: function () {
+                        dataTable.reload();
+                    }
+                });
+            });
+
             //按钮批量删除
             $("#listDelete").click(function () {
-                var ids = []
-                var hasCheck = table.checkStatus('dataTable')
-                var hasCheckData = hasCheck.data
+                var ids = [];
+                var hasCheck = table.checkStatus('dataTable');
+                var hasCheckData = hasCheck.data;
                 if (hasCheckData.length>0){
                     $.each(hasCheckData,function (index,element) {
                         ids.push(element.id)
