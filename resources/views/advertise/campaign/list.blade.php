@@ -73,12 +73,12 @@
                     }
                     ,cols: [[ //表头
                         {checkbox: true,fixed: true}
-                        ,{field: 'id', title: 'ID', sort: true,width:80}
+                        // ,{field: 'id', title: 'ID', sort: true,width:80}
                         ,{field: 'name', title: 'Name'}
                         ,{field: 'app.name', title: 'App', templet: '#appTpl'}
-                        ,{field: 'status', title: 'Status', templet: '#status'}
-                        ,{field: 'created_at', title: 'Created'}
-                        ,{field: 'updated_at', title: 'Updated'}
+                        ,{field: 'status', title: 'Status', templet: '#status', width: 90}
+                        ,{field: 'created_at', title: 'Created', width:160}
+                        ,{field: 'updated_at', title: 'Updated', width:160}
                         ,{fixed: 'right', width: 220, align:'center', toolbar: '#options'}
                     ]]
                 });
@@ -111,8 +111,9 @@
                     } else if(layEvent === 'ad'){
                         layer.open({
                             type: 2,
-                            title: '',
-                            shadeClose: true, area: ['90%', '90%'],
+                            title: 'Campaign: ' + data.name,
+                            shadeClose: true,
+                            area: ['100%', '100%'],
                             content: '/advertise/campaign/'+data.id+'/ad/list',
                             end: function () {
                                 // dataTable.reload();
