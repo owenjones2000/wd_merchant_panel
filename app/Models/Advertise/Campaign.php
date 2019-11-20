@@ -11,7 +11,7 @@ class Campaign extends Model
 {
     use SoftDeletes;
 
-    protected $table = 'campaign';
+    protected $table = 'a_campaign';
 
     protected $fillable = ['name', 'status', 'app_id', 'main_user_id'];
 

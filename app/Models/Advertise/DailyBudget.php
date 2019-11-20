@@ -9,7 +9,7 @@ class DailyBudget extends Model
 {
     use SoftDeletes;
 
-    protected $table = 'daily_budget';
+    protected $table = 'a_daily_budget';
 
     protected $fillable = ['amount', 'country_id'];
 

@@ -9,7 +9,7 @@ class TrackUrl extends Model
 {
     use SoftDeletes;
 
-    protected $table = 'track_url';
+    protected $table = 'a_track_url';
 
     protected $fillable = ['impression', 'click', 'country_id'];
 

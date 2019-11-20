@@ -8,7 +8,7 @@ class App extends Model
 {
     use SoftDeletes;
 
-    protected $table = 'app';
+    protected $table = 'a_app';
 
     protected $fillable = ['name', 'bundle_id', 'os', 'status', 'main_user_id'];
 }

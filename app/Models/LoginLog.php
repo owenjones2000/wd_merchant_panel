@@ -6,6 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class LoginLog extends Model
 {
-    protected $table = 'login_logs';
+    protected $table = 'ua_login_logs';
     protected $fillable = ['user_id','username','realname','ip'];
 }

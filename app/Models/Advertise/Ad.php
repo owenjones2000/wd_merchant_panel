@@ -8,7 +8,7 @@ class Ad extends Model
 {
     use SoftDeletes;
 
-    protected $table = 'ad';
+    protected $table = 'a_ad';
 
     protected $fillable = ['name', 'status', 'campaign_id'];
 

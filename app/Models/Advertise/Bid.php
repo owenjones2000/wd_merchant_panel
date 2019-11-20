@@ -9,7 +9,7 @@ class Bid extends Model
 {
     use SoftDeletes;
 
-    protected $table = 'bid';
+    protected $table = 'a_bid';
 
     protected $fillable = ['type', 'amount', 'country_id'];
 

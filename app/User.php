@@ -11,7 +11,7 @@ class User extends Authenticatable
 {
     use Notifiable,HasRoles,SoftDeletes;
 
-//    protected $table = 'ua_users';
+    protected $table = 'a_users';
 
     public function getMainId(){
         return $this->main_user_id > 0 ? $this->main_user_id : $this->id;

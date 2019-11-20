@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Icon extends Model
 {
-    protected $table = 'icons';
+    protected $table = 'ua_icons';
     protected $fillable = ['unicode','class','name','sort'];
 
     //对应菜单
