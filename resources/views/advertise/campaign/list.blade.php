@@ -115,7 +115,7 @@
                             shadeClose: true, area: ['90%', '90%'],
                             content: '/advertise/campaign/'+data.id+'/ad/list',
                             end: function () {
-                                dataTable.reload();
+                                // dataTable.reload();
                             }
                         });
                     }
@@ -138,7 +138,7 @@
                 //按钮批量删除
                 $("#listDelete").click(function () {
                     var ids = []
-                    var hasCheck = table.checkStatus('dataTable')
+                    var hasCheck = table.checkStatus('dataTable');
                     var hasCheckData = hasCheck.data
                     if (hasCheckData.length>0){
                         $.each(hasCheckData,function (index,element) {
