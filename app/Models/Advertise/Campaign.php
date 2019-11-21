@@ -5,7 +5,6 @@ use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
-use PHPUnit\Framework\Constraint\Count;
 
 class Campaign extends Model
 {
@@ -73,21 +72,21 @@ class Campaign extends Model
             }
 
             if(isset($params['budget_by_country']) && isset($params['budget'])){
-                $campaign->dailyBudgets()->delete();
+                $campaign->budgets()->delete();
                 if($params['budget_by_country']){
                     $budget_list = [];
                     foreach($params['budget'] as $budget){
                         if(!empty($budget['country']) && !empty($budget['amount'])) {
-                            $budget_list[] = new DailyBudget([
+                            $budget_list[] = new CampaignBudget([
                                 'amount' => $budget['amount'],
                                 'country_id' => $budget['country'],
                             ]);
                         }
                     }
-                    $campaign->dailyBudgets()->saveMany($budget_list);
+                    $campaign->budgets()->saveMany($budget_list);
                 }else{
                     if(empty($params['bid'][0]['amount'])) {
-                        $campaign->dailyBudgets()->save(new DailyBudget([
+                        $campaign->budgets()->save(new CampaignBudget([
                             'amount' => $params['budget'][0]['amount'] ?? 0,
                             'country_id' => 0,
                         ]));
@@ -101,7 +100,7 @@ class Campaign extends Model
                     $bid_list = [];
                     foreach($params['bid'] as $bid){
                         if(!empty($bid['country']) && !empty($bid['amount'])) {
-                            $bid_list[] = new Bid([
+                            $bid_list[] = new CampaignBid([
                                 'amount' => $bid['amount'],
                                 'country_id' => $bid['country'],
                             ]);
@@ -110,7 +109,7 @@ class Campaign extends Model
                     $campaign->bids()->saveMany($bid_list);
                 }else{
                     if(empty($params['bid'][0]['amount'])){
-                        $campaign->bids()->save(new Bid([
+                        $campaign->bids()->save(new CampaignBid([
                             'amount' => $params['bid'][0]['amount'] ?? 0,
                             'country_id' => 0,
                         ]));
@@ -149,17 +148,17 @@ class Campaign extends Model
     }
 
     /**
-     * 日预算
+     * 预算
      */
-    public function dailyBudgets(){
-        return $this->morphMany(DailyBudget::class, 'budgeting');
+    public function budgets(){
+        return $this->hasMany(CampaignBudget::class, 'campaign_id', 'id');
     }
 
     /**
      * 出价
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     * 
      */
     public function bids(){
-        return $this->morphMany(Bid::class, 'bidding');
+        return $this->hasMany(CampaignBid::class, 'campaign_id', 'id');
     }
 }

@@ -5,17 +5,13 @@ namespace App\Models\Advertise;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Bid extends Model
+class CampaignBudget extends Model
 {
     use SoftDeletes;
 
-    protected $table = 'a_bid';
+    protected $table = 'a_campaign_budget';
 
-    protected $fillable = ['type', 'amount', 'country_id'];
-
-    public function bidding(){
-        return $this->morphTo();
-    }
+    protected $fillable = ['amount', 'country_id'];
 
     /**
      * 指定国家

@@ -105,8 +105,8 @@
 
     <div class="layui-colla-item">
         @php
-            $is_budget_by_all_country = $campaign->dailyBudgets->count() == 0 || $campaign->dailyBudgets->contains('country_id', 0);
-            $budget_for_all_country = $campaign->dailyBudgets->where('country_id', 0)->first();
+            $is_budget_by_all_country = $campaign->budgets->count() == 0 || $campaign->budgets->contains('country_id', 0);
+            $budget_for_all_country = $campaign->budgets->where('country_id', 0)->first();
         @endphp
         <h2 class="layui-colla-title">Daily Budgets</h2>
         <div class="layui-colla-content">
@@ -124,7 +124,7 @@
                     <div class="layui-colla-content @if(!$is_budget_by_all_country) layui-show @endif">
                         <ul id="budget">
                             @if(!$is_budget_by_all_country)
-                                @foreach($campaign->dailyBudgets as $budget)
+                                @foreach($campaign->budgets as $budget)
                             <li data-index="{{$budget['country']['id']}}">
                                 <div class="layui-form-item">
                                 <label class="layui-form-label">{{$budget['country']['name']}}</label>
