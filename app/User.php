@@ -23,14 +23,6 @@ class User extends Authenticatable
         return empty($this->main_user_id);
     }
 
-    public function apps(){
-        return $this->hasMany(App::class, 'main_user_id', 'id');
-    }
-
-    public function campaigns(){
-        return $this->hasMany(Campaign::class, 'main_user_id', 'id');
-    }
-
     public function getAuthPassword()
     {
         return $this->password_hash;
