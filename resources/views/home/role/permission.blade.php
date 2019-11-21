@@ -39,12 +39,12 @@
                     </dl>
                 @empty
                     <div style="text-align: center;padding:20px 0;">
-                        无数据
+                        no data
                     </div>
                 @endforelse
                 <div class="layui-form-item">
-                    <button type="submit" class="layui-btn" lay-submit="" >确 认</button>
-                    <div  class="layui-btn close-iframe" onclick="close_parent(true)">关闭</div>
+                    <button type="submit" class="layui-btn" lay-submit="" >Save</button>
+                    <div  class="layui-btn close-iframe">Cancel</div>
                 </div>
 
             </form>

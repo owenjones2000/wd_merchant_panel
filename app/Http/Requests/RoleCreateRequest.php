@@ -24,7 +24,7 @@ class RoleCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'  => 'required|unique:roles|max:200',
+            'name'  => 'required|unique:ua_roles|max:200',
             'display_name'  => 'required'
         ];
     }

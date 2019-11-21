@@ -55,8 +55,8 @@ class AppController extends Controller
     public function store(Request $request)
     {
         $this->validate($request,[
-            'name'  => 'required|string|unique:app,name',
-            'bundle_id'  => 'required|unique:app,bundle_id',
+            'name'  => 'required|string|unique:a_app,name',
+            'bundle_id'  => 'required|unique:a_app,bundle_id',
         ]);
         $create_arr = $request->all();
         $create_arr['status'] = isset($create_arr['status']) ? 1 : 0;
@@ -100,8 +100,8 @@ class AppController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request,[
-            'name'  => 'required|string|unique:app,name,'.$id,
-            'bundle_id'  => 'required|unique:app,bundle_id,'.$id,
+            'name'  => 'required|string|unique:a_app,name,'.$id,
+            'bundle_id'  => 'required|unique:a_app,bundle_id,'.$id,
         ]);
         $apps = App::findOrFail($id);
         $update_arr = $request->only(['name','bundle_id', 'os', 'status']);

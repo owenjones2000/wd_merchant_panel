@@ -83,7 +83,7 @@ class CampaignController extends Controller
     public function save(Request $request, $id = null)
     {
         $this->validate($request,[
-            'name'  => 'required|string|unique:campaign,name,'.$id,
+            'name'  => 'required|string|unique:a_campaign,name,'.$id,
         ]);
         $params = $request->all();
         $params['id'] = $id;
