@@ -136,7 +136,7 @@ class Campaign extends Model
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function countries(){
-        return $this->belongsToMany(Country::class, 'campaign_country',
+        return $this->belongsToMany(Country::class, 'a_campaign_country',
             'campaign_id','country_id');
     }
 

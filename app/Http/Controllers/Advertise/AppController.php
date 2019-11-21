@@ -21,7 +21,7 @@ class AppController extends Controller
 
     public function data(Request $request)
     {
-        $app_query = App::query();
+        $app_query = Auth::user()->apps();
         if(!empty($request->get('name'))){
             $app_query->where('name', 'like', '%'.$request->get('name').'%');
         }

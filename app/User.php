@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Models\Advertise\App;
+use App\Models\Advertise\Campaign;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -19,6 +21,14 @@ class User extends Authenticatable
 
     public function isMainAccount(){
         return empty($this->main_user_id);
+    }
+
+    public function apps(){
+        return $this->hasMany(App::class, 'main_user_id', 'id');
+    }
+
+    public function campaigns(){
+        return $this->hasMany(Campaign::class, 'main_user_id', 'id');
     }
 
     public function getAuthPassword()

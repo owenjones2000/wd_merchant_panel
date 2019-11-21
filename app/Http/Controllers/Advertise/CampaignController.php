@@ -23,7 +23,7 @@ class CampaignController extends Controller
 
     public function data(Request $request)
     {
-        $campaign_query = Campaign::query()->where('main_user_id', Auth::user()->getMainId());
+        $campaign_query = Auth::user()->campaigns();
         if(!empty($request->get('name'))){
             $campaign_query->where('name', 'like', '%'.$request->get('name').'%');
         }
