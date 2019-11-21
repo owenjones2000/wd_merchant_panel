@@ -11,7 +11,7 @@
     </style>
     <div class="layui-card">
         <div class="layui-card-header layuiadmin-card-header-auto">
-            <h2>用户 【{{$user->realname}}】分配直接权限，直接权限与角色拥有的角色权限不冲突</h2>
+            <h2>Assign permissions to User 【{{$user->realname}}】</h2>
         </div>
         <div class="layui-card-body">
             <form action="{{route('home.user.assignPermission',['id'=>$user])}}" method="post" class="layui-form" onsubmit="return dosubmit()">
@@ -39,14 +39,13 @@
                     </dl>
                 @empty
                     <div style="text-align: center;padding:20px 0;">
-                        无数据
+                        no data
                     </div>
                 @endforelse
                 <div class="layui-form-item">
-                    <button type="submit" class="layui-btn" lay-submit="" >确 认</button>
-                    <div  class="layui-btn close-iframe" onclick="close_parent(true)">关闭</div>
+                    <button type="submit" class="layui-btn" lay-submit="" >Save</button>
+                    <div  class="layui-btn layui-btn-primary close-iframe">Cancel</div>
                 </div>
-
             </form>
         </div>
     </div>

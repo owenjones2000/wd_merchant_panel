@@ -18,7 +18,7 @@
             <table id="dataTable" lay-filter="dataTable"></table>
             <script type="text/html" id="options">
                 <div class="layui-btn-group">
-                    @can('system.user.create')
+                    @can('system.user.edit')
                     <a class="layui-btn layui-btn-sm" lay-event="edit">Edit</a>
                     @endcan
                     @can('system.user.role')
@@ -70,7 +70,7 @@
                 }
                 ,cols: [[ //表头
                     {checkbox: true,fixed: true}
-                    ,{field: 'id', title: 'ID', sort: true,width:80}
+                    // ,{field: 'id', title: 'ID', sort: true,width:80}
                     ,{field: 'username', title: 'Login Account'}
                     ,{field: 'realname', title: 'Real Name'}
                     ,{field: 'email', title: 'Email'}

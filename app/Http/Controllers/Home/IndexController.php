@@ -8,6 +8,7 @@ use App\Models\Role;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class IndexController extends Controller
 {
@@ -47,21 +48,32 @@ class IndexController extends Controller
     public function data(Request $request)
     {
         $model = $request->get('model');
-        $hidden_ids = [1];
+        /** @var User $user */
+        $user = Auth::user();
+        $empty_data = [
+            'code' => 0,
+            'msg' => '正在请求中...',
+            'count' => 0,
+            'data' => [],
+            'parent_id'=>$request->get('parent_id', 0),
+        ];
         switch (strtolower($model)) {
             case 'user':
                 $query = new User();
-                if(!in_array($request->user()->id, $hidden_ids)){
-                    $query = $query->whereNotIn('id', $hidden_ids);
+                $query = $query->where('id', $user['id']);
+                if(empty($user['main_user_id'])){
+                    $query = $query->orWhere('main_user_id', $user['id']);
                 }
                 break;
             case 'role':
+                return response()->json($empty_data);
                 $query = new Role();
                 if(!in_array($request->user()->id, $hidden_ids)){
                     $query = $query->whereNotIn('id', [1]);
                 }
                 break;
             case 'permission':
+                return response()->json($empty_data);
                 $query = new Permission();
                 if(!in_array($request->user()->id, $hidden_ids)){
                     $query = $query->whereNotIn('id', [1]);
@@ -69,7 +81,9 @@ class IndexController extends Controller
                 $query = $query->where('parent_id', $request->get('parent_id', 0))->with('icon');
                 break;
             default:
+                return response()->json($empty_data);
                 $query = new User();
+                $query = $query->where('id', $user['id']);
                 break;
         }
         $res = $query->paginate($request->get('limit', 30))->toArray();

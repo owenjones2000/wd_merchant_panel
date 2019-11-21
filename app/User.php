@@ -17,6 +17,10 @@ class User extends Authenticatable
         return $this->main_user_id > 0 ? $this->main_user_id : $this->id;
     }
 
+    public function isMainAccount(){
+        return empty($this->main_user_id);
+    }
+
     public function getAuthPassword()
     {
         return $this->password_hash;
@@ -28,7 +32,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'username','realname', 'email', 'password_hash','phone',
+        'username','realname', 'email', 'password_hash','phone'
     ];
 
     /**

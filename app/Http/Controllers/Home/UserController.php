@@ -43,25 +43,28 @@ class UserController extends Controller
      */
     public function store(UserCreateRequest $request)
     {
-        $user = Auth::user();
-        if($user['main_user_id'] > 0){
-            return redirect()->to(route('home.user'))->withErrors('');
+        /** @var User $user */
+        $op_user = Auth::user();
+        if(!$op_user->isMainAccount()){
+            return redirect()->to(route('home.user.create'))->withErrors('Permission denied');
         }
         $data =  $request->all();
         $data['uuid'] = \Faker\Provider\Uuid::uuid();
         $data['password_hash'] = Hash::make($data['password']);
-        $result = DB::transaction(function () use($data) {
-            $user = User::firstOrCreate(
+        $result = DB::transaction(function () use($data, $op_user) {
+            $user = User::firstOrNew(
                     ['username' => $data['username']],
                     $data
                 );
+            $user['main_user_id'] = $op_user->getMainId();
+            $user->saveOrFail();
             return true;
         }, 3);
         if ($result){
 
-            return redirect()->to(route('home.user'))->with(['status'=>'添加用户成功']);
+            return redirect()->to(route('home.user.create'))->with(['status'=>'Add user successful.']);
         }
-        return redirect()->to(route('home.user'))->withErrors('系统错误');
+        return redirect()->to(route('home.user.create'))->withErrors('Error');
     }
 
     /**
@@ -97,17 +100,24 @@ class UserController extends Controller
     public function update(UserUpdateRequest $request, $id)
     {
         try{
-            DB::transaction(function () use($id, $request) {
-                $user = User::findOrFail($id);
+            /** @var User $op_user */
+            $op_user = Auth::user();
+            DB::transaction(function () use($id, $request, $op_user) {
+                $user = User::query()
+                    ->where('id', $id)
+                    ->where(function($query) use($id, $op_user) {
+                        $query->where('main_user_id', $op_user['id'])
+                            ->orWhere('id', $op_user['id']);
+                    })->firstOrFail();
                 $data = $request->except('password');
                 if ($request->get('password')){
                     $data['password_hash'] = Hash::make($request->get('password'));
                 }
                 $user->update($data);
             }, 3);
-            //return redirect()->to(route('home.user.edit',[$id]))->with(['status'=>'更新用户成功']);
+            return redirect()->to(route('home.user.edit',[$id]))->with(['status'=>'更新用户成功']);
         }catch(\Exception $ex) {
-            return redirect()->to(route('home.user'))->withErrors('系统错误');
+            return redirect()->to(route('home.user.edit',[$id]))->withErrors('Permission denied');
         }
     }
 
@@ -123,7 +133,12 @@ class UserController extends Controller
         if (empty($ids)){
             return response()->json(['code'=>1,'msg'=>'请选择删除项']);
         }
-        if (User::destroy($ids)){
+        /** @var User $op_user */
+        $op_user = Auth::user();
+        $result = User::query()
+            ->whereIn('id', $ids)
+            ->where('main_user_id', $op_user['id'])->delete();
+        if ($result){
             return response()->json(['code'=>0,'msg'=>'删除成功']);
         }
         return response()->json(['code'=>1,'msg'=>'删除失败']);
@@ -132,52 +147,56 @@ class UserController extends Controller
     /**
      * 分配角色
      */
-    public function role(Request $request,$id)
-    {
-        $user = User::findOrFail($id);
-        if(in_array($request->user()->id, [1, 2])){
-            $roles = Role::get();
-        }else{
-            $roles = Role::query()->whereNotIn('id', [1, 6])->get();
-        }
-        $hasRoles = $user->roles();
-        foreach ($roles as $role){
-            $role->own = $user->hasRole($role) ? true : false;
-        }
-        return view('home.user.role',compact('roles','user'));
-    }
+//    public function role(Request $request,$id)
+//    {
+//        $user = User::findOrFail($id);
+//        if(in_array($request->user()->id, [1, 2])){
+//            $roles = Role::get();
+//        }else{
+//            $roles = Role::query()->whereNotIn('id', [1, 6])->get();
+//        }
+//        $hasRoles = $user->roles();
+//        foreach ($roles as $role){
+//            $role->own = $user->hasRole($role) ? true : false;
+//        }
+//        return view('home.user.role',compact('roles','user'));
+//    }
 
     /**
      * 更新分配角色
      */
-    public function assignRole(Request $request,$id)
-    {
-        $user = User::findOrFail($id);
-        $roles = $request->get('roles',[]);
-        if ($user->roles()->sync($roles)){
-           return redirect()->to(route('home.user.role',[$id]))->with(['status'=>'更新用户角色成功']);
-        }
-        return redirect()->to(route('home.user'))->withErrors('系统错误');
-    }
+//    public function assignRole(Request $request,$id)
+//    {
+//        $user = User::findOrFail($id);
+//        $roles = $request->get('roles',[]);
+//        if ($user->roles()->sync($roles)){
+//           return redirect()->to(route('home.user.role',[$id]))->with(['status'=>'更新用户角色成功']);
+//        }
+//        return redirect()->to(route('home.user'))->withErrors('系统错误');
+//    }
 
     /**
      * 分配权限
      */
     public function permission(Request $request,$id)
     {
+        /** @var User $op_user */
+        $op_user = Auth::user();
         $user = User::findOrFail($id);
         $permissions = $this->tree();
-        foreach ($permissions as $key1 => $item1){
-            if(in_array($item1['id'], [1, 32]) && !in_array($request->user()->id, [1, 2])){
-                unset($permissions[$key1]);
-                continue;
-            }
+        foreach ($permissions as $key1 => &$item1){
             $permissions[$key1]['own'] = $user->hasDirectPermission($item1['id']) ? 'checked' : false ;
             if (isset($item1['_child'])){
-                foreach ($item1['_child'] as $key2 => $item2){
+                foreach ($item1['_child'] as $key2 => &$item2){
                     $permissions[$key1]['_child'][$key2]['own'] = $user->hasDirectPermission($item2['id']) ? 'checked' : false ;
                     if (isset($item2['_child'])){
                         foreach ($item2['_child'] as $key3 => $item3){
+                            if(!empty($op_user['main_user_id']) || !empty($user['main_user_id'])){
+                                if(in_array($item3['id'], [3, 5, 7])){
+                                    unset($item2['_child'][$key3]);
+                                    continue;
+                                }
+                            }
                             $permissions[$key1]['_child'][$key2]['_child'][$key3]['own'] = $user->hasDirectPermission($item3['id']) ? 'checked' : false ;
                         }
                     }
@@ -192,16 +211,32 @@ class UserController extends Controller
      */
     public function assignPermission(Request $request,$id)
     {
-        $user = User::findOrFail($id);
+        /** @var User $op_user */
+        $op_user = Auth::user();
+        if(!empty($op_user['main_user_id'])){
+            return redirect()->to(route('home.user.permission',[$id]))->withErrors('Permission denied.');
+        }
+
+        try{
+            $user = User::query()
+                ->where('id', $id)
+                ->where(function($query) use($id, $op_user) {
+                    $query->where('main_user_id', $op_user['id'])
+                        ->orWhere('id', $op_user['id']);
+                })->firstOrFail();
+        }catch (\Exception $ex){
+            return redirect()->to(route('home.user.permission',[$id]))->withErrors('Permission denied.');
+        }
+
 
         $permissions = $request->get('permissions');
 
         if (empty($permissions)){
             $user->permissions()->detach();
-            return redirect()->to(route('home.user.permission',[$id]))->with(['status'=>'已更新用户直接权限']);
+            return redirect()->to(route('home.user.permission',[$id]))->with(['status'=>'Update permission successful.']);
         }
         $user->syncPermissions($permissions);
-        return redirect()->to(route('home.user.permission',[$id]))->with(['status'=>'已更新用户直接权限']);
+        return redirect()->to(route('home.user.permission',[$id]))->with(['status'=>'Update permission successful.']);
     }
 
 }
