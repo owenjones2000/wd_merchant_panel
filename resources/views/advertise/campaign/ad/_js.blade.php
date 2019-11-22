@@ -8,11 +8,12 @@
 
         //多文件列表示例
         var fileList = $('#fileList');
-            var uploadListIns = upload.render({
+        var uploadListIns = upload.render({
             elem: '#upload'
             ,accept: 'file'
             ,exts: 'mp4'
             ,url: '{{ route('advertise.asset.process') }}'
+            //,data:{ad_type_id: 2}
             ,multiple: true
             ,auto: true
             ,done: function(res, index, upload){

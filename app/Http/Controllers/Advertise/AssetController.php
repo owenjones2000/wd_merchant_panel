@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Advertise;
 
 use App\Http\Controllers\Controller;
+use App\Models\Advertise\AdType;
 use App\Models\Advertise\Asset;
 use App\Models\Advertise\AssetType;
 use FFMpeg\FFProbe;
@@ -18,44 +19,47 @@ class AssetController extends Controller
         //返回信息json
         $file = $request->file('file');
 
-        $data = [
-            'code'=>200,
-            'msg'=>'上传失败',
-            'name' => pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME),
-            'data'=>''
-        ];
+        try{
+            if (!$file->isValid()){
+                throw new \Exception($file->getErrorMessage());
+            }
+            $file_info = $this->decideAssetType($file);
+            $ad_type = AdType::get($request->input('ad_type_id', null));
+            if($ad_type != null){
+                if(!in_array($file_info['type'], $ad_type['need_asset_type'])){
+                    throw new \Exception('file type not support.');
+                }
+            }
+            $main_id = Auth::user()->getMainId();
+            $dir = "asset/{$main_id}";
+            $file_name = date('Ymd').time().uniqid().".".$file->getClientOriginalExtension();
+            $path = Storage::putFileAs($dir, $file, $file_name);
 
-        //检查文件是否上传完成
-        if (!$file->isValid()){
-            $data['msg'] = $file->getErrorMessage();
+
+            $asset = Asset::create([
+                'file_path' => $path,
+                'type_id' => $file_info['type'],
+                'spec' => $file_info
+            ]);
+            $asset['type'] = AssetType::get($asset['type_id']);
+
+            if($path){
+                $data = [
+                    'code'  => 0,
+                    'msg'   => '上传成功',
+                    'asset' => $asset,
+                ];
+            }else{
+                $data['msg'] = $file->getErrorMessage();
+            }
+            return response()->json($data);
+        }catch (\Exception $ex){
+            $data = [
+                'code'=>1,
+                'msg'=>$ex->getMessage()
+            ];
             return response()->json($data);
         }
-
-        $main_id = Auth::user()->getMainId();
-        $dir = "asset/{$main_id}";
-        $file_name = date('Ymd').time().uniqid().".".$file->getClientOriginalExtension();
-        $path = Storage::putFileAs($dir, $file, $file_name);
-
-        $file_info = $this->decideAssetType($file);
-        $asset = Asset::create([
-            'file_path' => $path,
-            'type_id' => $file_info['type'],
-            'width' => $file_info['width'],
-            'height' => $file_info['height'],
-            'duration' => $file_info['duration'],
-        ]);
-        $asset['type'] = AssetType::get($asset['type_id']);
-
-        if($path){
-            $data = [
-                'code'  => 0,
-                'msg'   => '上传成功',
-                'asset' => $asset,
-            ];
-        }else{
-            $data['msg'] = $file->getErrorMessage();
-        }
-        return response()->json($data);
     }
 
     private function decideAssetType($file){

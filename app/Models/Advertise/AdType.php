@@ -9,7 +9,10 @@ class AdType
     const Video_Portrait_Long = 4;
 
     public static function get($type_id){
-        return self::$list[$type_id];
+        if(isset(self::$list[$type_id])) {
+            return self::$list[$type_id];
+        }
+        return null;
     }
 
     public static $list = [

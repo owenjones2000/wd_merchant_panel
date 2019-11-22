@@ -10,7 +10,11 @@ class Asset extends Model
 
     protected $table = 'a_asset';
 
-    protected $fillable = ['file_path', 'type_id', 'width', 'height', 'duration', 'ad_id'];
+    protected $fillable = ['file_path', 'type_id', 'width', 'height', 'duration', 'spec', 'ad_id'];
+
+    protected $casts = [
+        'spec' => 'json'
+    ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
