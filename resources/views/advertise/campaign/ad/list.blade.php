@@ -4,11 +4,11 @@
     <div class="layui-card">
         <div class="layui-card-header layuiadmin-card-header-auto">
             <div class="layui-btn-group ">
-                @can('advertise.campaign.ad.destroy')
-                    <button class="layui-btn layui-btn-sm layui-btn-danger" id="listDelete">Remove</button>
-                @endcan
-                @can('advertise.campaign.ad.create')
-                    <button class="layui-btn layui-btn-sm" id="ad_add">Create Ad</button>
+                {{--@can('advertise.campaign.ad.destroy')--}}
+                    {{--<button class="layui-btn layui-btn-sm layui-btn-danger" id="listDelete">Remove</button>--}}
+                {{--@endcan--}}
+                @can('advertise.campaign.ad.edit')
+                    <button class="layui-btn layui-btn-normal layui-btn-sm" id="ad_add">Create Ad</button>
                 @endcan
             </div>
             <div class="layui-form" >
@@ -22,16 +22,20 @@
             <table id="dataTable" lay-filter="dataTable"></table>
             <script type="text/html" id="options">
                 <div class="layui-btn-group">
-                    @can('advertise.campaign.ad.edit')
-                        <a class="layui-btn layui-btn-sm" lay-event="edit">Edit</a>
-                    @endcan
-                    @can('advertise.campaign.ad.destroy')
-                        <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">Remove</a>
-                    @endcan
+                    {{--@can('advertise.campaign.ad.destroy')--}}
+                        {{--<a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">Remove</a>--}}
+                    {{--@endcan--}}
                 </div>
             </script>
             <script type="text/html" id="nameTpl">
-                @{{ d.ad.name }}
+                @can('advertise.campaign.ad.edit')
+                    <a class="layui-table-link" lay-event="edit">
+                @endcan
+                    @{{ d.ad.name }}
+                @can('advertise.campaign.ad.edit')
+                    </a>
+                @endcan
+
             </script>
             <script type="text/html" id="status">
                 @{{# if(d.status){ }}
@@ -81,7 +85,7 @@
                         ,{field: 'ecpi', title: 'eCPI'}
                         ,{field: 'ecpm', title: 'eCPM'}
                         ,{field: 'status', title: 'Status', templet: '#status', width:90}
-                        ,{fixed: 'right', width: 220, align:'center', toolbar: '#options'}
+                        // ,{fixed: 'right', width: 220, align:'center', toolbar: '#options'}
                     ]]
                 });
 

@@ -4,11 +4,11 @@
     <div class="layui-card">
         <div class="layui-card-header layuiadmin-card-header-auto">
             <div class="layui-btn-group ">
-                @can('advertise.campaign.destroy')
-                    <button class="layui-btn layui-btn-sm layui-btn-danger" id="listDelete">Remove</button>
-                @endcan
-                @can('advertise.campaign.create')
-                    <button class="layui-btn layui-btn-sm" id="campaign_add">Create Campaign</button>
+                {{--@can('advertise.campaign.destroy')--}}
+                    {{--<button class="layui-btn layui-btn-sm layui-btn-danger" id="listDelete">Remove</button>--}}
+                {{--@endcan--}}
+                @can('advertise.campaign.edit')
+                    <button class="layui-btn layui-btn-normal layui-btn-sm" id="campaign_add">Create Campaign</button>
                 @endcan
             </div>
             <div class="layui-form" >
@@ -25,16 +25,19 @@
                     @can('advertise.campaign.ad')
                         <a class="layui-btn layui-btn-sm" lay-event="ad">Ads</a>
                     @endcan
-                    @can('advertise.campaign.edit')
-                        <a class="layui-btn layui-btn-sm" lay-event="edit">Edit</a>
-                    @endcan
-                    @can('advertise.campaign.destroy')
-                        <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">Remove</a>
-                    @endcan
+                    {{--@can('advertise.campaign.destroy')--}}
+                        {{--<a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">Remove</a>--}}
+                    {{--@endcan--}}
                 </div>
             </script>
             <script type="text/html" id="nameTpl">
-                @{{ d.campaign.name }}
+                @can('advertise.campaign.edit')
+                    <a class="layui-table-link" lay-event="edit">
+                @endcan
+                    @{{ d.campaign.name }}
+                @can('advertise.campaign.edit')
+                    </a>
+                @endcan
             </script>
             <script type="text/html" id="appTpl">
                 @{{ d.campaign.app.name }} (@{{ d.campaign.app.os }})
