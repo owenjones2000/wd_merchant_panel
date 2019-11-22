@@ -56,7 +56,7 @@
                 case '#track':
                     return $([
                         '<li data-index="'+ obj.value +'">',
-                        '<input type="hidden" name="track['+ obj.value +'][country]" value="'+ obj.value +'">',
+                        '<input type="hidden" name="track['+ obj.value +'][country_code]" value="'+ obj.value +'">',
                         '<div class="layui-form-item">',
                         '<label class="layui-form-label">'+ obj.name +'</label>',
                         '<div class="layui-input-block">',
@@ -76,7 +76,7 @@
                         '<div class="layui-form-item">',
                         '<label class="layui-form-label">'+ obj.name +'</label>',
                         '<div class="layui-input-inline">',
-                        '<input type="hidden" name="budget['+ obj.value +'][country]" value="'+ obj.value +'">',
+                        '<input type="hidden" name="budget['+ obj.value +'][country_code]" value="'+ obj.value +'">',
                         '<input type="text" name="budget['+ obj.value +'][amount]" value="" placeholder="$" autocomplete="off" class="layui-input" >',
                         '</div>',
                         '</div>',
@@ -88,7 +88,7 @@
                         '<div class="layui-form-item">',
                         '<label class="layui-form-label">'+ obj.name +'</label>',
                         '<div class="layui-input-inline">',
-                        '<input type="hidden" name="bid['+ obj.value +'][country]" value="'+ obj.value +'">',
+                        '<input type="hidden" name="bid['+ obj.value +'][country_code]" value="'+ obj.value +'">',
                         '<input type="text" name="bid['+ obj.value +'][amount]" value="" placeholder="$" autocomplete="off" class="layui-input" >',
                         '</div>',
                         '</div>',

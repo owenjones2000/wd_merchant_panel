@@ -37,11 +37,11 @@ class Campaign extends Model
             if(empty($params['countries'])){
                 $campaign->countries()->sync([]);
             }else{
-                $country_id_list = is_array($params['countries']) ?
+                $country_code_list = is_array($params['countries']) ?
                     $params['countries'] : explode(',', $params['countries']);
                 $countries = Country::query()
-                    ->whereIn('id', $country_id_list)
-                    ->pluck('id');
+                    ->whereIn('code', $country_code_list)
+                    ->pluck('code');
                 $campaign->countries()->sync($countries);
             }
 
@@ -49,13 +49,13 @@ class Campaign extends Model
                 $campaign->trackUrls()->delete();
                 if($params['track_by_country']){
                     $track_list = [];
-                    foreach($params['track'] as $track){
-                        if(!empty($track['country'])
-                            && (!empty($track['impression']) || !empty($track['click']))) {
+                    foreach($params['track'] as $track_info){
+                        if(!empty($track_info['country_code'])
+                            && (!empty($track_info['impression']) || !empty($track_info['click']))) {
                             $track_list[] = new TrackUrl([
-                                'impression' => $track['impression'],
-                                'click' => $track['click'],
-                                'country_id' => $track['country'],
+                                'impression' => $track_info['impression'],
+                                'click' => $track_info['click'],
+                                'country_code' => $track_info['country_code'],
                             ]);
                         }
                     }
@@ -65,7 +65,7 @@ class Campaign extends Model
                         $campaign->trackUrls()->save(new TrackUrl([
                             'impression' => $params['track'][0]['impression'] ?? '',
                             'click' => $params['track'][0]['click'] ?? '',
-                            'country_id' => 0,
+                            'country_code' => '',
                         ]));
                     }
                 }
@@ -75,20 +75,20 @@ class Campaign extends Model
                 $campaign->budgets()->delete();
                 if($params['budget_by_country']){
                     $budget_list = [];
-                    foreach($params['budget'] as $budget){
-                        if(!empty($budget['country']) && !empty($budget['amount'])) {
+                    foreach($params['budget'] as $budget_info){
+                        if(!empty($budget_info['country_code']) && !empty($budget_info['amount'])) {
                             $budget_list[] = new CampaignBudget([
-                                'amount' => $budget['amount'],
-                                'country_id' => $budget['country'],
+                                'amount' => $budget_info['amount'],
+                                'country_code' => $budget_info['country_code'],
                             ]);
                         }
                     }
                     $campaign->budgets()->saveMany($budget_list);
                 }else{
-                    if(empty($params['bid'][0]['amount'])) {
+                    if(empty($params['budget'][0]['amount'])) {
                         $campaign->budgets()->save(new CampaignBudget([
                             'amount' => $params['budget'][0]['amount'] ?? 0,
-                            'country_id' => 0,
+                            'country_code' => '',
                         ]));
                     }
                 }
@@ -98,11 +98,11 @@ class Campaign extends Model
                 $campaign->bids()->delete();
                 if($params['bid_by_country']){
                     $bid_list = [];
-                    foreach($params['bid'] as $bid){
-                        if(!empty($bid['country']) && !empty($bid['amount'])) {
+                    foreach($params['bid'] as $bid_info){
+                        if(!empty($bid_info['country_code']) && !empty($bid_info['amount'])) {
                             $bid_list[] = new CampaignBid([
-                                'amount' => $bid['amount'],
-                                'country_id' => $bid['country'],
+                                'amount' => $bid_info['amount'],
+                                'country_code' => $bid_info['country_code'],
                             ]);
                         }
                     }
@@ -111,7 +111,7 @@ class Campaign extends Model
                     if(empty($params['bid'][0]['amount'])){
                         $campaign->bids()->save(new CampaignBid([
                             'amount' => $params['bid'][0]['amount'] ?? 0,
-                            'country_id' => 0,
+                            'country_code' => '',
                         ]));
                     }
                 }
@@ -136,7 +136,7 @@ class Campaign extends Model
      */
     public function countries(){
         return $this->belongsToMany(Country::class, 'a_campaign_country',
-            'campaign_id','country_id');
+            'campaign_id','country_code', 'id', 'code');
     }
 
     /**
@@ -156,7 +156,7 @@ class Campaign extends Model
 
     /**
      * 出价
-     * 
+     *
      */
     public function bids(){
         return $this->hasMany(CampaignBid::class, 'campaign_id', 'id');
