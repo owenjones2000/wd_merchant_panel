@@ -10,7 +10,7 @@ class Ad extends Model
 
     protected $table = 'a_ad';
 
-    protected $fillable = ['name', 'status', 'campaign_id'];
+    protected $fillable = ['name', 'status', 'type_id', 'campaign_id'];
 
     /**
      * 构造Ad

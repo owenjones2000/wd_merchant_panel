@@ -7,7 +7,9 @@ class AssetType
     const Landscape_Long = 2;
     const Portrait_Short = 3;
     const Portrait_Long = 4;
-    const Html = 5;
+    const Landscape_Interstitial_Image = 5;
+    const Portrait_Interstitial_Image = 6;
+    const Html = 7;
 
     public static function get($asset_type_id){
         return self::$list[$asset_type_id];
@@ -25,6 +27,9 @@ class AssetType
         ],
         self::Portrait_Long => [
             'name' => 'Portrait Long Video'
+        ],
+        self::Html => [
+            'name' => 'HTML File'
         ],
     ];
 }

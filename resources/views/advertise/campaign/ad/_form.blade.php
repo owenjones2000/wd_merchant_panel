@@ -1,6 +1,18 @@
 {{csrf_field()}}
 
 <div class="layui-form-item">
+    <label for="" class="layui-form-label">Ad Type</label>
+    <div class="layui-input-inline">
+        <select name="type_id" lay-filter="selectType" lay-verify="required">
+            <option value=""></option>
+            @foreach(\App\Models\Advertise\AdType::$list as $ad_type)
+                <option @if(($ad['type_id']??0) == $ad_type['id']) selected @endif value="{{ $ad_type['id']}}">{{ $ad_type['name'] }}</option>
+            @endforeach
+        </select>
+    </div>
+</div>
+
+<div class="layui-form-item">
     <label for="" class="layui-form-label">Name</label>
     <div class="layui-input-block">
         <input type="text" name="name" value="{{ $ad->name ?? old('name') }}" lay-verify="required" placeholder="" autocomplete="off" class="layui-input" >
@@ -10,7 +22,7 @@
 <div class="layui-form-item">
     <label class="layui-form-label">Status</label>
     <div class="layui-input-block">
-        <input type="checkbox" name="status" @if($ad->status??true) checked @endif lay-skin="switch" lay-filter="switchStatus" lay-text="Enable|Disable">
+        <input type="checkbox" name="status" @if($ad->status??true) checked @endif lay-skin="switch" lay-filter="switchStatus" lay-text="">
     </div>
 </div>
 

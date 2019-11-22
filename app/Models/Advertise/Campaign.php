@@ -61,7 +61,7 @@ class Campaign extends Model
                     }
                     $campaign->trackUrls()->saveMany($track_list);
                 }else{
-                    if(!empty($track['impression']) || !empty($track['click'])) {
+                    if(!empty($track[0]['impression']) || !empty($track[0]['click'])) {
                         $campaign->trackUrls()->save(new TrackUrl([
                             'impression' => $params['track'][0]['impression'] ?? '',
                             'click' => $params['track'][0]['click'] ?? '',
