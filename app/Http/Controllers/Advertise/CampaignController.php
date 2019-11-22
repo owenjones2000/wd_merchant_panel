@@ -25,6 +25,7 @@ class CampaignController extends Controller
 
     public function data(Request $request)
     {
+        $today = date('Y-m-d');
         $campaign_base_query = Campaign::query()->where('main_user_id', Auth::user()->getMainId());
         if(!empty($request->get('name'))){
             $campaign_base_query->where('name', 'like', '%'.$request->get('name').'%');
@@ -32,7 +33,7 @@ class CampaignController extends Controller
         $campaign_id_query = clone $campaign_base_query;
         $campaign_id_query->select('id');
         $advertise_kpi_query = AdvertiseKpi::query()
-            ->whereBetween('date', ['2019-11-22', '2019-11-22'])
+            ->whereBetween('date', [$today, $today])
             ->whereIn('campaign_id', $campaign_id_query);
         $advertise_kpi_query->select([
             DB::raw('sum(impressions) as impressions'),
