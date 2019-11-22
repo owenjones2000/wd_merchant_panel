@@ -75,9 +75,9 @@
                         }
                     }
                     ,cols: [[ //表头
-                        {checkbox: true,fixed: true}
+                        //{checkbox: true,fixed: true}
                         // ,{field: 'id', title: 'ID', sort: true,width:80}
-                        ,{field: 'name', title: 'Name', templet: '#nameTpl', width:300}
+                        {field: 'name', title: 'Name', templet: '#nameTpl', width:300}
                         // ,{field: 'app.name', title: 'App', templet: '#appTpl'}
                         ,{field: 'created', title: 'Created', width:110}
                         ,{field: 'impressions', title: 'Impressions'}

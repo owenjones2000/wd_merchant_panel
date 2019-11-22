@@ -30,6 +30,9 @@
                     @endcan
                 </div>
             </script>
+            <script type="text/html" id="nameTpl">
+                @{{ d.ad.name }}
+            </script>
             <script type="text/html" id="status">
                 @{{# if(d.status){ }}
                     <span class="layui-bg-green">Enabled</span>
@@ -66,12 +69,18 @@
                         }
                     }
                     ,cols: [[ //表头
-                        {checkbox: true,fixed: true}
-                        ,{field: 'id', title: 'ID', sort: true,width:80}
-                        ,{field: 'name', title: 'Name'}
-                        ,{field: 'status', title: 'Status', templet: '#status'}
-                        ,{field: 'created_at', title: 'Created'}
-                        ,{field: 'updated_at', title: 'Updated'}
+                        //{checkbox: true,fixed: true}
+                        // ,{field: 'id', title: 'ID', sort: true,width:80}
+                        {field: 'name', title: 'Name', templet: '#nameTpl', width:300}
+                        // ,{field: 'app.name', title: 'App', templet: '#appTpl'}
+                        ,{field: 'created', title: 'Created', width:110}
+                        ,{field: 'impressions', title: 'Impressions'}
+                        ,{field: 'clicks', title: 'Clicks'}
+                        ,{field: 'installs', title: 'Installs'}
+                        ,{field: 'spend', title: 'Spend'}
+                        ,{field: 'ecpi', title: 'eCPI'}
+                        ,{field: 'ecpm', title: 'eCPM'}
+                        ,{field: 'status', title: 'Status', templet: '#status', width:90}
                         ,{fixed: 'right', width: 220, align:'center', toolbar: '#options'}
                     ]]
                 });
@@ -82,7 +91,7 @@
                         ,layEvent = obj.event; //获得 lay-event 对应的值
                     if(layEvent === 'del'){
                         layer.confirm('确认删除吗？', function(index){
-                            $.post("{{ route('advertise.campaign.ad.destroy', [$campaign['id']]) }}",{_method:'delete',ids:[data.id]},function (result) {
+                            $.post("{{ route('advertise.campaign.ad.destroy', [$campaign['id']]) }}",{_method:'delete',ids:[data.ad_id]},function (result) {
                                 if (result.code==0){
                                     obj.del(); //删除对应行（tr）的DOM结构
                                 }
@@ -96,7 +105,7 @@
                             type: 2,
                             title: '',
                             shadeClose: true, area: ['80%', '80%'],
-                            content: '/advertise/campaign/{{$campaign['id']}}/ad/'+data.id,
+                            content: '/advertise/campaign/{{$campaign['id']}}/ad/'+data.ad_id,
                             end: function () {
                                 dataTable.reload();
                             }

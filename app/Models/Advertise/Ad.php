@@ -53,6 +53,14 @@ class Ad extends Model
     }
 
     /**
+     * 广告活动
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function campaign(){
+        return $this->belongsTo(Campaign::class, 'campaign_id', 'id');
+    }
+
+    /**
      * 素材
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
