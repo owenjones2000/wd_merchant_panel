@@ -33,8 +33,11 @@
                     @endcan
                 </div>
             </script>
+            <script type="text/html" id="nameTpl">
+                @{{ d.campaign.name }}
+            </script>
             <script type="text/html" id="appTpl">
-                @{{ d.app.name }} (@{{ d.app.os }})
+                @{{ d.campaign.app.name }} (@{{ d.campaign.app.os }})
             </script>
             <script type="text/html" id="status">
                 @{{# if(d.status){ }}
@@ -74,11 +77,16 @@
                     ,cols: [[ //表头
                         {checkbox: true,fixed: true}
                         // ,{field: 'id', title: 'ID', sort: true,width:80}
-                        ,{field: 'name', title: 'Name'}
-                        ,{field: 'app.name', title: 'App', templet: '#appTpl'}
-                        ,{field: 'status', title: 'Status', templet: '#status', width: 90}
-                        ,{field: 'created_at', title: 'Created', width:160}
-                        ,{field: 'updated_at', title: 'Updated', width:160}
+                        ,{field: 'name', title: 'Name', templet: '#nameTpl', width:300}
+                        // ,{field: 'app.name', title: 'App', templet: '#appTpl'}
+                        ,{field: 'created', title: 'Created', width:110}
+                        ,{field: 'impressions', title: 'Impressions'}
+                        ,{field: 'clicks', title: 'Clicks'}
+                        ,{field: 'installs', title: 'Installs'}
+                        ,{field: 'spend', title: 'Spend'}
+                        ,{field: 'ecpi', title: 'eCPI'}
+                        ,{field: 'ecpm', title: 'eCPM'}
+                        ,{field: 'status', title: 'Status', templet: '#status', width:90}
                         ,{fixed: 'right', width: 220, align:'center', toolbar: '#options'}
                     ]]
                 });
@@ -89,7 +97,7 @@
                         ,layEvent = obj.event; //获得 lay-event 对应的值
                     if(layEvent === 'del'){
                         layer.confirm('确认删除吗？', function(index){
-                            $.post("{{ route('advertise.campaign.destroy') }}",{_method:'delete',ids:[data.id]},function (result) {
+                            $.post("{{ route('advertise.campaign.destroy') }}",{_method:'delete',ids:[data.campaign_id]},function (result) {
                                 if (result.code==0){
                                     obj.del(); //删除对应行（tr）的DOM结构
                                 }
@@ -103,7 +111,7 @@
                             type: 2,
                             title: '',
                             shadeClose: true, area: ['80%', '80%'],
-                            content: '/advertise/campaign/'+data.id,
+                            content: '/advertise/campaign/'+data.campaign_id,
                             end: function () {
                                 dataTable.reload();
                             }
@@ -114,7 +122,7 @@
                             title: 'Campaign: ' + data.name,
                             shadeClose: true,
                             area: ['100%', '100%'],
-                            content: '/advertise/campaign/'+data.id+'/ad/list',
+                            content: '/advertise/campaign/'+data.campaign_id+'/ad/list',
                             end: function () {
                                 // dataTable.reload();
                             }
@@ -138,9 +146,9 @@
 
                 //按钮批量删除
                 $("#listDelete").click(function () {
-                    var ids = []
+                    var ids = [];
                     var hasCheck = table.checkStatus('dataTable');
-                    var hasCheckData = hasCheck.data
+                    var hasCheckData = hasCheck.data;
                     if (hasCheckData.length>0){
                         $.each(hasCheckData,function (index,element) {
                             ids.push(element.id)

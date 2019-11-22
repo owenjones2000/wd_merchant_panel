@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Advertise;
 
+use App\Models\Advertise\AdvertiseKpi;
 use App\Models\Advertise\App;
 use App\Models\Advertise\Campaign;
 use App\Models\Advertise\Country;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class CampaignController extends Controller
 {
@@ -23,11 +25,36 @@ class CampaignController extends Controller
 
     public function data(Request $request)
     {
-        $campaign_query = Campaign::query()->where('main_user_id', Auth::user()->getMainId());
+        $campaign_base_query = Campaign::query()->where('main_user_id', Auth::user()->getMainId());
         if(!empty($request->get('name'))){
-            $campaign_query->where('name', 'like', '%'.$request->get('name').'%');
+            $campaign_base_query->where('name', 'like', '%'.$request->get('name').'%');
         }
-        $res = $campaign_query->with('app')->orderBy($request->get('field','status'),$request->get('order','desc'))->orderBy('name','asc')->paginate($request->get('limit',30))->toArray();
+        $campaign_id_query = clone $campaign_base_query;
+        $campaign_id_query->select('id');
+        $advertise_kpi_query = AdvertiseKpi::query()
+            ->whereBetween('date', ['2019-11-22', '2019-11-22'])
+            ->whereIn('campaign_id', $campaign_id_query);
+        $advertise_kpi_query->select([
+            DB::raw('sum(impressions) as impressions'),
+            DB::raw('sum(clicks) as clicks'),
+            DB::raw('sum(installations) as installs'),
+            DB::raw('round(sum(spend), 2) as spend'),
+//            DB::raw('round(sum(clicks) / sum(impressions) * 100, 2) as rate_clicks'),
+//            DB::raw('round(sum(installs) * 1000 / sum(impressions), 2) as ipm'),
+//            DB::raw('round(sum(installs) / sum(clicks) * 100, 2) as rate_conversion'),
+            DB::raw('round(sum(spend) * 1000 / sum(installations), 2) as ecpi'),
+            DB::raw('round(sum(spend) * 1000 / sum(impressions), 2) as ecpm'),
+            'campaign_id',
+            'status',
+            DB::raw('DATE_FORMAT(created_at, \'%Y-%m-%d\') as created'),
+        ]);
+        $advertise_kpi_query->groupBy('campaign_id');
+
+
+        $res = $advertise_kpi_query->with('campaign.app')
+            ->orderBy($request->get('field','status'),$request->get('order','desc'))
+            ->orderBy('spend','asc')->paginate($request->get('limit',30))
+            ->toArray();
 
         $data = [
             'code' => 0,
