@@ -89,9 +89,9 @@ class CampaignController extends Controller
         $params['id'] = $id;
         $params['status'] = isset($params['status']) ? 1 : 0;
         if (Campaign::Make(Auth::user(), $params)){
-           // return redirect(route('advertise.campaign.edit', [$id]))->with(['status'=>'更新成功']);
+            return redirect(route('advertise.campaign.edit', [$id]))->with(['status'=>'更新成功']);
         }
-        //return redirect(route('advertise.campaign.edit', [$id]))->withErrors(['status'=>'系统错误']);
+        return redirect(route('advertise.campaign.edit', [$id]))->withErrors(['status'=>'系统错误']);
     }
 
     /**
