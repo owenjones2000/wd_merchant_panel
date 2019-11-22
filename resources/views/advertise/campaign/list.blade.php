@@ -119,7 +119,7 @@
                     } else if(layEvent === 'ad'){
                         layer.open({
                             type: 2,
-                            title: 'Campaign: ' + data.name,
+                            title: 'Campaign: ' + data.campaign.name,
                             shadeClose: true,
                             area: ['100%', '100%'],
                             content: '/advertise/campaign/'+data.campaign_id+'/ad/list',
