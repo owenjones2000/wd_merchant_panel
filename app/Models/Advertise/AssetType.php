@@ -28,6 +28,12 @@ class AssetType
         self::Portrait_Long => [
             'name' => 'Portrait Long Video'
         ],
+        self::Landscape_Interstitial_Image => [
+            'name' => 'Landscape Interstitial Image'
+        ],
+        self::Portrait_Interstitial_Image => [
+            'name' => 'Portrait Interstitial Image'
+        ],
         self::Html => [
             'name' => 'HTML File'
         ],
