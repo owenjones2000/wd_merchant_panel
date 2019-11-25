@@ -9,15 +9,15 @@ class TrackUrl extends Model
 {
     use SoftDeletes;
 
-    protected $table = 'a_track_url';
+    protected $table = 'a_campaign_track_url';
 
-    protected $fillable = ['impression', 'click', 'country_id'];
+    protected $fillable = ['impression', 'click', 'region_id'];
 
     /**
      * 指定国家
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function country(){
-        return $this->belongsTo(Country::class, 'country_id', 'id');
+    public function region(){
+        return $this->belongsTo(Region::class, 'country', 'id');
     }
 }

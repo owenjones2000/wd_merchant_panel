@@ -11,13 +11,13 @@ class CampaignBid extends Model
 
     protected $table = 'a_campaign_bid';
 
-    protected $fillable = ['type', 'amount', 'country_code'];
+    protected $fillable = ['type', 'amount', 'region_code', 'country'];
 
     /**
      * 指定国家
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function country(){
-        return $this->belongsTo(Country::class, 'country_code', 'code');
+    public function region(){
+        return $this->belongsTo(Region::class, 'country', 'code');
     }
 }
