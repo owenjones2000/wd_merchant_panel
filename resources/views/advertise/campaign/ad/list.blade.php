@@ -66,9 +66,9 @@
                         }
                     }
                     ,cols: [[ //表头
-                        {checkbox: true,fixed: true}
-                        ,{field: 'id', title: 'ID', sort: true,width:80}
-                        ,{field: 'name', title: 'Name'}
+                        // {checkbox: true,fixed: true}
+                        // ,{field: 'id', title: 'ID', sort: true,width:80}
+                        {field: 'name', title: 'Name'}
                         ,{field: 'status', title: 'Status', templet: '#status'}
                         ,{field: 'created_at', title: 'Created'}
                         ,{field: 'updated_at', title: 'Updated'}
