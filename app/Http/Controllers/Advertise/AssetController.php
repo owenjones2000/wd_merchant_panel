@@ -37,6 +37,7 @@ class AssetController extends Controller
 
 
             $asset = Asset::create([
+                'url' => Storage::url($path),
                 'file_path' => $path,
                 'type_id' => $file_info['type'],
                 'spec' => $file_info
@@ -48,7 +49,6 @@ class AssetController extends Controller
                     'code'  => 0,
                     'msg'   => '上传成功',
                     'asset' => $asset,
-                    'url' => Storage::url($asset['file_path']),
                 ];
             }else{
                 $data['msg'] = $file->getErrorMessage();
