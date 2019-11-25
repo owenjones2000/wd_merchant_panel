@@ -16,6 +16,10 @@
             //,data:{ad_type_id: 2}
             ,multiple: true
             ,auto: true
+            ,progress: function(n){
+                var percent = n + '%';
+                element.progress('uploadProgress', percent);
+            }
             ,done: function(res, index, upload){
                 if(res.code == 0){ //上传成功
                     // console.log(res);

@@ -95,7 +95,7 @@
                         layer.open({
                             type: 2,
                             title: '',
-                            shadeClose: true, area: ['80%', '80%'],
+                            shadeClose: true, area: ['90%', '90%'],
                             content: '/advertise/campaign/{{$campaign['id']}}/ad/'+data.id,
                             end: function () {
                                 dataTable.reload();

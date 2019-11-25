@@ -34,7 +34,11 @@
     <div class="layui-upload-drag" id="upload">
         <i class="layui-icon"></i>
         <p>Drag & Drop your files or Browse</p>
+        <div class="layui-progress" lay-filter="uploadProgress">
+            <div class="layui-progress-bar"></div>
+        </div>
     </div>
+
 </div>
 
 <div class="layui-collapse" id="fileList">

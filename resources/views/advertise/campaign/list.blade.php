@@ -113,7 +113,7 @@
                             type: 2,
                             title: 'Campaign: ' + data.name,
                             shadeClose: true,
-                            area: ['100%', '100%'],
+                            area: ['90%', '90%'],
                             content: '/advertise/campaign/'+data.id+'/ad/list',
                             end: function () {
                                 // dataTable.reload();
