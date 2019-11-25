@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Advertise;
 use App\Models\Advertise\AdvertiseKpi;
 use App\Models\Advertise\App;
 use App\Models\Advertise\Campaign;
-use App\Models\Advertise\Country;
+use App\Models\Advertise\Region;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -97,8 +97,8 @@ class CampaignController extends Controller
         $apps = App::query()
             ->where('main_user_id', Auth::user()->getMainId())
             ->get();
-        $countries = Country::query()->get();
-        return view('advertise.campaign.edit',compact('campaign', 'apps', 'countries'));
+        $regions = Region::query()->get();
+        return view('advertise.campaign.edit',compact('campaign', 'apps', 'regions'));
     }
 
     /**

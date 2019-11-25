@@ -9,15 +9,15 @@ class CampaignBudget extends Model
 {
     use SoftDeletes;
 
-    protected $table = 'a_campaign_budget';
+    protected $table = 'a_campaign_daily_budget';
 
-    protected $fillable = ['amount', 'country_code'];
+    protected $fillable = ['amount', 'country'];
 
     /**
      * 指定国家
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function country(){
-        return $this->belongsTo(Country::class, 'country_code', 'code');
+    public function region(){
+        return $this->belongsTo(Region::class, 'country', 'code');
     }
 }

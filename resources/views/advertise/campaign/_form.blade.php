@@ -38,139 +38,139 @@
         <h2 class="layui-colla-title">Countries</h2>
         <div class="layui-colla-content layui-show">
             <div class="layui-input-block">
-                <select name="countries" xm-select="selectCountries" xm-select-search="", lay-filter="selectCountries">
-                    @foreach($countries as $country)
+                <select name="regions" xm-select="selectRegions" xm-select-search="", lay-filter="selectRegions">
+                    @foreach($regions as $region)
                         <option
-                                @if($campaign->countries->contains($country)) selected @endif
-                        value="{{ $country->code }}">{{ $country->name }}({{ $country->code }})</option>
+                                @if($campaign->regions->contains($region)) selected @endif
+                        value="{{ $region->code }}">{{ $region->name }}({{ $region->code }})</option>
                     @endforeach
                 </select>
             </div>
         </div>
     </div>
+    {{--<div class="layui-colla-item">--}}
+        {{--@php--}}
+            {{--$is_track_by_all_region = $campaign->trackUrls->count() == 0 || $campaign->trackUrls->contains('region_id', null);--}}
+            {{--$track_for_all_region = $campaign->trackUrls->where('region_id', 0)->first();--}}
+        {{--@endphp--}}
+        {{--<h2 class="layui-colla-title">Track URL</h2>--}}
+        {{--<div class="layui-colla-content @if(!$is_track_by_all_region) layui-show @endif">--}}
+            {{--<div class="layui-input-block">--}}
+                {{--<div>--}}
+                    {{--<input type="radio" name="track_by_region" value="0" title="Single URL for all regions" @if($is_track_by_all_region) checked="" @endif lay-filter="radioByCountry">--}}
+                    {{--<div class="layui-colla-content @if($is_track_by_all_region) layui-show @endif">--}}
+                        {{--<div class="layui-form-item">--}}
+                            {{--<label class="layui-form-label"></label>--}}
+                            {{--<input type="hidden" name="track[0][region_code]" value="">--}}
+                            {{--<div class="layui-input-block">--}}
+                                {{--<input type="text" name="track[0][impression]" value="{{ $track_for_all_region['impression']??'' }}" placeholder="impression url" autocomplete="off" class="layui-input" >--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+                        {{--<div class="layui-form-item">--}}
+                            {{--<div class="layui-input-block">--}}
+                                {{--<input type="text" name="track[0][click]" value="{{ $track_for_all_region['click']??'' }}" placeholder="click url" autocomplete="off" class="layui-input" >--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
+
+                {{--<div>--}}
+                    {{--<input type="radio" name="track_by_region" value="1" title="URL by Country" @if(!$is_track_by_all_region) checked="" @endif lay-filter="radioByCountry">--}}
+                    {{--<div class="layui-colla-content @if(!$is_track_by_all_region) layui-show @endif">--}}
+                        {{--<ul id="track">--}}
+                            {{--@if(!$is_track_by_all_region)--}}
+                            {{--@foreach($campaign->trackUrls as $trackUrl)--}}
+                                {{--<li data-index="{{$trackUrl['region']['code']}}">--}}
+                                    {{--<input type="hidden" name="track[{{$trackUrl['region']['code']}}][region_code]" value="{{$trackUrl['region']['code']}}">--}}
+                                    {{--<div class="layui-form-item">--}}
+                                        {{--<label class="layui-form-label">{{$trackUrl['region']['name']}}</label>--}}
+                                    {{--<div class="layui-input-block">--}}
+                                        {{--<input type="text" name="track[{{$trackUrl['region']['code']}}][impression]" value="{{ $trackUrl['impression'] }}" placeholder="impression url" autocomplete="off" class="layui-input" >--}}
+                                    {{--</div>--}}
+                                    {{--</div>--}}
+                                    {{--<div class="layui-form-item">--}}
+                                    {{--<div class="layui-input-block">--}}
+                                        {{--<input type="text" name="track[{{$trackUrl['region']['code']}}][click]" value="{{ $trackUrl['click'] }}" placeholder="click url" autocomplete="off" class="layui-input" >--}}
+                                    {{--</div>--}}
+                                    {{--</div>--}}
+                                {{--</li>--}}
+                            {{--@endforeach--}}
+                            {{--@endif--}}
+                        {{--</ul>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
+            {{--</div>--}}
+        {{--</div>--}}
+    {{--</div>--}}
+
     <div class="layui-colla-item">
         @php
-            $is_track_by_all_country = $campaign->trackUrls->count() == 0 || $campaign->trackUrls->contains('country_id', null);
-            $track_for_all_country = $campaign->trackUrls->where('country_id', 0)->first();
-        @endphp
-        <h2 class="layui-colla-title">Track URL</h2>
-        <div class="layui-colla-content @if(!$is_track_by_all_country) layui-show @endif">
-            <div class="layui-input-block">
-                <div>
-                    <input type="radio" name="track_by_country" value="0" title="Single URL for all countries" @if($is_track_by_all_country) checked="" @endif lay-filter="radioByCountry">
-                    <div class="layui-colla-content @if($is_track_by_all_country) layui-show @endif">
-                        <div class="layui-form-item">
-                            <label class="layui-form-label"></label>
-                            <input type="hidden" name="track[0][country_code]" value="">
-                            <div class="layui-input-block">
-                                <input type="text" name="track[0][impression]" value="{{ $track_for_all_country['impression']??'' }}" placeholder="impression url" autocomplete="off" class="layui-input" >
-                            </div>
-                        </div>
-                        <div class="layui-form-item">
-                            <div class="layui-input-block">
-                                <input type="text" name="track[0][click]" value="{{ $track_for_all_country['click']??'' }}" placeholder="click url" autocomplete="off" class="layui-input" >
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div>
-                    <input type="radio" name="track_by_country" value="1" title="URL by Country" @if(!$is_track_by_all_country) checked="" @endif lay-filter="radioByCountry">
-                    <div class="layui-colla-content @if(!$is_track_by_all_country) layui-show @endif">
-                        <ul id="track">
-                            @if(!$is_track_by_all_country)
-                            @foreach($campaign->trackUrls as $trackUrl)
-                                <li data-index="{{$trackUrl['country']['code']}}">
-                                    <input type="hidden" name="track[{{$trackUrl['country']['code']}}][country_code]" value="{{$trackUrl['country']['code']}}">
-                                    <div class="layui-form-item">
-                                        <label class="layui-form-label">{{$trackUrl['country']['name']}}</label>
-                                    <div class="layui-input-block">
-                                        <input type="text" name="track[{{$trackUrl['country']['code']}}][impression]" value="{{ $trackUrl['impression'] }}" placeholder="impression url" autocomplete="off" class="layui-input" >
-                                    </div>
-                                    </div>
-                                    <div class="layui-form-item">
-                                    <div class="layui-input-block">
-                                        <input type="text" name="track[{{$trackUrl['country']['code']}}][click]" value="{{ $trackUrl['click'] }}" placeholder="click url" autocomplete="off" class="layui-input" >
-                                    </div>
-                                    </div>
-                                </li>
-                            @endforeach
-                            @endif
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="layui-colla-item">
-        @php
-            $is_budget_by_all_country = $campaign->budgets->count() == 0 || $campaign->budgets->contains('country', '');
-            $budget_for_all_country = $campaign->budgets->where('country', '')->first();
+            $is_budget_by_all_region = $campaign->budgets->count() == 0 || $campaign->budgets->contains('country', 'ALL');
+            $budget_for_all_region = $campaign->budgets->where('country', 'ALL')->first();
         @endphp
         <h2 class="layui-colla-title">Daily Budgets</h2>
         <div class="layui-colla-content">
             <div class="layui-input-block">
                 <div>
-                    <input type="radio" name="budget_by_country" value="0" title="Single daily budget for all Countries" @if($is_budget_by_all_country) checked="" @endif lay-filter="radioByCountry">
-                    <div class="layui-colla-content @if($is_budget_by_all_country) layui-show @endif">
-                        <input type="hidden" name="budget[0][country_code]" value="0">
-                        <input type="text" name="budget[0][amount]" value="{{ $budget_for_all_country['amount']??'' }}" placeholder="$" autocomplete="off" class="layui-input" >
+                    <input type="radio" name="budget_by_region" value="0" title="Single daily budget for all Countries" @if($is_budget_by_all_region) checked="" @endif lay-filter="radioByCountry">
+                    <div class="layui-colla-content @if($is_budget_by_all_region) layui-show @endif">
+                        <input type="hidden" name="budget[0][country]" value="0">
+                        <input type="text" name="budget[0][amount]" value="{{ $budget_for_all_region['amount']??'' }}" placeholder="$" autocomplete="off" class="layui-input" lay-verify="required" >
                     </div>
                 </div>
 
-                <div>
-                    <input type="radio" name="budget_by_country" value="1" title="Daily budget by Country" @if(!$is_budget_by_all_country) checked="" @endif lay-filter="radioByCountry">
-                    <div class="layui-colla-content @if(!$is_budget_by_all_country) layui-show @endif">
-                        <ul id="budget">
-                            @if(!$is_budget_by_all_country)
-                                @foreach($campaign->budgets as $budget)
-                            <li data-index="{{$budget['country']['code']}}">
-                                <div class="layui-form-item">
-                                <label class="layui-form-label">{{$budget['country']['name']}}</label>
-                                <div class="layui-input-inline">
-                                    <input type="hidden" name="budget[{{$budget['country']['code']}}][country_code]" value="{{ $budget['country']['code'] }}">
-                                    <input type="text" name="budget[{{$budget['country']['code']}}][amount]" value="{{ $budget['amount'] }}" placeholder="$" autocomplete="off" class="layui-input" >
-                                </div>
-                                </div>
-                            </li>
-                                @endforeach
-                            @endif
-                        </ul>
-                    </div>
-                </div>
+                {{--<div>--}}
+                    {{--<input type="radio" name="budget_by_region" value="1" title="Daily budget by Country" @if(!$is_budget_by_all_region) checked="" @endif lay-filter="radioByCountry">--}}
+                    {{--<div class="layui-colla-content @if(!$is_budget_by_all_region) layui-show @endif">--}}
+                        {{--<ul id="budget">--}}
+                            {{--@if(!$is_budget_by_all_region)--}}
+                                {{--@foreach($campaign->budgets as $budget)--}}
+                            {{--<li data-index="{{$budget['region']['code']}}">--}}
+                                {{--<div class="layui-form-item">--}}
+                                {{--<label class="layui-form-label">{{$budget['region']['name']}}</label>--}}
+                                {{--<div class="layui-input-inline">--}}
+                                    {{--<input type="hidden" name="budget[{{$budget['region']['code']}}][country]" value="{{ $budget['region']['code'] }}">--}}
+                                    {{--<input type="text" name="budget[{{$budget['region']['code']}}][amount]" value="{{ $budget['amount'] }}" placeholder="$" autocomplete="off" class="layui-input" >--}}
+                                {{--</div>--}}
+                                {{--</div>--}}
+                            {{--</li>--}}
+                                {{--@endforeach--}}
+                            {{--@endif--}}
+                        {{--</ul>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
             </div>
         </div>
     </div>
 
     <div class="layui-colla-item">
         @php
-            $is_bid_by_all_country = $campaign->bids->count() == 0 || $campaign->bids->contains('country', '');
-            $bid_for_all_country = $campaign->bids->where('country', '')->first();
+            $is_bid_by_all_region = $campaign->bids->count() == 0 || $campaign->bids->contains('country', 'ALL');
+            $bid_for_all_region = $campaign->bids->where('country', 'ALL')->first();
         @endphp
         <h2 class="layui-colla-title">Bidding</h2>
         <div class="layui-colla-content">
             <div class="layui-input-block">
                 <div>
-                    <input type="radio" name="bid_by_country" value="0" title="CPI Bid for all Countries" @if($is_bid_by_all_country) checked="" @endif lay-filter="radioByCountry">
-                    <div class="layui-colla-content @if($is_bid_by_all_country) layui-show @endif">
-                        <input type="hidden" name="bid[0][country_code]" value="0">
-                        <input type="text" name="bid[0][amount]" value="{{ $bid_for_all_country['amount']??'' }}" placeholder="$" autocomplete="off" class="layui-input" >
+                    <input type="radio" name="bid_by_region" value="0" title="CPI Bid for all Countries" @if($is_bid_by_all_region) checked="" @endif lay-filter="radioByCountry">
+                    <div class="layui-colla-content @if($is_bid_by_all_region) layui-show @endif">
+                        <input type="hidden" name="bid[0][country]" value="0">
+                        <input type="text" name="bid[0][amount]" value="{{ $bid_for_all_region['amount']??'' }}" placeholder="$" autocomplete="off" class="layui-input" >
                     </div>
                 </div>
 
                 <div>
-                    <input type="radio" name="bid_by_country" value="1" title="CPI Bid by Country" @if(!$is_bid_by_all_country) checked="" @endif lay-filter="radioByCountry">
-                    <div class="layui-colla-content @if(!$is_bid_by_all_country) layui-show @endif">
+                    <input type="radio" name="bid_by_region" value="1" title="CPI Bid by Country" @if(!$is_bid_by_all_region) checked="" @endif lay-filter="radioByCountry">
+                    <div class="layui-colla-content @if(!$is_bid_by_all_region) layui-show @endif">
                         <ul id="bid">
-                            @if(!$is_bid_by_all_country)
+                            @if(!$is_bid_by_all_region)
                                 @foreach($campaign->bids as $bid)
-                                    <li data-index="{{$bid['country']['code']}}">
+                                    <li data-index="{{$bid['region']['code']}}">
                                         <div class="layui-form-item">
-                                        <label class="layui-form-label">{{$bid['country']['name']}}({{$bid['country']['code']}})</label>
+                                        <label class="layui-form-label">{{$bid['region']['name']}}({{$bid['region']['code']}})</label>
                                         <div class="layui-input-inline">
-                                            <input type="hidden" name="bid[{{$bid['country']['code']}}][country_code]" value="{{ $bid['country']['code'] }}">
-                                            <input type="text" name="bid[{{$bid['country']['code']}}][amount]" value="{{ $bid['amount'] }}" placeholder="$" autocomplete="off" class="layui-input" >
+                                            <input type="hidden" name="bid[{{$bid['region']['code']}}][country]" value="{{ $bid['region']['code'] }}">
+                                            <input type="text" name="bid[{{$bid['region']['code']}}][amount]" value="{{ $bid['amount'] }}" placeholder="$" autocomplete="off" class="layui-input" >
                                         </div>
                                         </div>
                                     </li>

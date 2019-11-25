@@ -4,11 +4,19 @@
     <div class="layui-card">
         <div class="layui-card-header layuiadmin-card-header-auto">
             <div class="layui-btn-group ">
+<<<<<<< HEAD
                 {{--@can('advertise.campaign.destroy')--}}
                     {{--<button class="layui-btn layui-btn-sm layui-btn-danger" id="listDelete">Remove</button>--}}
                 {{--@endcan--}}
                 @can('advertise.campaign.edit')
                     <button class="layui-btn layui-btn-normal layui-btn-sm" id="campaign_add">Create Campaign</button>
+=======
+                @can('advertise.campaign.destroy')
+                    <button class="layui-btn layui-btn-sm layui-btn-danger" id="listDelete">Remove</button>
+                @endcan
+                @can('advertise.campaign.edit')
+                    <button class="layui-btn layui-btn-sm" id="campaign_add">Create Campaign</button>
+>>>>>>> develop
                 @endcan
             </div>
             <div class="layui-form" >
@@ -124,8 +132,8 @@
                             type: 2,
                             title: 'Campaign: ' + data.campaign.name,
                             shadeClose: true,
-                            area: ['100%', '100%'],
-                            content: '/advertise/campaign/'+data.campaign_id+'/ad/list',
+                            area: ['90%', '90%'],
+                            content: '/advertise/campaign/'+data.id+'/ad/list',
                             end: function () {
                                 // dataTable.reload();
                             }
