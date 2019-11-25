@@ -33,7 +33,7 @@
                             '<h2 class="layui-colla-title">'+ asset.type.name +'</h2>',
                             '<div class="layui-colla-content">',
                             '<video width="300px" height="auto" controls="controls">',
-                            '<source src="/storage/'+ asset.file_path +'">',
+                            '<source src="'+ res.url +'">',
                             '</video>',
                             '<input type="hidden" name="asset['+ asset.type_id +'][id]" value="'+ asset.id +'">',
                             '<input type="hidden" name="asset['+ asset.type_id +'][type]" value="'+ asset.type_id +'">',

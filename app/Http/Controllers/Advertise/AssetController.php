@@ -48,6 +48,7 @@ class AssetController extends Controller
                     'code'  => 0,
                     'msg'   => '上传成功',
                     'asset' => $asset,
+                    'url' => Storage::url($asset['file_path']),
                 ];
             }else{
                 $data['msg'] = $file->getErrorMessage();
