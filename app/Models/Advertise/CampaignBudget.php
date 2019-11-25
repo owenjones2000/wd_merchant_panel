@@ -11,7 +11,7 @@ class CampaignBudget extends Model
 
     protected $table = 'a_campaign_daily_budget';
 
-    protected $fillable = ['amount', 'region_code', 'country'];
+    protected $fillable = ['amount', 'country'];
 
     /**
      * 指定国家

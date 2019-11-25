@@ -11,7 +11,7 @@ class CampaignBid extends Model
 
     protected $table = 'a_campaign_bid';
 
-    protected $fillable = ['type', 'amount', 'region_code', 'country'];
+    protected $fillable = ['type', 'amount', 'country'];
 
     /**
      * 指定国家

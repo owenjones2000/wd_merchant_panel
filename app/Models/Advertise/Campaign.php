@@ -85,7 +85,7 @@ class Campaign extends Model
                     }
                     $campaign->budgets()->saveMany($budget_list);
                 }else{
-                    if(empty($params['budget'][0]['amount'])) {
+                    if(!empty($params['budget'][0]['amount'])) {
                         $campaign->budgets()->save(new CampaignBudget([
                             'amount' => $params['budget'][0]['amount'] ?? 0,
                             'country' => 'ALL',
@@ -108,7 +108,7 @@ class Campaign extends Model
                     }
                     $campaign->bids()->saveMany($bid_list);
                 }else{
-                    if(empty($params['bid'][0]['amount'])){
+                    if(!empty($params['bid'][0]['amount'])){
                         $campaign->bids()->save(new CampaignBid([
                             'amount' => $params['bid'][0]['amount'] ?? 0,
                             'country' => 'ALL',
