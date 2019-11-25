@@ -7,7 +7,7 @@
                 @can('advertise.campaign.destroy')
                     <button class="layui-btn layui-btn-sm layui-btn-danger" id="listDelete">Remove</button>
                 @endcan
-                @can('advertise.campaign.create')
+                @can('advertise.campaign.edit')
                     <button class="layui-btn layui-btn-sm" id="campaign_add">Create Campaign</button>
                 @endcan
             </div>
