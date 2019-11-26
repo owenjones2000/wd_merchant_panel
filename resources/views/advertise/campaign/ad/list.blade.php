@@ -16,7 +16,7 @@
                     <input type="text" name="name" id="name" placeholder="Name" class="layui-input">
                 </div>
                 <div class="layui-input-inline">
-                    <input type="text" name="rangedate" id="rangedate" class="layui-input" autocomplete="off" placeholder="">
+                    <input type="text" name="rangedate" id="rangedate" class="layui-input" autocomplete="off" placeholder="default today">
                 </div>
                 <button class="layui-btn" id="adSearchBtn">Run Report</button>
             </div>
