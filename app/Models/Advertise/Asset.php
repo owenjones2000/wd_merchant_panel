@@ -17,6 +17,13 @@ class Asset extends Model
     ];
 
     /**
+     * Asset类型
+     * @return mixed
+     */
+    public function getTypeAttribute(){
+        return AssetType::get($this->type_id);
+    }
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function ad(){

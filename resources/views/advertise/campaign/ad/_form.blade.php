@@ -3,8 +3,7 @@
 <div class="layui-form-item">
     <label for="" class="layui-form-label">Ad Type</label>
     <div class="layui-input-inline">
-        <select name="type_id" lay-filter="selectType" lay-verify="required">
-            <option value=""></option>
+        <select name="type_id" id="type_id" lay-filter="selectType" lay-verify="required">
             @foreach(\App\Models\Advertise\AdType::$list as $ad_type)
                 <option @if(($ad['type_id']??0) == $ad_type['id']) selected @endif value="{{ $ad_type['id']}}">{{ $ad_type['name'] }}</option>
             @endforeach
@@ -43,12 +42,19 @@
 
 <div class="layui-collapse" id="fileList">
     @foreach($ad->assets as $asset)
+        @php
+            $media_width = $asset['spec']['width'] < 300 ? $asset['spec']['width'] : 300;
+        @endphp
     <div class="layui-colla-item" data-type="{{$asset['type_id']}}">
         <h2 class="layui-colla-title">{{ \App\Models\Advertise\AssetType::get($asset['type_id'])['name'] }}</h2>
         <div class="layui-colla-content">
-            <video width="300px" height="auto" controls="controls">
-                <source src="{{ $asset['url'] }}">
-            </video>
+            @if($asset['type']['mime_type'] == 'video')
+                <video width="{{$media_width}}px" height="auto" controls="controls">
+                    <source src="{{ $asset['url'] }}">
+                </video>
+            @elseif($asset['type']['mime_type'] == 'image')
+                <img src="{{ $asset['url'] }}" width="{{$media_width}}px">
+            @endif
             <input type="hidden" name="asset[{{$asset['type_id']}}][id]" value="{{ $asset['id'] }}">
             <input type="hidden" name="asset[{{$asset['type_id']}}][type]" value="{{ $asset['type_id'] }}">
         </div>

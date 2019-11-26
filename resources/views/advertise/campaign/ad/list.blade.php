@@ -133,7 +133,7 @@
                     } else if(layEvent === 'edit'){
                         layer.open({
                             type: 2,
-                            title: '',
+                            title: ' ',
                             shadeClose: true, area: ['90%', '90%'],
                             content: '/advertise/campaign/{{$campaign['id']}}/ad/'+data.id,
                             end: function () {

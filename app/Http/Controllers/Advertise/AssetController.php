@@ -6,9 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Advertise\AdType;
 use App\Models\Advertise\Asset;
 use App\Models\Advertise\AssetType;
-use FFMpeg\FFProbe;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
@@ -23,7 +21,7 @@ class AssetController extends Controller
             if (!$file->isValid()){
                 throw new \Exception($file->getErrorMessage());
             }
-            $file_info = $this->decideAssetType($file);
+            $file_info = AssetType::decide($file);
             $ad_type = AdType::get($request->input('ad_type_id', null));
             if($ad_type != null){
                 if(!in_array($file_info['type'], $ad_type['need_asset_type'])){
@@ -63,27 +61,5 @@ class AssetController extends Controller
         }
     }
 
-    private function decideAssetType($file){
-        $ffprobe = FFProbe::create([
-            'ffmpeg.binaries'  => env('FFMPEG_BIN_PATH','/usr/local/bin/ffmpeg'),
-            'ffprobe.binaries' => env('FFPROBE_BIN_PATH','/usr/local/bin/ffprobe')
-        ]);
-        $video_info = $ffprobe->streams($file)->videos()->first()->all();
-        $width = Arr::get($video_info, 'width');
-        $height = Arr::get($video_info, 'height');
-        $duration = Arr::get($video_info, 'duration');
-        if($width >= $height){
-            $type = $duration > 15 ?
-                AssetType::Landscape_Long : AssetType::Landscape_Short;
-        }else{
-            $type = $duration > 15 ?
-                AssetType::Portrait_Long : AssetType::Portrait_Short;
-        }
-        return [
-            'type' => $type,
-            'width' => $width,
-            'height' => $height,
-            'duration' => $duration
-        ];
-    }
+
 }
