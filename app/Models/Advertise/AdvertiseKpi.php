@@ -1,11 +1,14 @@
 <?php
 namespace App\Models\Advertise;
 
+use App\Traits\MultiTable;
 use Illuminate\Database\Eloquent\Model;
 
 class AdvertiseKpi extends Model
 {
-    protected $table = 'zz_ad_country_tasks';
+    use MultiTable;
+
+    protected $table = 'z_sub_tasks';
 
     /**
      * 广告活动

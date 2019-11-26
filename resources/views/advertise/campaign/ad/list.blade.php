@@ -31,7 +31,7 @@
                 @can('advertise.campaign.ad.edit')
                     <a class="layui-table-link" lay-event="edit">
                 @endcan
-                    @{{ d.ad.name }}
+                    @{{ d.name }}
                 @can('advertise.campaign.ad.edit')
                     </a>
                 @endcan
@@ -51,10 +51,11 @@
 @section('script')
     @can('advertise.campaign.ad')
         <script>
-            layui.use(['layer','table','form'],function () {
+            layui.use(['layer','table','form', 'util'],function () {
                 var layer = layui.layer;
                 var form = layui.form;
                 var table = layui.table;
+                var util = layui.util;
                 //用户表格初始化
                 var dataTable = table.render({
                     elem: '#dataTable'
@@ -77,7 +78,7 @@
                         // ,{field: 'id', title: 'ID', sort: true,width:80}
                         {field: 'name', title: 'Name', templet: '#nameTpl', width:300}
                         // ,{field: 'app.name', title: 'App', templet: '#appTpl'}
-                        ,{field: 'created', title: 'Created', width:110}
+                        ,{field: 'created', title: 'Created', width:110, templet: function(d){return util.toDateString(d.created_at, "yyyy-MM-dd");}}
                         ,{field: 'impressions', title: 'Impressions'}
                         ,{field: 'clicks', title: 'Clicks'}
                         ,{field: 'installs', title: 'Installs'}

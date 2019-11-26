@@ -34,13 +34,13 @@
                 @can('advertise.campaign.edit')
                     <a class="layui-table-link" lay-event="edit">
                 @endcan
-                    @{{ d.campaign.name }}
+                    @{{ d.name }}
                 @can('advertise.campaign.edit')
                     </a>
                 @endcan
             </script>
             <script type="text/html" id="appTpl">
-                @{{ d.campaign.app.name }} (@{{ d.campaign.app.os }})
+                @{{ d.app.name }} (@{{ d.campaign.app.os }})
             </script>
             <script type="text/html" id="status">
                 @{{# if(d.status){ }}
@@ -56,10 +56,11 @@
 @section('script')
     @can('advertise.campaign')
         <script>
-            layui.use(['layer','table','form'],function () {
+            layui.use(['layer','table','form', 'util'],function () {
                 var layer = layui.layer;
                 var form = layui.form;
                 var table = layui.table;
+                var util = layui.util;
                 //用户表格初始化
                 var dataTable = table.render({
                     elem: '#dataTable'
@@ -82,7 +83,7 @@
                         // ,{field: 'id', title: 'ID', sort: true,width:80}
                         {field: 'name', title: 'Name', templet: '#nameTpl', width:300}
                         // ,{field: 'app.name', title: 'App', templet: '#appTpl'}
-                        ,{field: 'created', title: 'Created', width:110}
+                        ,{field: 'created', title: 'Created', width:110, templet: function(d){return util.toDateString(d.created_at, "yyyy-MM-dd");}}
                         ,{field: 'impressions', title: 'Impressions'}
                         ,{field: 'clicks', title: 'Clicks'}
                         ,{field: 'installs', title: 'Installs'}
@@ -114,7 +115,7 @@
                             type: 2,
                             title: '',
                             shadeClose: true, area: ['80%', '80%'],
-                            content: '/advertise/campaign/'+data.campaign_id,
+                            content: '/advertise/campaign/'+data.id,
                             end: function () {
                                 dataTable.reload();
                             }
@@ -122,10 +123,10 @@
                     } else if(layEvent === 'ad'){
                         layer.open({
                             type: 2,
-                            title: 'Campaign: ' + data.campaign.name,
+                            title: 'Campaign: ' + data.name,
                             shadeClose: true,
                             area: ['90%', '90%'],
-                            content: '/advertise/campaign/'+data.campaign_id+'/ad/list',
+                            content: '/advertise/campaign/'+data.id+'/ad/list',
                             end: function () {
                                 // dataTable.reload();
                             }

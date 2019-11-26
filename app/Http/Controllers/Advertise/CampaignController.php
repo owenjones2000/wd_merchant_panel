@@ -25,43 +25,57 @@ class CampaignController extends Controller
 
     public function data(Request $request)
     {
-        $today = date('Y-m-d');
+        $start_date = date('Ymd', strtotime('-8 day'));
+        $end_date = date('Ymd');
         $campaign_base_query = Campaign::query()->where('main_user_id', Auth::user()->getMainId());
         if(!empty($request->get('name'))){
             $campaign_base_query->where('name', 'like', '%'.$request->get('name').'%');
         }
+
         $campaign_id_query = clone $campaign_base_query;
         $campaign_id_query->select('id');
-        $advertise_kpi_query = AdvertiseKpi::query()
-            ->whereBetween('date', [$today, $today])
-            ->whereIn('campaign_id', $campaign_id_query);
+        $advertise_kpi_query = AdvertiseKpi::multiTableQuery(function($query) use($start_date, $end_date, $campaign_id_query){
+            $query->whereBetween('date', [$start_date, $end_date])
+                ->whereIn('campaign_id', $campaign_id_query);
+            return $query;
+        }, $start_date, $end_date);
+
         $advertise_kpi_query->select([
             DB::raw('sum(impressions) as impressions'),
             DB::raw('sum(clicks) as clicks'),
             DB::raw('sum(installations) as installs'),
             DB::raw('round(sum(spend), 2) as spend'),
-//            DB::raw('round(sum(clicks) / sum(impressions) * 100, 2) as rate_clicks'),
-//            DB::raw('round(sum(installs) * 1000 / sum(impressions), 2) as ipm'),
-//            DB::raw('round(sum(installs) / sum(clicks) * 100, 2) as rate_conversion'),
             DB::raw('round(sum(spend) * 1000 / sum(installations), 2) as ecpi'),
             DB::raw('round(sum(spend) * 1000 / sum(impressions), 2) as ecpm'),
             'campaign_id',
-            'status',
-            DB::raw('DATE_FORMAT(created_at, \'%Y-%m-%d\') as created'),
         ]);
         $advertise_kpi_query->groupBy('campaign_id');
 
-
-        $res = $advertise_kpi_query->with('campaign.app')
-            ->orderBy($request->get('field','status'),$request->get('order','desc'))
-            ->orderBy('spend','asc')->paginate($request->get('limit',30))
+        $advertise_kpi_list = $advertise_kpi_query
+            ->orderBy('spend','desc')
+            ->get()
+            ->keyBy('campaign_id')
+            ->toArray();
+        $order_by_ids = implode(',', array_reverse(array_keys($advertise_kpi_list)));
+        $campaign_query = clone $campaign_base_query;
+        $campaign_query->with('app');
+        if(!empty($order_by_ids)){
+            $campaign_query->orderByRaw(DB::raw("FIELD(id,{$order_by_ids}) desc"));
+        }
+        $campaign_list = $campaign_query->orderBy($request->get('field','status'),$request->get('order','desc'))
+            ->paginate($request->get('limit',30))
             ->toArray();
 
+        foreach($campaign_list['data'] as &$campaign){
+            if(isset($advertise_kpi_list[$campaign['id']])){
+                $campaign = array_merge($campaign, $advertise_kpi_list[$campaign['id']]);
+            }
+        }
         $data = [
             'code' => 0,
             'msg'   => '正在请求中...',
-            'count' => $res['total'],
-            'data'  => $res['data']
+            'count' => $campaign_list['total'],
+            'data'  => $campaign_list['data']
         ];
         return response()->json($data);
     }
