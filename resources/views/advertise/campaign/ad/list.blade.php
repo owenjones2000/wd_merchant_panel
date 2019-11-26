@@ -68,8 +68,6 @@
                     ,value: util.toDateString(new Date(), 'yyyy-MM-dd ~ yyyy-MM-dd')
                     ,extrabtns: [
                         {id:'today', text:'今天', range:[new Date(), new Date()]},
-                        {id:'tomorrow', text:'明天', range:[new Date(new Date().setDate(new Date().getDate()+1)),
-                                new Date(new Date().setDate(new Date().getDate()+1))]},
                         {id:'yesterday', text:'昨天', range:[new Date(new Date().setDate(new Date().getDate()-1)),
                                 new Date(new Date().setDate(new Date().getDate()-1))]},
                         {id:'lastday-7', text:'过去7天', range:[new Date(new Date().setDate(new Date().getDate()-7)),
