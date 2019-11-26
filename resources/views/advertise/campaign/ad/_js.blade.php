@@ -31,7 +31,7 @@
                     var fileItem = $([
                         '<div class="layui-colla-item" data-type="'+ asset.type_id +'">',
                             '<h2 class="layui-colla-title">'+ asset.type.name +'</h2>',
-                            '<div class="layui-colla-content">',
+                            '<div class="layui-colla-content layui-show">',
                             '<video width="300px" height="auto" controls="controls">',
                             '<source src="'+ asset.url +'">',
                             '</video>',

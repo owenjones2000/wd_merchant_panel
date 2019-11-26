@@ -4,11 +4,11 @@
     <div class="layui-card">
         <div class="layui-card-header layuiadmin-card-header-auto">
             <div class="layui-btn-group ">
-                @can('advertise.campaign.ad.destroy')
-                    <button class="layui-btn layui-btn-sm layui-btn-danger" id="listDelete">Remove</button>
-                @endcan
+                {{--@can('advertise.campaign.ad.destroy')--}}
+                    {{--<button class="layui-btn layui-btn-sm layui-btn-danger" id="listDelete">Remove</button>--}}
+                {{--@endcan--}}
                 @can('advertise.campaign.ad.edit')
-                    <button class="layui-btn layui-btn-sm" id="ad_add">Create Ad</button>
+                    <button class="layui-btn layui-btn-normal layui-btn-sm" id="ad_add">Create Ad</button>
                 @endcan
             </div>
             <div class="layui-form" >
@@ -22,13 +22,20 @@
             <table id="dataTable" lay-filter="dataTable"></table>
             <script type="text/html" id="options">
                 <div class="layui-btn-group">
-                    @can('advertise.campaign.ad.edit')
-                        <a class="layui-btn layui-btn-sm" lay-event="edit">Edit</a>
-                    @endcan
-                    @can('advertise.campaign.ad.destroy')
-                        <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">Remove</a>
-                    @endcan
+                    {{--@can('advertise.campaign.ad.destroy')--}}
+                        {{--<a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">Remove</a>--}}
+                    {{--@endcan--}}
                 </div>
+            </script>
+            <script type="text/html" id="nameTpl">
+                @can('advertise.campaign.ad.edit')
+                    <a class="layui-table-link" lay-event="edit">
+                @endcan
+                    @{{ d.name }}
+                @can('advertise.campaign.ad.edit')
+                    </a>
+                @endcan
+
             </script>
             <script type="text/html" id="status">
                 @{{# if(d.status){ }}
@@ -44,10 +51,11 @@
 @section('script')
     @can('advertise.campaign.ad')
         <script>
-            layui.use(['layer','table','form'],function () {
+            layui.use(['layer','table','form', 'util'],function () {
                 var layer = layui.layer;
                 var form = layui.form;
                 var table = layui.table;
+                var util = layui.util;
                 //用户表格初始化
                 var dataTable = table.render({
                     elem: '#dataTable'
@@ -66,13 +74,19 @@
                         }
                     }
                     ,cols: [[ //表头
-                        // {checkbox: true,fixed: true}
+                        //{checkbox: true,fixed: true}
                         // ,{field: 'id', title: 'ID', sort: true,width:80}
-                        {field: 'name', title: 'Name'}
-                        ,{field: 'status', title: 'Status', templet: '#status'}
-                        ,{field: 'created_at', title: 'Created'}
-                        ,{field: 'updated_at', title: 'Updated'}
-                        ,{fixed: 'right', width: 220, align:'center', toolbar: '#options'}
+                        {field: 'name', title: 'Name', templet: '#nameTpl', width:300}
+                        // ,{field: 'app.name', title: 'App', templet: '#appTpl'}
+                        ,{field: 'created', title: 'Created', width:110, templet: function(d){return util.toDateString(d.created_at, "yyyy-MM-dd");}}
+                        ,{field: 'impressions', title: 'Impressions'}
+                        ,{field: 'clicks', title: 'Clicks'}
+                        ,{field: 'installs', title: 'Installs'}
+                        ,{field: 'spend', title: 'Spend'}
+                        ,{field: 'ecpi', title: 'eCPI'}
+                        ,{field: 'ecpm', title: 'eCPM'}
+                        ,{field: 'status', title: 'Status', templet: '#status', width:90}
+                        // ,{fixed: 'right', width: 220, align:'center', toolbar: '#options'}
                     ]]
                 });
 
@@ -82,7 +96,7 @@
                         ,layEvent = obj.event; //获得 lay-event 对应的值
                     if(layEvent === 'del'){
                         layer.confirm('确认删除吗？', function(index){
-                            $.post("{{ route('advertise.campaign.ad.destroy', [$campaign['id']]) }}",{_method:'delete',ids:[data.id]},function (result) {
+                            $.post("{{ route('advertise.campaign.ad.destroy', [$campaign['id']]) }}",{_method:'delete',ids:[data.ad_id]},function (result) {
                                 if (result.code==0){
                                     obj.del(); //删除对应行（tr）的DOM结构
                                 }
@@ -96,7 +110,7 @@
                             type: 2,
                             title: '',
                             shadeClose: true, area: ['90%', '90%'],
-                            content: '/advertise/campaign/{{$campaign['id']}}/ad/'+data.id,
+                            content: '/advertise/campaign/{{$campaign['id']}}/ad/'+data.ad_id,
                             end: function () {
                                 dataTable.reload();
                             }

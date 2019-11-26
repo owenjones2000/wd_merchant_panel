@@ -26,7 +26,7 @@
 <div class="layui-form-item">
     <label class="layui-form-label">Status</label>
     <div class="layui-input-block">
-        <input type="checkbox" name="status" @if($campaign->status??true) checked @endif lay-skin="switch" lay-filter="switchStatus" lay-text="Enable|Disable">
+        <input type="checkbox" name="status" @if($campaign->status??true) checked @endif lay-skin="switch" lay-filter="switchStatus" lay-text="">
     </div>
 </div>
 
@@ -109,10 +109,10 @@
             $budget_for_all_region = $campaign->budgets->where('country', 'ALL')->first();
         @endphp
         <h2 class="layui-colla-title">Daily Budgets</h2>
-        <div class="layui-colla-content">
+        <div class="layui-colla-content layui-show">
             <div class="layui-input-block">
                 <div>
-                    <input type="radio" name="budget_by_region" value="0" title="Single daily budget for all Countries" @if($is_budget_by_all_region) checked="" @endif lay-filter="radioByCountry">
+                    <input type="radio" name="budget_by_region" value="0" title="Default daily budget" @if($is_budget_by_all_region) checked="" @endif lay-filter="radioByCountry">
                     <div class="layui-colla-content @if($is_budget_by_all_region) layui-show @endif">
                         <input type="hidden" name="budget[0][country]" value="0">
                         <input type="text" name="budget[0][amount]" value="{{ $budget_for_all_region['amount']??'' }}" placeholder="$" autocomplete="off" class="layui-input" lay-verify="required" >
