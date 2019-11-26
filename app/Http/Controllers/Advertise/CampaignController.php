@@ -25,8 +25,11 @@ class CampaignController extends Controller
 
     public function data(Request $request)
     {
-        $start_date = date('Ymd', strtotime('-8 day'));
-        $end_date = date('Ymd');
+        if(!empty($request->get('rangedate'))){
+            $range_date = explode(' ~ ',$request->get('rangedate'));
+        }
+        $start_date = date('Ymd', strtotime($range_date[0]??''));
+        $end_date = date('Ymd', strtotime($range_date[1]??''));
         $campaign_base_query = Campaign::query()->where('main_user_id', Auth::user()->getMainId());
         if(!empty($request->get('name'))){
             $campaign_base_query->where('name', 'like', '%'.$request->get('name').'%');

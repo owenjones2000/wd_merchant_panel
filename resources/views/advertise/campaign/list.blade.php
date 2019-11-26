@@ -15,7 +15,10 @@
                 <div class="layui-input-inline">
                     <input type="text" name="name" id="name" placeholder="Name" class="layui-input">
                 </div>
-                <button class="layui-btn" id="campaignSearchBtn">Search</button>
+                <div class="layui-input-inline">
+                    <input type="text" name="rangedate" id="rangedate" class="layui-input" autocomplete="off" placeholder="">
+                </div>
+                <button class="layui-btn" id="campaignSearchBtn">Run Report</button>
             </div>
         </div>
         <div class="layui-card-body">
@@ -56,11 +59,35 @@
 @section('script')
     @can('advertise.campaign')
         <script>
-            layui.use(['layer','table','form', 'util'],function () {
+            layui.use(['layer','table','form','laydate','util'],function () {
                 var layer = layui.layer;
                 var form = layui.form;
                 var table = layui.table;
                 var util = layui.util;
+
+                //日期范围选择
+                var laydate = layui.laydate;
+                laydate.render({
+                    elem: '#rangedate'
+                    ,range: '~' //或 range: '~' 来自定义分割字符
+                    ,value: util.toDateString(new Date(), 'yyyy-MM-dd ~ yyyy-MM-dd')
+                    ,extrabtns: [
+                        {id:'today', text:'今天', range:[new Date(), new Date()]},
+                        {id:'tomorrow', text:'明天', range:[new Date(new Date().setDate(new Date().getDate()+1)),
+                                new Date(new Date().setDate(new Date().getDate()+1))]},
+                        {id:'yesterday', text:'昨天', range:[new Date(new Date().setDate(new Date().getDate()-1)),
+                                new Date(new Date().setDate(new Date().getDate()-1))]},
+                        {id:'lastday-7', text:'过去7天', range:[new Date(new Date().setDate(new Date().getDate()-7)),
+                                new Date(new Date().setDate(new Date().getDate()-1))]},
+                        {id:'lastday-28', text:'过去28天', range:[new Date(new Date().setDate(new Date().getDate()-28)),
+                                new Date(new Date().setDate(new Date().getDate()-1))]},
+                        {id:'thismonth', text:'本月', range:[new Date(new Date().setDate(1)),
+                                new Date(new Date(new Date().setMonth(new Date().getMonth()+1)).setDate(0))]},
+                        {id:'lastmonth', text:'上个月', range:[new Date(new Date(new Date().setMonth(new Date().getMonth()-1)).setDate(1)),
+                                new Date(new Date().setDate(0))]}
+                    ],
+                });
+
                 //用户表格初始化
                 var dataTable = table.render({
                     elem: '#dataTable'
@@ -81,7 +108,7 @@
                     ,cols: [[ //表头
                         //{checkbox: true,fixed: true}
                         // ,{field: 'id', title: 'ID', sort: true,width:80}
-                        {field: 'name', title: 'Name', templet: '#nameTpl', width:300}
+                        {field: 'name', title: 'Campaign', templet: '#nameTpl', width:300}
                         // ,{field: 'app.name', title: 'App', templet: '#appTpl'}
                         ,{field: 'created', title: 'Created', width:110, templet: function(d){return util.toDateString(d.created_at, "yyyy-MM-dd");}}
                         ,{field: 'impressions', title: 'Impressions'}
@@ -188,9 +215,9 @@
                 //搜索
                 $("#campaignSearchBtn").click(function () {
                     var name = $("#name").val();
-                    var type = $("#type").val();
+                    var rangedate = $("#rangedate").val();
                     dataTable.reload({
-                        where:{name:name, type:type},
+                        where:{name:name, rangedate:rangedate},
                         page:{curr:1}
                     })
                 })

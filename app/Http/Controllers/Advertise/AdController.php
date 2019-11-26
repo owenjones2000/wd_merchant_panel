@@ -26,8 +26,11 @@ class AdController extends Controller
 
     public function data(Request $request, $campaign_id)
     {
-        $start_date = date('Ymd', strtotime('-8 day'));
-        $end_date = date('Ymd');
+        if(!empty($request->get('rangedate'))){
+            $range_date = explode(' ~ ',$request->get('rangedate'));
+        }
+        $start_date = date('Ymd', strtotime($range_date[0]??''));
+        $end_date = date('Ymd', strtotime($range_date[1]??''));
         $ad_base_query = Ad::query()->where('campaign_id', $campaign_id);
         if(!empty($request->get('name'))){
             $ad_base_query->where('name', 'like', '%'.$request->get('name').'%');
@@ -57,9 +60,11 @@ class AdController extends Controller
             ->keyBy('ad_id')
             ->toArray();
         $order_by_ids = implode(',', array_reverse(array_keys($advertise_kpi_list)));
-        $ad_list = $ad_base_query->with('campaign.app')
-            ->orderByRaw(DB::raw("FIELD(id,{$order_by_ids}) desc"))
-            ->orderBy($request->get('field','status'),$request->get('order','desc'))
+        $ad_base_query->with('campaign.app');
+        if(!empty($order_by_ids)){
+            $ad_base_query->orderByRaw(DB::raw("FIELD(id,{$order_by_ids}) desc"));
+        }
+        $ad_list = $ad_base_query->orderBy($request->get('field','status'),$request->get('order','desc'))
             ->paginate($request->get('limit',30))
             ->toArray();
 

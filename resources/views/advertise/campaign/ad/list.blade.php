@@ -15,7 +15,10 @@
                 <div class="layui-input-inline">
                     <input type="text" name="name" id="name" placeholder="Name" class="layui-input">
                 </div>
-                <button class="layui-btn" id="adSearchBtn">Search</button>
+                <div class="layui-input-inline">
+                    <input type="text" name="rangedate" id="rangedate" class="layui-input" autocomplete="off" placeholder="">
+                </div>
+                <button class="layui-btn" id="adSearchBtn">Run Report</button>
             </div>
         </div>
         <div class="layui-card-body">
@@ -51,11 +54,35 @@
 @section('script')
     @can('advertise.campaign.ad')
         <script>
-            layui.use(['layer','table','form', 'util'],function () {
+            layui.use(['layer','table','form','laydate','util'],function () {
                 var layer = layui.layer;
                 var form = layui.form;
                 var table = layui.table;
                 var util = layui.util;
+
+                //日期范围选择
+                var laydate = layui.laydate;
+                laydate.render({
+                    elem: '#rangedate'
+                    ,range: '~' //或 range: '~' 来自定义分割字符
+                    ,value: util.toDateString(new Date(), 'yyyy-MM-dd ~ yyyy-MM-dd')
+                    ,extrabtns: [
+                        {id:'today', text:'今天', range:[new Date(), new Date()]},
+                        {id:'tomorrow', text:'明天', range:[new Date(new Date().setDate(new Date().getDate()+1)),
+                                new Date(new Date().setDate(new Date().getDate()+1))]},
+                        {id:'yesterday', text:'昨天', range:[new Date(new Date().setDate(new Date().getDate()-1)),
+                                new Date(new Date().setDate(new Date().getDate()-1))]},
+                        {id:'lastday-7', text:'过去7天', range:[new Date(new Date().setDate(new Date().getDate()-7)),
+                                new Date(new Date().setDate(new Date().getDate()-1))]},
+                        {id:'lastday-28', text:'过去28天', range:[new Date(new Date().setDate(new Date().getDate()-28)),
+                                new Date(new Date().setDate(new Date().getDate()-1))]},
+                        {id:'thismonth', text:'本月', range:[new Date(new Date().setDate(1)),
+                                new Date(new Date(new Date().setMonth(new Date().getMonth()+1)).setDate(0))]},
+                        {id:'lastmonth', text:'上个月', range:[new Date(new Date(new Date().setMonth(new Date().getMonth()-1)).setDate(1)),
+                                new Date(new Date().setDate(0))]}
+                    ],
+                });
+
                 //用户表格初始化
                 var dataTable = table.render({
                     elem: '#dataTable'
@@ -76,7 +103,7 @@
                     ,cols: [[ //表头
                         //{checkbox: true,fixed: true}
                         // ,{field: 'id', title: 'ID', sort: true,width:80}
-                        {field: 'name', title: 'Name', templet: '#nameTpl', width:300}
+                        {field: 'name', title: 'Ad', templet: '#nameTpl', width:300}
                         // ,{field: 'app.name', title: 'App', templet: '#appTpl'}
                         ,{field: 'created', title: 'Created', width:110, templet: function(d){return util.toDateString(d.created_at, "yyyy-MM-dd");}}
                         ,{field: 'impressions', title: 'Impressions'}
@@ -96,7 +123,7 @@
                         ,layEvent = obj.event; //获得 lay-event 对应的值
                     if(layEvent === 'del'){
                         layer.confirm('确认删除吗？', function(index){
-                            $.post("{{ route('advertise.campaign.ad.destroy', [$campaign['id']]) }}",{_method:'delete',ids:[data.ad_id]},function (result) {
+                            $.post("{{ route('advertise.campaign.ad.destroy', [$campaign['id']]) }}",{_method:'delete',ids:[data.id]},function (result) {
                                 if (result.code==0){
                                     obj.del(); //删除对应行（tr）的DOM结构
                                 }
@@ -110,7 +137,7 @@
                             type: 2,
                             title: '',
                             shadeClose: true, area: ['90%', '90%'],
-                            content: '/advertise/campaign/{{$campaign['id']}}/ad/'+data.ad_id,
+                            content: '/advertise/campaign/{{$campaign['id']}}/ad/'+data.id,
                             end: function () {
                                 dataTable.reload();
                             }
@@ -172,9 +199,9 @@
                 //搜索
                 $("#adSearchBtn").click(function () {
                     var name = $("#name").val();
-                    var type = $("#type").val();
+                    var rangedate = $("#rangedate").val();
                     dataTable.reload({
-                        where:{name:name, type:type},
+                        where:{name:name, rangedate:rangedate},
                         page:{curr:1}
                     })
                 })
