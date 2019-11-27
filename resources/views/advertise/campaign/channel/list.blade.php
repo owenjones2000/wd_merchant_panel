@@ -23,7 +23,7 @@
                 </div>
             </script>
             <script type="text/html" id="nameTpl">
-                    @{{ d.name }}
+                    @{{ d.name_hash }}
             </script>
             <script type="text/html" id="status">
                 @{{# if(d.status){ }}
@@ -94,7 +94,7 @@
                         ,{field: 'spend', title: 'Spend'}
                         ,{field: 'ecpi', title: 'eCPI'}
                         ,{field: 'ecpm', title: 'eCPM'}
-                        ,{field: 'status', title: 'Status', templet: '#status', width:90}
+                        //,{field: 'status', title: 'Status', templet: '#status', width:90}
                         // ,{fixed: 'right', width: 220, align:'center', toolbar: '#options'}
                     ]]
                 });
