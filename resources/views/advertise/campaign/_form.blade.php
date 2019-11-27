@@ -105,22 +105,23 @@
 
     <div class="layui-colla-item">
         @php
-            $is_budget_by_all_region = $campaign->budgets->count() == 0 || $campaign->budgets->contains('country', 'ALL');
+            // $is_budget_by_all_region = $campaign->budgets->count() == 0 || $campaign->budgets->contains('country', 'ALL');
             $budget_for_all_region = $campaign->budgets->where('country', 'ALL')->first();
         @endphp
         <h2 class="layui-colla-title">Daily Budgets</h2>
         <div class="layui-colla-content layui-show">
-            <div class="layui-input-block">
-                <div>
-                    <input type="radio" name="budget_by_region" value="0" title="Default daily budget" @if($is_budget_by_all_region) checked="" @endif lay-filter="radioByCountry">
-                    <div class="layui-colla-content @if($is_budget_by_all_region) layui-show @endif">
-                        <input type="hidden" name="budget[0][region_code]" value="0">
-                        <input type="text" name="budget[0][amount]" value="{{ $budget_for_all_region['amount']??'' }}" placeholder="$" autocomplete="off" class="layui-input" lay-verify="required" >
-                    </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">Default</label>
+                <div class="layui-input-inline">
+                    <input type="hidden" name="budget[0][region_code]" value="0">
+                    <input type="text" name="budget[0][amount]" value="{{ $budget_for_all_region['amount']??'' }}" placeholder="$" autocomplete="off" class="layui-input" lay-verify="required" >
                 </div>
+            </div>
 
+            {{--<div class="layui-input-block">--}}
                 {{--<div>--}}
-                    {{--<input type="radio" name="budget_by_region" value="1" title="Daily budget by Country" @if(!$is_budget_by_all_region) checked="" @endif lay-filter="radioByCountry">--}}
+                {{--<input type="radio" name="budget_by_region" value="0" title="Use default daily budget only" @if($is_budget_by_all_region) checked="" @endif lay-filter="radioByCountry">--}}
+                {{--<input type="radio" name="budget_by_region" value="1" title="Daily budget by Country" @if(!$is_budget_by_all_region) checked="" @endif lay-filter="radioByCountry">--}}
                     {{--<div class="layui-colla-content @if(!$is_budget_by_all_region) layui-show @endif">--}}
                         {{--<ul id="budget">--}}
                             {{--@if(!$is_budget_by_all_region)--}}
@@ -139,45 +140,44 @@
                         {{--</ul>--}}
                     {{--</div>--}}
                 {{--</div>--}}
-            </div>
+            {{--</div>--}}
         </div>
     </div>
 
     <div class="layui-colla-item">
         @php
-            $is_bid_by_all_region = $campaign->bids->count() == 0 || $campaign->bids->contains('country', 'ALL');
+            $is_bid_by_region = $campaign->bids->where('deleted_at', null)->count() > 1;
             $bid_for_all_region = $campaign->bids->where('country', 'ALL')->first();
         @endphp
         <h2 class="layui-colla-title">Bidding</h2>
-        <div class="layui-colla-content">
-            <div class="layui-input-block">
-                <div>
-                    <input type="radio" name="bid_by_region" value="0" title="CPI Bid for all Countries" @if($is_bid_by_all_region) checked="" @endif lay-filter="radioByCountry">
-                    <div class="layui-colla-content @if($is_bid_by_all_region) layui-show @endif">
-                        <input type="hidden" name="bid[0][region_code]" value="0">
-                        <input type="text" name="bid[0][amount]" value="{{ $bid_for_all_region['amount']??'' }}" placeholder="$" autocomplete="off" class="layui-input" >
-                    </div>
+        <div class="layui-colla-content layui-show">
+            <div class="layui-form-item">
+                <label class="layui-form-label">Default</label>
+                <div class="layui-input-inline">
+                    <input type="hidden" name="bid[0][region_code]" value="0">
+                    <input type="text" name="bid[0][amount]" value="{{ $bid_for_all_region['amount']??'' }}" lay-verify="required" placeholder="$" autocomplete="off" class="layui-input" >
                 </div>
+            </div>
 
-                <div>
-                    <input type="radio" name="bid_by_region" value="1" title="CPI Bid by Country" @if(!$is_bid_by_all_region) checked="" @endif lay-filter="radioByCountry">
-                    <div class="layui-colla-content @if(!$is_bid_by_all_region) layui-show @endif">
-                        <ul id="bid">
-                            @if(!$is_bid_by_all_region)
-                                @foreach($campaign->bids as $bid)
-                                    <li data-index="{{$bid['region']['code']}}">
-                                        <div class="layui-form-item">
-                                        <label class="layui-form-label">{{$bid['region']['name']}}({{$bid['region']['code']}})</label>
-                                        <div class="layui-input-inline">
-                                            <input type="hidden" name="bid[{{$bid['region']['code']}}][region_code]" value="{{ $bid['region']['code'] }}">
-                                            <input type="text" name="bid[{{$bid['region']['code']}}][amount]" value="{{ $bid['amount'] }}" placeholder="$" autocomplete="off" class="layui-input" >
-                                        </div>
-                                        </div>
-                                    </li>
-                                @endforeach
-                            @endif
-                        </ul>
-                    </div>
+            <div class="layui-input-block">
+                <input type="radio" name="bid_by_region" value="0" title="Use default bid only" @if(!$is_bid_by_region) checked="" @endif lay-filter="radioByCountry">
+                <input type="radio" name="bid_by_region" value="1" title="CPI Bid by Country" @if($is_bid_by_region) checked="" @endif lay-filter="radioByCountry">
+                <div class="layui-colla-content @if($is_bid_by_region) layui-show @endif">
+                    <ul id="bid">
+                        @if($is_bid_by_region)
+                            @foreach($campaign->bids as $bid)
+                                <li data-index="{{$bid['region']['code']}}">
+                                    <div class="layui-form-item">
+                                    <label class="layui-form-label">{{$bid['region']['name']}}({{$bid['region']['code']}})</label>
+                                    <div class="layui-input-inline">
+                                        <input type="hidden" name="bid[{{$bid['region']['code']}}][region_code]" value="{{ $bid['region']['code'] }}">
+                                        <input type="text" name="bid[{{$bid['region']['code']}}][amount]" value="{{ $bid['amount'] }}" placeholder="$" autocomplete="off" class="layui-input" >
+                                    </div>
+                                    </div>
+                                </li>
+                            @endforeach
+                        @endif
+                    </ul>
                 </div>
             </div>
         </div>

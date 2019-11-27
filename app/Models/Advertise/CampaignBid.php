@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CampaignBid extends Model
 {
-    use SoftDeletes;
+    // use SoftDeletes;
 
     protected $table = 'a_campaign_bid';
 
-    protected $fillable = ['type', 'amount', 'country'];
+    protected $fillable = ['type', 'amount', 'country', 'deleted_at'];
 
     /**
      * 指定国家

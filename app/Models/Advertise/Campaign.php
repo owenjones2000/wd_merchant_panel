@@ -2,6 +2,7 @@
 namespace App\Models\Advertise;
 
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
@@ -71,29 +72,37 @@ class Campaign extends Model
                 }
             }
 
-            if(isset($params['budget_by_region']) && isset($params['budget'])){
-                if($params['budget_by_region']){
+            if(/*isset($params['budget_by_region']) &&*/ isset($params['budget'])){
+                $campaign->budgets()->updateOrCreate([
+                        'country' => 'ALL',
+                    ],[
+                        'amount' => $params['budget'][0]['amount'] ?? 0,
+                    ]);
+                if($params['budget_by_region']??false){
                     foreach($params['budget'] as $budget_info){
                         if(!empty($budget_info['region_code']) && !empty($budget_info['amount'])) {
                             $campaign->budgets()->updateOrCreate([
                                 'country' => $budget_info['region_code'],
                             ],[
                                 'amount' => $budget_info['amount'],
+                                'deleted_at' => null,
                             ]);
                         }
                     }
                 }else{
-                    if(!empty($params['budget'][0]['amount'])) {
-                        $campaign->budgets()->updateOrCreate([
-                            'country' => 'ALL',
-                        ],[
-                            'amount' => $params['budget'][0]['amount'] ?? 0,
-                        ]);
-                    }
+                    $campaign->budgets()->where('country', '!=', 'ALL')
+                        ->update([
+                        'deleted_at' => Carbon::now(),
+                    ]);
                 }
             }
 
             if(isset($params['bid_by_region']) && isset($params['bid'])){
+                $campaign->bids()->updateOrCreate([
+                    'country' => 'ALL',
+                ],[
+                    'amount' => $params['bid'][0]['amount'] ?? 1,
+                ]);
                 if($params['bid_by_region']){
                     foreach($params['bid'] as $bid_info){
                         if(!empty($bid_info['region_code']) && !empty($bid_info['amount'])) {
@@ -101,17 +110,15 @@ class Campaign extends Model
                                 'country' => $bid_info['region_code'],
                             ],[
                                 'amount' => $bid_info['amount'],
+                                'deleted_at' => null,
                             ]);
                         }
                     }
                 }else{
-                    if(!empty($params['bid'][0]['amount'])){
-                        $campaign->bids()->updateOrCreate([
-                            'country' => 'ALL',
-                        ],[
-                            'amount' => $params['bid'][0]['amount'] ?? 0,
+                    $campaign->bids()->where('country', '!=', 'ALL')
+                        ->update([
+                            'deleted_at' => Carbon::now(),
                         ]);
-                    }
                 }
             }
 

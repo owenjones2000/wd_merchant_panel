@@ -29,10 +29,13 @@
 
         // 单选框初始化
         form.on('radio(radioByCountry)', function(data){
-            // 关闭所有折叠
-            $(data.elem.parentNode.parentNode).find('.layui-colla-content').removeClass('layui-show');
-            // 打开当前选中折叠
-            $(data.elem.parentNode).children('.layui-colla-content').addClass('layui-show');
+            if(data.value == 0){
+                // 关闭折叠
+                $(data.elem.parentNode).children('.layui-colla-content').removeClass('layui-show');
+            }else{
+                // 打开折叠
+                $(data.elem.parentNode).children('.layui-colla-content').addClass('layui-show');
+            }
         });
 
         function updateCountryList(elem, regions){
