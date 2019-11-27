@@ -30,7 +30,8 @@ class CampaignController extends Controller
         }
         $start_date = date('Ymd', strtotime($range_date[0]??'now'));
         $end_date = date('Ymd', strtotime($range_date[1]??'now'));
-        $campaign_base_query = Campaign::query()->where('main_user_id', Auth::user()->getMainId());
+        $campaign_base_query = Campaign::query();
+
         if(!empty($request->get('name'))){
             $campaign_base_query->where('name', 'like', '%'.$request->get('name').'%');
         }
