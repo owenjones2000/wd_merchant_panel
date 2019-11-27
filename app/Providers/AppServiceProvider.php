@@ -35,10 +35,10 @@ class AppServiceProvider extends ServiceProvider
 //            $view->with('unreadMessage',$unreadMessage);
         });
 
-        DB::listen(function ($query) {
-             Log::info($query->sql);
-            // $query->bindings
-            // $query->time
-        });
+//        DB::listen(function ($query) {
+//             Log::info($query->sql);
+//            // $query->bindings
+//            // $query->time
+//        });
     }
 }

@@ -29,8 +29,8 @@ class AdController extends Controller
         if(!empty($request->get('rangedate'))){
             $range_date = explode(' ~ ',$request->get('rangedate'));
         }
-        $start_date = date('Ymd', strtotime($range_date[0]??''));
-        $end_date = date('Ymd', strtotime($range_date[1]??''));
+        $start_date = date('Ymd', strtotime($range_date[0]??'now'));
+        $end_date = date('Ymd', strtotime($range_date[1]??'now'));
         $ad_base_query = Ad::query()->where('campaign_id', $campaign_id);
         if(!empty($request->get('name'))){
             $ad_base_query->where('name', 'like', '%'.$request->get('name').'%');
