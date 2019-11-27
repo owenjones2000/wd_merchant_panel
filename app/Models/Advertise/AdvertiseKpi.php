@@ -27,6 +27,14 @@ class AdvertiseKpi extends Model
     }
 
     /**
+     * 区域
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function region(){
+        return $this->belongsTo(Region::class, 'country', 'code');
+    }
+
+    /**
      * 渠道
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */

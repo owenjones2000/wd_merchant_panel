@@ -142,6 +142,12 @@ Route::group(['namespace'=>'Advertise','prefix'=>'advertise','middleware'=>['aut
             Route::get('data', 'ChannelController@data')->name('advertise.campaign.channel.data');
             Route::get('list', 'ChannelController@list')->name('advertise.campaign.channel');
         });
+
+        // 区域
+        Route::group(['prefix'=>'{campaign_id}/region', 'middleware' => 'permission:advertise.campaign'], function () {
+            Route::get('data', 'RegionController@data')->name('advertise.campaign.region.data');
+            Route::get('list', 'RegionController@list')->name('advertise.campaign.region');
+        });
     });
 
     //文件

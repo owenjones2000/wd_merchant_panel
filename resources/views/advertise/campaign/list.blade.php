@@ -29,6 +29,9 @@
                         <a class="layui-btn layui-btn-sm" lay-event="ad">Ads</a>
                     @endcan
                     @can('advertise.campaign')
+                        <a class="layui-btn layui-btn-sm" lay-event="region">Countries</a>
+                    @endcan
+                    @can('advertise.campaign')
                         <a class="layui-btn layui-btn-sm" lay-event="channel">Sources</a>
                     @endcan
                     {{--@can('advertise.campaign.destroy')--}}
@@ -173,6 +176,18 @@
                                 shadeClose: true,
                                 area: ['90%', '90%'],
                                 content: '/advertise/campaign/' + data.id + '/channel/list',
+                                end: function () {
+                                    // dataTable.reload();
+                                }
+                            });
+                            break;
+                        case 'region':
+                            layer.open({
+                                type: 2,
+                                title: 'Campaign: ' + data.name,
+                                shadeClose: true,
+                                area: ['90%', '90%'],
+                                content: '/advertise/campaign/' + data.id + '/region/list',
                                 end: function () {
                                     // dataTable.reload();
                                 }
