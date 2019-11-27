@@ -122,11 +122,15 @@ class AdController extends Controller
         $this->validate($request,[
             'name'  => 'required|string|unique:a_campaign,name,'.$id,
         ]);
+        /** @var Campaign $campaign */
+        $campaign = Campaign::query()->where([
+            'id' => $campaign_id,
+            'main_user_id' => Auth::user()->getMainId(),
+        ])->firstOrFail();
         $params = $request->all();
         $params['id'] = $id;
         $params['status'] = isset($params['status']) ? 1 : 0;
-        $params['campaign_id'] = $campaign_id;
-        $ad = Ad::Make(Auth::user(), $params);
+        $ad = $campaign->makeAd(Auth::user(), $params);
         if ($ad){
             return redirect(route('advertise.campaign.ad.edit', [$ad['campaign_id'], $ad['id']]))->with(['status'=>'更新成功']);
         }

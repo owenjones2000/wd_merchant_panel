@@ -128,11 +128,60 @@ class Campaign extends Model
     }
 
     /**
+     * 构造Ad
+     * @param User $user
+     * @param $params
+     * @return Ad
+     */
+    public function makeAd($user, $params){
+        $ad = DB::transaction(function () use($user, $params) {
+            if (empty($params['id'])) {
+                $ad = new Ad();
+                $ad['campaign_id'] = $this['id'];
+                $ad['app_id'] = $this['app_id'];
+            } else {
+                $ad = $this->ads()->where([
+                    'id' => $params['id'],
+                ])->firstOrFail();
+            }
+            $ad->fill($params);
+            $ad->saveOrFail();
+
+            if(isset($params['asset'])){
+                $asset_id_list = array_column($params['asset'], 'type', 'id');
+                $ad->assets()
+                    ->whereNotIn('id', array_keys($asset_id_list))
+                    ->where('ad_id', $ad['id'])
+                    ->update([
+                        'ad_id' => null
+                    ]);
+                Asset::query()
+                    ->whereIn('id', array_keys($asset_id_list))
+                    ->whereNull('ad_id')
+                    ->update([
+                        'ad_id' => $ad['id']
+                    ]);
+            }
+
+            return $ad;
+        }, 3);
+        return $ad;
+    }
+
+    /**
      * 所属应用
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function app(){
         return $this->belongsTo(App::class, 'app_id', 'id');
+    }
+
+    /**
+     * 广告
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function ads(){
+        return $this->hasMany(Ad::class, 'campaign_id', 'id');
     }
 
     /**
