@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -31,6 +33,12 @@ class AppServiceProvider extends ServiceProvider
 //            $unreadMessage = \App\Models\Message::where('read',1)->where('accept_uuid',auth()->user()->uuid)->count();
             $view->with('menus',$menus);
 //            $view->with('unreadMessage',$unreadMessage);
+        });
+
+        DB::listen(function ($query) {
+             Log::info($query->sql);
+            // $query->bindings
+            // $query->time
         });
     }
 }
