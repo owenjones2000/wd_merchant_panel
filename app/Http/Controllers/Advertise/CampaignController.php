@@ -114,7 +114,7 @@ class CampaignController extends Controller
         $apps = App::query()
             ->where('main_user_id', Auth::user()->getMainId())
             ->get();
-        $regions = Region::query()->get();
+        $regions = Region::query()->orderBy('sort', 'desc')->get();
         return view('advertise.campaign.edit',compact('campaign', 'apps', 'regions'));
     }
 
