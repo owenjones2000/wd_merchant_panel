@@ -57,28 +57,16 @@ class ChannelController extends Controller
         $advertise_kpi_query->groupBy('target_app_id');
 
         $advertise_kpi_list = $advertise_kpi_query
+            ->with('channel')
             ->orderBy('spend','desc')
-            ->get()
-            ->keyBy('target_app_id')
-            ->toArray();
-        $order_by_ids = implode(',', array_reverse(array_keys($advertise_kpi_list)));
-        if(!empty($order_by_ids)){
-            $channel_base_query->orderByRaw(DB::raw("FIELD(id,{$order_by_ids}) desc"));
-        }
-        $channel_list = $channel_base_query->orderBy($request->get('field','id'),$request->get('order','desc'))
             ->paginate($request->get('limit',30))
             ->toArray();
 
-        foreach($channel_list['data'] as &$channel){
-            if(isset($advertise_kpi_list[$channel['id']])){
-                $channel = array_merge($channel, $advertise_kpi_list[$channel['id']]);
-            }
-        }
         $data = [
             'code' => 0,
             'msg'   => '正在请求中...',
-            'count' => $channel_list['total'],
-            'data'  => $channel_list['data']
+            'count' => $advertise_kpi_list['total'],
+            'data'  => $advertise_kpi_list['data']
         ];
         return response()->json($data);
     }

@@ -23,7 +23,7 @@
                 </div>
             </script>
             <script type="text/html" id="nameTpl">
-                    @{{ d.name_hash }}
+                    @{{ d.channel.name_hash }}
             </script>
             <script type="text/html" id="status">
                 @{{# if(d.status){ }}
