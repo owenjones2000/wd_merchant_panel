@@ -136,6 +136,12 @@ Route::group(['namespace'=>'Advertise','prefix'=>'advertise','middleware'=>['aut
             //删除
             Route::delete('destroy', 'AdController@destroy')->name('advertise.campaign.ad.destroy')->middleware('permission:advertise.campaign.ad.destroy');
         });
+
+        // 子渠道
+        Route::group(['prefix'=>'{campaign_id}/channel', 'middleware' => 'permission:advertise.campaign'], function () {
+            Route::get('data', 'ChannelController@data')->name('advertise.campaign.channel.data');
+            Route::get('list', 'ChannelController@list')->name('advertise.campaign.channel');
+        });
     });
 
     //文件

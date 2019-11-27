@@ -28,6 +28,9 @@
                     @can('advertise.campaign.ad')
                         <a class="layui-btn layui-btn-sm" lay-event="ad">Ads</a>
                     @endcan
+                    @can('advertise.campaign')
+                        <a class="layui-btn layui-btn-sm" lay-event="channel">Sources</a>
+                    @endcan
                     {{--@can('advertise.campaign.destroy')--}}
                         {{--<a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">Remove</a>--}}
                     {{--@endcan--}}
@@ -124,38 +127,57 @@
                 table.on('tool(dataTable)', function(obj){ //注：tool是工具条事件名，dataTable是table原始容器的属性 lay-filter="对应的值"
                     var data = obj.data //获得当前行数据
                         ,layEvent = obj.event; //获得 lay-event 对应的值
-                    if(layEvent === 'del'){
-                        layer.confirm('确认删除吗？', function(index){
-                            $.post("{{ route('advertise.campaign.destroy') }}",{_method:'delete',ids:[data.campaign_id]},function (result) {
-                                if (result.code==0){
-                                    obj.del(); //删除对应行（tr）的DOM结构
-                                }
-                                layer.close(index);
-                                layer.msg(result.msg);
-                                dataTable.reload();
+                    switch(layEvent) {
+                        case 'del':
+                            layer.confirm('确认删除吗？', function (index) {
+                                $.post("{{ route('advertise.campaign.destroy') }}", {
+                                    _method: 'delete',
+                                    ids: [data.campaign_id]
+                                }, function (result) {
+                                    if (result.code == 0) {
+                                        obj.del(); //删除对应行（tr）的DOM结构
+                                    }
+                                    layer.close(index);
+                                    layer.msg(result.msg);
+                                    dataTable.reload();
+                                });
                             });
-                        });
-                    } else if(layEvent === 'edit'){
-                        layer.open({
-                            type: 2,
-                            title: '',
-                            shadeClose: true, area: ['80%', '80%'],
-                            content: '/advertise/campaign/'+data.id,
-                            end: function () {
-                                dataTable.reload();
-                            }
-                        });
-                    } else if(layEvent === 'ad'){
-                        layer.open({
-                            type: 2,
-                            title: 'Campaign: ' + data.name,
-                            shadeClose: true,
-                            area: ['90%', '90%'],
-                            content: '/advertise/campaign/'+data.id+'/ad/list',
-                            end: function () {
-                                // dataTable.reload();
-                            }
-                        });
+                            break;
+                        case 'edit':
+                            layer.open({
+                                type: 2,
+                                title: '',
+                                shadeClose: true, area: ['80%', '80%'],
+                                content: '/advertise/campaign/' + data.id,
+                                end: function () {
+                                    dataTable.reload();
+                                }
+                            });
+                            break;
+                        case 'ad':
+                            layer.open({
+                                type: 2,
+                                title: 'Campaign: ' + data.name,
+                                shadeClose: true,
+                                area: ['90%', '90%'],
+                                content: '/advertise/campaign/' + data.id + '/ad/list',
+                                end: function () {
+                                    // dataTable.reload();
+                                }
+                            });
+                            break;
+                        case 'channel':
+                            layer.open({
+                                type: 2,
+                                title: 'Campaign: ' + data.name,
+                                shadeClose: true,
+                                area: ['90%', '90%'],
+                                content: '/advertise/campaign/' + data.id + '/channel/list',
+                                end: function () {
+                                    // dataTable.reload();
+                                }
+                            });
+                            break;
                     }
                 });
 

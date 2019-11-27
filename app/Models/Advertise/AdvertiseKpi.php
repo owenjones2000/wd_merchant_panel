@@ -25,4 +25,12 @@ class AdvertiseKpi extends Model
     public function ad(){
         return $this->belongsTo(Ad::class, 'ad_id', 'id');
     }
+
+    /**
+     * 渠道
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function channel(){
+        return $this->belongsTo(Channel::class, 'target_app_id', 'id');
+    }
 }
