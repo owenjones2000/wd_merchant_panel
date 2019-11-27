@@ -24,6 +24,13 @@ class TenantScope implements Scope
      */
     public function apply(Builder $builder, Model $model)
     {
-        $builder->where('main_user_id',Auth::user()->getMainId());
+        $builder->where('main_user_id', $this->main_user_id);
     }
+
+    public function __construct($main_user_id)
+    {
+        $this->main_user_id = $main_user_id;
+    }
+
+    private $main_user_id;
 }

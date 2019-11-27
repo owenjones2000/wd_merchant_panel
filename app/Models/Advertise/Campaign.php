@@ -6,6 +6,7 @@ use App\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class Campaign extends Model
@@ -226,6 +227,6 @@ class Campaign extends Model
     {
         parent::boot();
 
-        static::addGlobalScope(new TenantScope());
+        static::addGlobalScope(new TenantScope(Auth::user()->getMainId()));
     }
 }
