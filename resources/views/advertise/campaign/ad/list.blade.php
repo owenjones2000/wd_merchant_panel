@@ -65,7 +65,7 @@
                 laydate.render({
                     elem: '#rangedate'
                     ,range: '~' //或 range: '~' 来自定义分割字符
-                    ,value: util.toDateString(new Date(), 'yyyy-MM-dd ~ yyyy-MM-dd')
+                    ,value: '{{ $rangedate }}' //util.toDateString(new Date(), 'yyyy-MM-dd ~ yyyy-MM-dd')
                     ,extrabtns: [
                         {id:'today', text:'今天', range:[new Date(), new Date()]},
                         {id:'yesterday', text:'昨天', range:[new Date(new Date().setDate(new Date().getDate()-1)),
@@ -87,6 +87,7 @@
                     ,autoSort: false
                     ,height: 500
                     ,url: "{{ route('advertise.campaign.ad.data', [$campaign['id']]) }}" //数据接口
+                    ,where: {rangedate: '{{$rangedate}}'}
                     ,page: true //开启分页
                     ,done: function(res, curr, count){
                         //接口回调，处理一些和表格相关的辅助事项

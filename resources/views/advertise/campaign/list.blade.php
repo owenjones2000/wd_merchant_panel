@@ -130,6 +130,7 @@
                 table.on('tool(dataTable)', function(obj){ //注：tool是工具条事件名，dataTable是table原始容器的属性 lay-filter="对应的值"
                     var data = obj.data //获得当前行数据
                         ,layEvent = obj.event; //获得 lay-event 对应的值
+                    var rangedate = $("#rangedate").val();
                     switch(layEvent) {
                         case 'del':
                             layer.confirm('确认删除吗？', function (index) {
@@ -163,7 +164,7 @@
                                 title: 'Campaign: ' + data.name,
                                 shadeClose: true,
                                 area: ['90%', '90%'],
-                                content: '/advertise/campaign/' + data.id + '/ad/list',
+                                content: '/advertise/campaign/' + data.id + '/ad/list?rangedate=' + rangedate,
                                 end: function () {
                                     // dataTable.reload();
                                 }
@@ -175,7 +176,7 @@
                                 title: 'Campaign: ' + data.name,
                                 shadeClose: true,
                                 area: ['90%', '90%'],
-                                content: '/advertise/campaign/' + data.id + '/channel/list',
+                                content: '/advertise/campaign/' + data.id + '/channel/list?rangedate=' + rangedate,
                                 end: function () {
                                     // dataTable.reload();
                                 }
@@ -187,7 +188,7 @@
                                 title: 'Campaign: ' + data.name,
                                 shadeClose: true,
                                 area: ['90%', '90%'],
-                                content: '/advertise/campaign/' + data.id + '/region/list',
+                                content: '/advertise/campaign/' + data.id + '/region/list?rangedate=' + rangedate,
                                 end: function () {
                                     // dataTable.reload();
                                 }

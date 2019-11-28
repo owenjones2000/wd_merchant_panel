@@ -20,10 +20,11 @@ class RegionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function list($campaign_id)
+    public function list(Request $request, $campaign_id)
     {
+        $rangedate = $request->input('rangedate', date('Y-m-d ~ Y-m-d'));
         $campaign = Campaign::findOrFail($campaign_id);
-        return view('advertise.campaign.region.list', compact('campaign'));
+        return view('advertise.campaign.region.list', compact('campaign', 'rangedate'));
     }
 
     public function data(Request $request, $campaign_id)
