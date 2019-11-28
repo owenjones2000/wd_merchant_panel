@@ -121,16 +121,16 @@
                     var data = obj.data //获得当前行数据
                         ,layEvent = obj.event; //获得 lay-event 对应的值
                     if(layEvent === 'del'){
-                        layer.confirm('确认删除吗？', function(index){
-                            $.post("{{ route('advertise.campaign.ad.destroy', [$campaign['id']]) }}",{_method:'delete',ids:[data.id]},function (result) {
-                                if (result.code==0){
-                                    obj.del(); //删除对应行（tr）的DOM结构
-                                }
-                                layer.close(index);
-                                layer.msg(result.msg);
-                                dataTable.reload();
-                            });
-                        });
+                        {{--layer.confirm('确认删除吗？', function(index){--}}
+                            {{--$.post("{{ route('advertise.campaign.ad.destroy', [$campaign['id']]) }}",{_method:'delete',ids:[data.id]},function (result) {--}}
+                                {{--if (result.code==0){--}}
+                                    {{--obj.del(); //删除对应行（tr）的DOM结构--}}
+                                {{--}--}}
+                                {{--layer.close(index);--}}
+                                {{--layer.msg(result.msg);--}}
+                                {{--dataTable.reload();--}}
+                            {{--});--}}
+                        {{--});--}}
                     } else if(layEvent === 'edit'){
                         layer.open({
                             type: 2,
@@ -156,31 +156,6 @@
                             ,order: obj.type //排序方式
                         }
                     });
-                });
-
-                //按钮批量删除
-                $("#listDelete").click(function () {
-                    var ids = []
-                    var hasCheck = table.checkStatus('dataTable');
-                    var hasCheckData = hasCheck.data
-                    if (hasCheckData.length>0){
-                        $.each(hasCheckData,function (index,element) {
-                            ids.push(element.id)
-                        })
-                    }
-                    if (ids.length>0){
-                        layer.confirm('确认删除吗？', function(index){
-                            $.post("{{ route('advertise.campaign.ad.destroy', [$campaign['id']]) }}",{_method:'delete',ids:ids},function (result) {
-                                if (result.code==0){
-                                    dataTable.reload()
-                                }
-                                layer.close(index);
-                                layer.msg(result.msg,)
-                            });
-                        })
-                    }else {
-                        layer.msg('请选择删除项')
-                    }
                 });
 
                 $('#ad_add').on('click',function () {

@@ -43,9 +43,9 @@
             </script>
             <script type="text/html" id="status">
                 @{{# if(d.status){ }}
-                    <span class="layui-bg-green">Enabled</span>
+                    <span lay-event="edit"><i class="layui-icon layui-icon-pause" style="color: red;"></i></span>
                 @{{# } else { }}
-                    <span class="layui-bg-red">Disabled</span>
+                    <span lay-event="edit"><i class="layui-icon layui-icon-play" style="color: #76C81C;"></i></span>
                 @{{# } }}
             </script>
         </div>
@@ -83,7 +83,7 @@
                         ,{field: 'bundle_id', title: 'Package Name'}
                         ,{field: 'os', title: 'Platform'}
                         ,{field: 'track', title: 'Track', templet: '#track'}
-                        ,{field: 'status', title: 'Status', templet: '#status'}
+                        ,{field: 'status', title: 'Status', templet: '#status', align:'center', width:70}
                         // ,{field: 'created_at', title: 'Created'}
                         // ,{field: 'updated_at', title: 'Updated'}
                         ,{fixed: 'right', width: 220, align:'center', toolbar: '#options'}
@@ -94,7 +94,8 @@
                 table.on('tool(dataTable)', function(obj){ //注：tool是工具条事件名，dataTable是table原始容器的属性 lay-filter="对应的值"
                     var data = obj.data //获得当前行数据
                         ,layEvent = obj.event; //获得 lay-event 对应的值
-                    if(layEvent === 'del'){
+                    switch(layEvent){
+                        case 'del':
                         {{--layer.confirm('确认删除吗？', function(index){--}}
                             {{--$.post("{{ route('advertise.app.destroy') }}",{_method:'delete',ids:[data.id]},function (result) {--}}
                                 {{--if (result.code==0){--}}
@@ -105,16 +106,18 @@
                                 {{--dataTable.reload();--}}
                             {{--});--}}
                         {{--});--}}
-                    } else if(layEvent === 'edit'){
-                        layer.open({
-                            type: 2,
-                            title: '',
-                            shadeClose: true, area: ['90%', '90%'],
-                            content: '/advertise/app/'+data.id,
-                            end: function () {
-                                dataTable.reload();
-                            }
-                        });
+                        break;
+                        case 'edit':
+                            layer.open({
+                                type: 2,
+                                title: '',
+                                shadeClose: true, area: ['90%', '90%'],
+                                content: '/advertise/app/'+data.id,
+                                end: function () {
+                                    dataTable.reload();
+                                }
+                            });
+                        break;
                     }
                 });
 
