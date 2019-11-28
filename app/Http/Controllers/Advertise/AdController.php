@@ -112,6 +112,34 @@ class AdController extends Controller
     }
 
     /**
+     * 启动
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Throwable
+     */
+    public function enable($campaign_id, $id)
+    {
+        /** @var Ad $ad */
+        $ad = Ad::query()->where(['id' => $id, 'campaign_id' => $campaign_id])->firstOrFail();
+        $ad->enable();
+        return response()->json(['code'=>0,'msg'=>'Successful']);
+    }
+
+    /**
+     * 停止
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Throwable
+     */
+    public function disable($campaign_id, $id)
+    {
+        /** @var Ad $ad */
+        $ad = Ad::query()->where(['id' => $id, 'campaign_id' => $campaign_id])->firstOrFail();
+        $ad->disable();
+        return response()->json(['code'=>0,'msg'=>'Successful']);
+    }
+    
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request

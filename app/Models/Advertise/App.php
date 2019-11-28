@@ -42,6 +42,28 @@ class App extends Model
         }, 3);
         return $apps;
     }
+
+    /**
+     * 启用
+     * @throws \Throwable
+     */
+    public function enable(){
+        if(!$this->status){
+            $this->status = true;
+            $this->saveOrFail();
+        }
+    }
+
+    /**
+     * 停用
+     * @throws \Throwable
+     */
+    public function disable(){
+        if($this->status){
+            $this->status = false;
+            $this->saveOrFail();
+        }
+    }
     
     public function getTrackAttribute(){
         return TrackPlatform::get($this['track_platform_id']);

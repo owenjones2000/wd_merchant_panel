@@ -109,9 +109,12 @@ Route::group(['namespace'=>'Advertise','prefix'=>'advertise','middleware'=>['aut
         //编辑
         Route::get('{id?}', 'AppController@edit')->name('advertise.app.edit')->middleware('permission:advertise.app.edit');
         Route::post('{id?}', 'AppController@save')->name('advertise.app.save')->middleware('permission:advertise.app.edit');
+        Route::post('{id}/enable', 'AppController@enable')->name('advertise.app.enable')->middleware('permission:advertise.app.edit');
+        Route::post('{id}/disable', 'AppController@disable')->name('advertise.app.disable')->middleware('permission:advertise.app.edit');
+
         //删除
 //        Route::delete('destroy', 'AppController@destroy')->name('advertise.app.destroy')->middleware('permission:advertise.app.destroy');
-    });
+        });
 
     // 活动管理
     Route::group(['prefix'=>'campaign', 'middleware' => 'permission:advertise.campaign'], function () {
@@ -120,6 +123,8 @@ Route::group(['namespace'=>'Advertise','prefix'=>'advertise','middleware'=>['aut
         //编辑
         Route::get('{id?}', 'CampaignController@edit')->name('advertise.campaign.edit')->middleware('permission:advertise.campaign.edit');
         Route::post('{id?}', 'CampaignController@save')->name('advertise.campaign.save')->middleware('permission:advertise.campaign.edit');
+        Route::post('{id}/enable', 'CampaignController@enable')->name('advertise.campaign.enable')->middleware('permission:advertise.campaign.edit');
+        Route::post('{id}/disable', 'CampaignController@disable')->name('advertise.campaign.disable')->middleware('permission:advertise.campaign.edit');
         //删除
 //        Route::delete('destroy', 'CampaignController@destroy')->name('advertise.campaign.destroy')->middleware('permission:advertise.campaign.destroy');
 
@@ -130,6 +135,8 @@ Route::group(['namespace'=>'Advertise','prefix'=>'advertise','middleware'=>['aut
             //编辑
             Route::get('{id?}', 'AdController@edit')->name('advertise.campaign.ad.edit')->middleware('permission:advertise.campaign.ad.edit');
             Route::post('{id?}', 'AdController@save')->name('advertise.campaign.ad.save')->middleware('permission:advertise.campaign.ad.edit');
+            Route::post('{id}/enable', 'AdController@enable')->name('advertise.ad.enable')->middleware('permission:advertise.campaign.ad.edit');
+            Route::post('{id}/disable', 'AdController@disable')->name('advertise.ad.disable')->middleware('permission:advertise.campaign.ad.edit');
             //删除
 //            Route::delete('destroy', 'AdController@destroy')->name('advertise.campaign.ad.destroy')->middleware('permission:advertise.campaign.ad.destroy');
         });

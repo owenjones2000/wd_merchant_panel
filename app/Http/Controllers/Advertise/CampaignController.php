@@ -118,6 +118,34 @@ class CampaignController extends Controller
     }
 
     /**
+     * 启动
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Throwable
+     */
+    public function enable($id)
+    {
+        /** @var Campaign $campaign */
+        $campaign = Campaign::findOrFail($id);
+        $campaign->enable();
+        return response()->json(['code'=>0,'msg'=>'Successful']);
+    }
+
+    /**
+     * 停止
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Throwable
+     */
+    public function disable($id)
+    {
+        /** @var Campaign $campaign */
+        $campaign = Campaign::findOrFail($id);
+        $campaign->disable();
+        return response()->json(['code'=>0,'msg'=>'Successful']);
+    }
+
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request

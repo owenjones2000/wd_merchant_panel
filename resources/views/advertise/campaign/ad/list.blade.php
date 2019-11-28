@@ -32,7 +32,7 @@
             </script>
             <script type="text/html" id="nameTpl">
                 @can('advertise.campaign.ad.edit')
-                    <a class="layui-table-link" lay-event="edit">
+                    <a class="layui-table-link" lay-event="edit" href="javascript:;">
                 @endcan
                     @{{ d.name }}
                 @can('advertise.campaign.ad.edit')
@@ -42,9 +42,9 @@
             </script>
             <script type="text/html" id="status">
                 @{{# if(d.status){ }}
-                    <span class="layui-bg-green">Enabled</span>
+                <a lay-event="disable" title="Click to pause" href="javascript:;"><i class="layui-icon layui-icon-radio" style="color: #76C81C;"></i></a>
                 @{{# } else { }}
-                    <span class="layui-bg-red">Disabled</span>
+                <a lay-event="enable" title="Click to activate" href="javascript:;"><i class="layui-icon layui-icon-radio" style="color: #666;"></i></a>
                 @{{# } }}
             </script>
         </div>
@@ -111,7 +111,7 @@
                         ,{field: 'spend', title: 'Spend'}
                         ,{field: 'ecpi', title: 'eCPI'}
                         ,{field: 'ecpm', title: 'eCPM'}
-                        ,{field: 'status', title: 'Status', templet: '#status', width:90}
+                        ,{field: 'status', title: 'Status', templet: '#status', align:'center', width:70}
                         // ,{fixed: 'right', width: 220, align:'center', toolbar: '#options'}
                     ]]
                 });
@@ -120,7 +120,8 @@
                 table.on('tool(dataTable)', function(obj){ //注：tool是工具条事件名，dataTable是table原始容器的属性 lay-filter="对应的值"
                     var data = obj.data //获得当前行数据
                         ,layEvent = obj.event; //获得 lay-event 对应的值
-                    if(layEvent === 'del'){
+                    switch(layEvent){
+                        case 'del':
                         {{--layer.confirm('确认删除吗？', function(index){--}}
                             {{--$.post("{{ route('advertise.campaign.ad.destroy', [$campaign['id']]) }}",{_method:'delete',ids:[data.id]},function (result) {--}}
                                 {{--if (result.code==0){--}}
@@ -131,16 +132,44 @@
                                 {{--dataTable.reload();--}}
                             {{--});--}}
                         {{--});--}}
-                    } else if(layEvent === 'edit'){
-                        layer.open({
-                            type: 2,
-                            title: ' ',
-                            shadeClose: true, area: ['90%', '90%'],
-                            content: '/advertise/campaign/{{$campaign['id']}}/ad/'+data.id,
-                            end: function () {
-                                dataTable.reload();
-                            }
-                        });
+                        break;
+                        case 'edit':
+                            layer.open({
+                                type: 2,
+                                title: ' ',
+                                shadeClose: true, area: ['90%', '90%'],
+                                content: '/advertise/campaign/{{$campaign['id']}}/ad/'+data.id,
+                                end: function () {
+                                    dataTable.reload();
+                                }
+                            });
+                            break;
+                        case 'enable':
+                            layer.confirm('Confirm activate [ '+data.name+' ] ?', function(index){
+                                $.post('/advertise/campaign/{{$campaign['id']}}/ad/'+data.id+'/enable',
+                                    {},
+                                    function (result) {
+                                        if (result.code==0){
+                                        }
+                                        layer.close(index);
+                                        layer.msg(result.msg);
+                                        dataTable.reload();
+                                    });
+                            });
+                            break;
+                        case 'disable':
+                            layer.confirm('Confirm pause [ '+data.name+' ] ?', function(index){
+                                $.post('/advertise/campaign/{{$campaign['id']}}/ad/'+data.id+'/disable',
+                                    {},
+                                    function (result) {
+                                        if (result.code==0){
+                                        }
+                                        layer.close(index);
+                                        layer.msg(result.msg);
+                                        dataTable.reload();
+                                    });
+                            });
+                            break;
                     }
                 });
 

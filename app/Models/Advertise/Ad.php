@@ -13,6 +13,28 @@ class Ad extends Model
     protected $fillable = ['name', 'status', 'type_id', 'campaign_id'];
 
     /**
+     * 启用
+     * @throws \Throwable
+     */
+    public function enable(){
+        if(!$this->status){
+            $this->status = true;
+            $this->saveOrFail();
+        }
+    }
+
+    /**
+     * 停用
+     * @throws \Throwable
+     */
+    public function disable(){
+        if($this->status){
+            $this->status = false;
+            $this->saveOrFail();
+        }
+    }
+
+    /**
      * 广告活动
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */

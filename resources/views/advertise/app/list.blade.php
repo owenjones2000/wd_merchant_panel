@@ -29,7 +29,7 @@
             </script>
             <script type="text/html" id="nameTpl">
                 @can('advertise.app.edit')
-                <a class="layui-table-link" lay-event="edit">
+                <a class="layui-table-link" lay-event="edit" href="javascript:;">
                     @endcan
                     @{{ d.name }}
                     @can('advertise.app.edit')
@@ -43,9 +43,9 @@
             </script>
             <script type="text/html" id="status">
                 @{{# if(d.status){ }}
-                    <span lay-event="edit"><i class="layui-icon layui-icon-pause" style="color: red;"></i></span>
+                    <a lay-event="disable" title="Click to pause" href="javascript:;"><i class="layui-icon layui-icon-radio" style="color: #76C81C;"></i></a>
                 @{{# } else { }}
-                    <span lay-event="edit"><i class="layui-icon layui-icon-play" style="color: #76C81C;"></i></span>
+                    <a lay-event="enable" title="Click to activate" href="javascript:;"><i class="layui-icon layui-icon-radio" style="color: #666;"></i></a>
                 @{{# } }}
             </script>
         </div>
@@ -117,7 +117,33 @@
                                     dataTable.reload();
                                 }
                             });
-                        break;
+                            break;
+                        case 'enable':
+                            layer.confirm('Confirm activate [ '+data.name+' ] ?', function(index){
+                                $.post('/advertise/app/'+data.id+'/enable',
+                                    {},
+                                    function (result) {
+                                    if (result.code==0){
+                                    }
+                                    layer.close(index);
+                                    layer.msg(result.msg);
+                                    dataTable.reload();
+                                });
+                            });
+                            break;
+                        case 'disable':
+                            layer.confirm('Confirm pause [ '+data.name+' ] ?', function(index){
+                                $.post('/advertise/app/'+data.id+'/disable',
+                                    {},
+                                    function (result) {
+                                        if (result.code==0){
+                                        }
+                                        layer.close(index);
+                                        layer.msg(result.msg);
+                                        dataTable.reload();
+                                    });
+                            });
+                            break;
                     }
                 });
 

@@ -90,6 +90,34 @@ class AppController extends Controller
     }
 
     /**
+     * 启动
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Throwable
+     */
+    public function enable($id)
+    {
+        /** @var App $apps */
+        $apps = App::findOrFail($id);
+        $apps->enable();
+        return response()->json(['code'=>0,'msg'=>'Successful']);
+    }
+
+    /**
+     * 停止
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Throwable
+     */
+    public function disable($id)
+    {
+        /** @var App $apps */
+        $apps = App::findOrFail($id);
+        $apps->disable();
+        return response()->json(['code'=>0,'msg'=>'Successful']);
+    }
+
+    /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
