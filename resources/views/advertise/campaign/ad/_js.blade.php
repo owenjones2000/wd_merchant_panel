@@ -13,15 +13,20 @@
             ,accept: 'file'
             ,exts: 'mp4|png|jpg'
             ,url: '{{ route('advertise.asset.process') }}'
-            ,data:{ad_type_id: $('#type_id').val()}
+            ,data: {
+                ad_type_id: function(){
+                    return $('#type_id').val();
+                }
+            }
             ,multiple: true
             ,auto: true
             ,progress: function(n){
-                var percent = n + '%';
+                var percent = n - 20 + '%';
                 element.progress('uploadProgress', percent);
             }
             ,done: function(res, index, upload){
                 if(res.code == 0){ //上传成功
+                    element.progress('uploadProgress', '100%');
                     // console.log(res);
                     var asset = res.asset;
                     var typeItem = fileList.find('[data-type='+ asset.type_id + ']');
@@ -55,11 +60,13 @@
                     fileList.append(fileItem);
                     element.render('collapse');
                     return ; //删除文件队列已经上传成功的文件
+                }else{
+                    element.progress('uploadProgress', '0%');
                 }
                 this.error(res, index, upload);
             }
             ,error: function(res, index, upload){
-                layer.alert(res.msg, {title:'上传失败'});
+                layer.alert(res.msg, {title:'upload failed'});
             }
         });
     });
