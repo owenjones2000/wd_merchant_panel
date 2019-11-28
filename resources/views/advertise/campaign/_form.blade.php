@@ -26,7 +26,7 @@
 <div class="layui-form-item">
     <label class="layui-form-label">Status</label>
     <div class="layui-input-block">
-        <input type="checkbox" name="status" @if($campaign->status??true) checked @endif lay-skin="switch" lay-filter="switchStatus" lay-text="">
+        <input type="checkbox" name="status" @if($campaign->status??false) checked @endif lay-skin="switch" lay-filter="switchStatus" lay-text="">
     </div>
 </div>
 
