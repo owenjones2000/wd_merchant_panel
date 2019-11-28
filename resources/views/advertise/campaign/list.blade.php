@@ -26,7 +26,7 @@
             <script type="text/html" id="options">
                 <div class="layui-btn-group">
                     @can('advertise.campaign.ad')
-                        <a class="layui-btn layui-btn-sm" lay-event="ad">Ads</a>
+                        <a class="layui-btn layui-btn-sm" lay-event="edit">Edit</a>
                     @endcan
                     @can('advertise.campaign')
                         <a class="layui-btn layui-btn-sm" lay-event="region">Countries</a>
@@ -41,7 +41,7 @@
             </script>
             <script type="text/html" id="nameTpl">
                 @can('advertise.campaign.edit')
-                    <a class="layui-table-link" lay-event="edit"  href="javascript:;">
+                    <a class="layui-table-link" title="Click to ads" lay-event="ad"  href="javascript:;">
                 @endcan
                     @{{ d.name }}
                 @can('advertise.campaign.edit')
