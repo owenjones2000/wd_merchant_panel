@@ -4,11 +4,11 @@
     <div class="layui-card">
         <div class="layui-card-header layuiadmin-card-header-auto">
             <div class="layui-btn-group ">
-                @can('advertise.app.destroy')
-                    <button class="layui-btn layui-btn-sm layui-btn-danger" id="listDelete">Remove Selected</button>
-                @endcan
+                {{--@can('advertise.app.destroy')--}}
+                    {{--<button class="layui-btn layui-btn-sm layui-btn-danger" id="listDelete">Remove Selected</button>--}}
+                {{--@endcan--}}
                 @can('advertise.app.edit')
-                    <button class="layui-btn layui-btn-sm" id="app_add">Add</button>
+                    <button class="layui-btn layui-btn-normal layui-btn-sm" id="app_add">Create App</button>
                 @endcan
             </div>
             <div class="layui-form" >
@@ -22,13 +22,24 @@
             <table id="dataTable" lay-filter="dataTable"></table>
             <script type="text/html" id="options">
                 <div class="layui-btn-group">
-                    @can('advertise.app.edit')
-                        <a class="layui-btn layui-btn-sm" lay-event="edit">Edit</a>
-                    @endcan
-                    @can('advertise.app.destroy')
-                        <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">Remove</a>
-                    @endcan
+                    {{--@can('advertise.app.destroy')--}}
+                        {{--<a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">Remove</a>--}}
+                    {{--@endcan--}}
                 </div>
+            </script>
+            <script type="text/html" id="nameTpl">
+                @can('advertise.app.edit')
+                <a class="layui-table-link" lay-event="edit">
+                    @endcan
+                    @{{ d.name }}
+                    @can('advertise.app.edit')
+                </a>
+                @endcan
+            </script>
+            <script type="text/html" id="track">
+                @{{# if(d.track){ }}
+                    @{{ d.track.name }}
+                @{{# } }}
             </script>
             <script type="text/html" id="status">
                 @{{# if(d.status){ }}
@@ -66,14 +77,15 @@
                         }
                     }
                     ,cols: [[ //表头
-                        {checkbox: true,fixed: true}
-                        ,{field: 'id', title: 'ID', sort: true,width:80}
-                        ,{field: 'name', title: 'Name'}
+                        // {checkbox: true,fixed: true}
+                        // ,{field: 'id', title: 'ID', sort: true,width:80}
+                        {field: 'name', title: 'Name', templet: '#nameTpl', width:300}
                         ,{field: 'bundle_id', title: 'Package Name'}
                         ,{field: 'os', title: 'Platform'}
+                        ,{field: 'track', title: 'Track', templet: '#track'}
                         ,{field: 'status', title: 'Status', templet: '#status'}
-                        ,{field: 'created_at', title: 'Created'}
-                        ,{field: 'updated_at', title: 'Updated'}
+                        // ,{field: 'created_at', title: 'Created'}
+                        // ,{field: 'updated_at', title: 'Updated'}
                         ,{fixed: 'right', width: 220, align:'center', toolbar: '#options'}
                     ]]
                 });
@@ -83,22 +95,22 @@
                     var data = obj.data //获得当前行数据
                         ,layEvent = obj.event; //获得 lay-event 对应的值
                     if(layEvent === 'del'){
-                        layer.confirm('确认删除吗？', function(index){
-                            $.post("{{ route('advertise.app.destroy') }}",{_method:'delete',ids:[data.id]},function (result) {
-                                if (result.code==0){
-                                    obj.del(); //删除对应行（tr）的DOM结构
-                                }
-                                layer.close(index);
-                                layer.msg(result.msg);
-                                dataTable.reload();
-                            });
-                        });
+                        {{--layer.confirm('确认删除吗？', function(index){--}}
+                            {{--$.post("{{ route('advertise.app.destroy') }}",{_method:'delete',ids:[data.id]},function (result) {--}}
+                                {{--if (result.code==0){--}}
+                                    {{--obj.del(); //删除对应行（tr）的DOM结构--}}
+                                {{--}--}}
+                                {{--layer.close(index);--}}
+                                {{--layer.msg(result.msg);--}}
+                                {{--dataTable.reload();--}}
+                            {{--});--}}
+                        {{--});--}}
                     } else if(layEvent === 'edit'){
                         layer.open({
                             type: 2,
                             title: '',
-                            shadeClose: true, area: ['80%', '80%'],
-                            content: '/advertise/app/'+data.id+'/edit',
+                            shadeClose: true, area: ['90%', '90%'],
+                            content: '/advertise/app/'+data.id,
                             end: function () {
                                 dataTable.reload();
                             }
@@ -120,37 +132,12 @@
                     });
                 });
 
-                //按钮批量删除
-                $("#listDelete").click(function () {
-                    var ids = []
-                    var hasCheck = table.checkStatus('dataTable')
-                    var hasCheckData = hasCheck.data
-                    if (hasCheckData.length>0){
-                        $.each(hasCheckData,function (index,element) {
-                            ids.push(element.id)
-                        })
-                    }
-                    if (ids.length>0){
-                        layer.confirm('确认删除吗？', function(index){
-                            $.post("{{ route('advertise.app.destroy') }}",{_method:'delete',ids:ids},function (result) {
-                                if (result.code==0){
-                                    dataTable.reload()
-                                }
-                                layer.close(index);
-                                layer.msg(result.msg,)
-                            });
-                        })
-                    }else {
-                        layer.msg('请选择删除项')
-                    }
-                });
-
                 $('#app_add').on('click',function () {
                     layer.open({
                         type: 2,
                         title: '',
-                        shadeClose: true, area: ['80%', '80%'],
-                        content: "{{route('advertise.app.create') }}",
+                        shadeClose: true, area: ['90%', '90%'],
+                        content: "{{ route('advertise.app.edit') }}",
                         end: function () {
                             dataTable.reload();
                         }

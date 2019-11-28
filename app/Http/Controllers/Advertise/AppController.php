@@ -16,7 +16,7 @@ class AppController extends Controller
      */
     public function index()
     {
-        return view('advertise.app.index');
+        return view('advertise.app.list');
     }
 
     public function data(Request $request)
@@ -25,7 +25,10 @@ class AppController extends Controller
         if(!empty($request->get('name'))){
             $app_query->where('name', 'like', '%'.$request->get('name').'%');
         }
-        $res = $app_query->orderBy($request->get('field','status'),$request->get('order','desc'))->orderBy('name','asc')->paginate($request->get('limit',30))->toArray();
+        $res = $app_query->orderBy($request->get('field','status'),$request->get('order','desc'))
+            ->orderBy('name','asc')
+            ->paginate($request->get('limit',30))
+            ->toArray();
 
         $data = [
             'code' => 0,
@@ -34,37 +37,6 @@ class AppController extends Controller
             'data'  => $res['data']
         ];
         return response()->json($data);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return view('advertise.app.create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $this->validate($request,[
-            'name'  => 'required|string|unique:a_app,name',
-            'bundle_id'  => 'required|unique:a_app,bundle_id',
-        ]);
-        $create_arr = $request->all();
-        $create_arr['status'] = isset($create_arr['status']) ? 1 : 0;
-        $create_arr['main_user_id'] = Auth::user()->getMainId();
-        if (App::create($create_arr)){
-            return redirect(route('advertise.app.create'))->with(['status'=>'添加完成']);
-        }
-        return redirect(route('advertise.app.create'))->with(['status'=>'系统错误']);
     }
 
     /**
@@ -84,9 +56,14 @@ class AppController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id = null)
     {
-        $apps = App::findOrFail($id);
+        if(empty($id)){
+            $apps = new App();
+        }else{
+            /** @var App $apps */
+            $apps = App::findOrFail($id);
+        }
         return view('advertise.app.edit',compact('apps'));
     }
 
@@ -97,16 +74,16 @@ class AppController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function save(Request $request, $id = null)
     {
         $this->validate($request,[
             'name'  => 'required|string|unique:a_app,name,'.$id,
             'bundle_id'  => 'required|unique:a_app,bundle_id,'.$id,
         ]);
-        $apps = App::findOrFail($id);
-        $update_arr = $request->only(['name','bundle_id', 'os', 'status']);
-        $update_arr['status'] = isset($update_arr['status']) ? 1 : 0;
-        if ($apps->update($update_arr)){
+        $params = $request->all();
+        $params['id'] = $id;
+        $params['status'] = isset($params['status']) ? 1 : 0;
+        if (App::Make(Auth::user(), $params)){
             return redirect(route('advertise.app.edit', [$id]))->with(['status'=>'更新成功']);
         }
         return redirect(route('advertise.app.edit', [$id]))->withErrors(['status'=>'系统错误']);

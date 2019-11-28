@@ -133,19 +133,19 @@
                     var rangedate = $("#rangedate").val();
                     switch(layEvent) {
                         case 'del':
-                            layer.confirm('确认删除吗？', function (index) {
-                                $.post("{{ route('advertise.campaign.destroy') }}", {
-                                    _method: 'delete',
-                                    ids: [data.campaign_id]
-                                }, function (result) {
-                                    if (result.code == 0) {
-                                        obj.del(); //删除对应行（tr）的DOM结构
-                                    }
-                                    layer.close(index);
-                                    layer.msg(result.msg);
-                                    dataTable.reload();
-                                });
-                            });
+                            {{--layer.confirm('确认删除吗？', function (index) {--}}
+                                {{--$.post("{{ route('advertise.campaign.destroy') }}", {--}}
+                                    {{--_method: 'delete',--}}
+                                    {{--ids: [data.campaign_id]--}}
+                                {{--}, function (result) {--}}
+                                    {{--if (result.code == 0) {--}}
+                                        {{--obj.del(); //删除对应行（tr）的DOM结构--}}
+                                    {{--}--}}
+                                    {{--layer.close(index);--}}
+                                    {{--layer.msg(result.msg);--}}
+                                    {{--dataTable.reload();--}}
+                                {{--});--}}
+                            {{--});--}}
                             break;
                         case 'edit':
                             layer.open({
@@ -209,31 +209,6 @@
                             ,order: obj.type //排序方式
                         }
                     });
-                });
-
-                //按钮批量删除
-                $("#listDelete").click(function () {
-                    var ids = [];
-                    var hasCheck = table.checkStatus('dataTable');
-                    var hasCheckData = hasCheck.data;
-                    if (hasCheckData.length>0){
-                        $.each(hasCheckData,function (index,element) {
-                            ids.push(element.id)
-                        })
-                    }
-                    if (ids.length>0){
-                        layer.confirm('确认删除吗？', function(index){
-                            $.post("{{ route('advertise.campaign.destroy') }}",{_method:'delete',ids:ids},function (result) {
-                                if (result.code==0){
-                                    dataTable.reload()
-                                }
-                                layer.close(index);
-                                layer.msg(result.msg,)
-                            });
-                        })
-                    }else {
-                        layer.msg('请选择删除项')
-                    }
                 });
 
                 $('#campaign_add').on('click',function () {

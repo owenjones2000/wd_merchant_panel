@@ -105,15 +105,12 @@ Route::group(['namespace'=>'Advertise','prefix'=>'advertise','middleware'=>['aut
     // 应用管理
     Route::group(['prefix'=>'app', 'middleware' => 'permission:advertise.app'], function () {
         Route::get('data', 'AppController@data')->name('advertise.app.data');
-        Route::get('', 'AppController@index')->name('advertise.app');
-        //添加
-        Route::get('create', 'AppController@create')->name('advertise.app.create')->middleware('permission:advertise.app.edit');
-        Route::post('store', 'AppController@store')->name('advertise.app.store')->middleware('permission:advertise.app.edit');
+        Route::get('list', 'AppController@index')->name('advertise.app');
         //编辑
-        Route::get('{id}/edit', 'AppController@edit')->name('advertise.app.edit')->middleware('permission:advertise.app.edit');
-        Route::put('{id}/update', 'AppController@update')->name('advertise.app.update')->middleware('permission:advertise.app.edit');
+        Route::get('{id?}', 'AppController@edit')->name('advertise.app.edit')->middleware('permission:advertise.app.edit');
+        Route::post('{id?}', 'AppController@save')->name('advertise.app.save')->middleware('permission:advertise.app.edit');
         //删除
-        Route::delete('destroy', 'AppController@destroy')->name('advertise.app.destroy')->middleware('permission:advertise.app.destroy');
+//        Route::delete('destroy', 'AppController@destroy')->name('advertise.app.destroy')->middleware('permission:advertise.app.destroy');
     });
 
     // 活动管理
@@ -124,7 +121,7 @@ Route::group(['namespace'=>'Advertise','prefix'=>'advertise','middleware'=>['aut
         Route::get('{id?}', 'CampaignController@edit')->name('advertise.campaign.edit')->middleware('permission:advertise.campaign.edit');
         Route::post('{id?}', 'CampaignController@save')->name('advertise.campaign.save')->middleware('permission:advertise.campaign.edit');
         //删除
-        Route::delete('destroy', 'CampaignController@destroy')->name('advertise.campaign.destroy')->middleware('permission:advertise.campaign.destroy');
+//        Route::delete('destroy', 'CampaignController@destroy')->name('advertise.campaign.destroy')->middleware('permission:advertise.campaign.destroy');
 
         // 广告
         Route::group(['prefix'=>'{campaign_id}/ad', 'middleware' => 'permission:advertise.campaign.ad'], function () {
@@ -134,7 +131,7 @@ Route::group(['namespace'=>'Advertise','prefix'=>'advertise','middleware'=>['aut
             Route::get('{id?}', 'AdController@edit')->name('advertise.campaign.ad.edit')->middleware('permission:advertise.campaign.ad.edit');
             Route::post('{id?}', 'AdController@save')->name('advertise.campaign.ad.save')->middleware('permission:advertise.campaign.ad.edit');
             //删除
-            Route::delete('destroy', 'AdController@destroy')->name('advertise.campaign.ad.destroy')->middleware('permission:advertise.campaign.ad.destroy');
+//            Route::delete('destroy', 'AdController@destroy')->name('advertise.campaign.ad.destroy')->middleware('permission:advertise.campaign.ad.destroy');
         });
 
         // 子渠道

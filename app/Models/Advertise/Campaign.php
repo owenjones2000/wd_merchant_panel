@@ -48,32 +48,6 @@ class Campaign extends Model
                 $campaign->regions()->sync($regions);
             }
 
-            if(isset($params['track_by_region']) && isset($params['track'])){
-                $campaign->trackUrls()->delete();
-                if($params['track_by_region']){
-                    $track_list = [];
-                    foreach($params['track'] as $track_info){
-                        if(!empty($track_info['region_code'])
-                            && (!empty($track_info['impression']) || !empty($track_info['click']))) {
-                            $track_list[] = new TrackUrl([
-                                'impression' => $track_info['impression'],
-                                'click' => $track_info['click'],
-                                'country' => $track_info['region_code'],
-                            ]);
-                        }
-                    }
-                    $campaign->trackUrls()->saveMany($track_list);
-                }else{
-                    if(!empty($track[0]['impression']) || !empty($track[0]['click'])) {
-                        $campaign->trackUrls()->save(new TrackUrl([
-                            'impression' => $params['track'][0]['impression'] ?? '',
-                            'click' => $params['track'][0]['click'] ?? '',
-                            'country' => 'ALL',
-                        ]));
-                    }
-                }
-            }
-
             if(/*isset($params['budget_by_region']) &&*/ isset($params['budget'])){
                 $campaign->budgets()->updateOrCreate([
                         'country' => 'ALL',
@@ -196,11 +170,11 @@ class Campaign extends Model
     }
 
     /**
-     * 三方跟踪链接
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * 三方跟踪
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function trackUrls(){
-        return $this->hasMany(TrackUrl::class, 'campaign_id', 'id');
+    public function track(){
+        return $this->hasOne(Track::class, 'campaign_id', 'id');
     }
 
     /**

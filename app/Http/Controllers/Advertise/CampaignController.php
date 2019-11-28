@@ -107,9 +107,7 @@ class CampaignController extends Controller
             $campaign = new Campaign();
         }else{
             /** @var Campaign $campaign */
-            $campaign = Campaign::query()
-                ->where(['id' => $id, 'main_user_id' => Auth::user()->getMainId()])
-                ->firstOrFail();
+            $campaign = Campaign::findOrFail($id);
         }
 
         $apps = App::query()

@@ -48,60 +48,6 @@
             </div>
         </div>
     </div>
-    {{--<div class="layui-colla-item">--}}
-        {{--@php--}}
-            {{--$is_track_by_all_region = $campaign->trackUrls->count() == 0 || $campaign->trackUrls->contains('region_id', null);--}}
-            {{--$track_for_all_region = $campaign->trackUrls->where('region_id', 0)->first();--}}
-        {{--@endphp--}}
-        {{--<h2 class="layui-colla-title">Track URL</h2>--}}
-        {{--<div class="layui-colla-content @if(!$is_track_by_all_region) layui-show @endif">--}}
-            {{--<div class="layui-input-block">--}}
-                {{--<div>--}}
-                    {{--<input type="radio" name="track_by_region" value="0" title="Single URL for all regions" @if($is_track_by_all_region) checked="" @endif lay-filter="radioByCountry">--}}
-                    {{--<div class="layui-colla-content @if($is_track_by_all_region) layui-show @endif">--}}
-                        {{--<div class="layui-form-item">--}}
-                            {{--<label class="layui-form-label"></label>--}}
-                            {{--<input type="hidden" name="track[0][region_code]" value="">--}}
-                            {{--<div class="layui-input-block">--}}
-                                {{--<input type="text" name="track[0][impression]" value="{{ $track_for_all_region['impression']??'' }}" placeholder="impression url" autocomplete="off" class="layui-input" >--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                        {{--<div class="layui-form-item">--}}
-                            {{--<div class="layui-input-block">--}}
-                                {{--<input type="text" name="track[0][click]" value="{{ $track_for_all_region['click']??'' }}" placeholder="click url" autocomplete="off" class="layui-input" >--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                    {{--</div>--}}
-                {{--</div>--}}
-
-                {{--<div>--}}
-                    {{--<input type="radio" name="track_by_region" value="1" title="URL by Country" @if(!$is_track_by_all_region) checked="" @endif lay-filter="radioByCountry">--}}
-                    {{--<div class="layui-colla-content @if(!$is_track_by_all_region) layui-show @endif">--}}
-                        {{--<ul id="track">--}}
-                            {{--@if(!$is_track_by_all_region)--}}
-                            {{--@foreach($campaign->trackUrls as $trackUrl)--}}
-                                {{--<li data-index="{{$trackUrl['region']['code']}}">--}}
-                                    {{--<input type="hidden" name="track[{{$trackUrl['region']['code']}}][region_code]" value="{{$trackUrl['region']['code']}}">--}}
-                                    {{--<div class="layui-form-item">--}}
-                                        {{--<label class="layui-form-label">{{$trackUrl['region']['name']}}</label>--}}
-                                    {{--<div class="layui-input-block">--}}
-                                        {{--<input type="text" name="track[{{$trackUrl['region']['code']}}][impression]" value="{{ $trackUrl['impression'] }}" placeholder="impression url" autocomplete="off" class="layui-input" >--}}
-                                    {{--</div>--}}
-                                    {{--</div>--}}
-                                    {{--<div class="layui-form-item">--}}
-                                    {{--<div class="layui-input-block">--}}
-                                        {{--<input type="text" name="track[{{$trackUrl['region']['code']}}][click]" value="{{ $trackUrl['click'] }}" placeholder="click url" autocomplete="off" class="layui-input" >--}}
-                                    {{--</div>--}}
-                                    {{--</div>--}}
-                                {{--</li>--}}
-                            {{--@endforeach--}}
-                            {{--@endif--}}
-                        {{--</ul>--}}
-                    {{--</div>--}}
-                {{--</div>--}}
-            {{--</div>--}}
-        {{--</div>--}}
-    {{--</div>--}}
 
     <div class="layui-colla-item">
         @php
