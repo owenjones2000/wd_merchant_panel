@@ -45,6 +45,15 @@ class Ad extends Model
     }
 
     /**
+     * 投放国家
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function regions(){
+        return $this->belongsToMany(Region::class, 'a_ad_country',
+            'ad_id','country', 'id', 'code');
+    }
+
+    /**
      * 广告类型
      * @return AdType
      */

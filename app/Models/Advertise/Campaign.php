@@ -145,6 +145,12 @@ class Campaign extends Model
             $ad->fill($params);
             $ad->saveOrFail();
 
+            $ad->regions()->firstOrCreate([
+                'country' => 'ALL'
+            ],[
+                'country' => 'ALL'
+            ]);
+
             if(isset($params['asset'])){
                 $asset_id_list = array_column($params['asset'], 'type', 'id');
                 $ad->assets()
