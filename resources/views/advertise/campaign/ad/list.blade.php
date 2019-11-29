@@ -229,7 +229,7 @@
                                 '      <div class="layui-card">' +
                                 '        <div class="layui-card-header">'+ asset.type.name +'</div>' +
                                 '        <div class="layui-card-body">' +
-                                '<video width="'+ (asset.spec.width > 300?'300':asset.spec.width) +'px" poster controls controlsList="nodownload">' +
+                                '<video width="'+ (asset.spec.width > 240?'240':asset.spec.width) +'px" poster controls controlsList="nodownload">' +
                                 '<source src="'+ asset.url +'" type="video/mp4" />' +
                                 '</video>' +
                                 '        </div>' +
@@ -243,7 +243,7 @@
                                 '      <div class="layui-card">' +
                                 '        <div class="layui-card-header">'+ asset.type.name +'</div>' +
                                 '        <div class="layui-card-body" align="center">' +
-                                '<img src="'+ asset.url +'" width="'+ (asset.spec.width > 300?'300':asset.spec.width) +'px">' +
+                                '<img src="'+ asset.url +'" width="'+ (asset.spec.width > 240?'240':asset.spec.width) +'px">' +
                                 '        </div>' +
                                 '    </div>' +
                                 '  </div>';
