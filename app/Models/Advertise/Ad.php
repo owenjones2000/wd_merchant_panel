@@ -43,6 +43,14 @@ class Ad extends Model
     }
 
     /**
+     * 广告类型
+     * @return AdType
+     */
+    public function getTypeAttribute(){
+        return AdType::get($this->type_id);
+    }
+
+    /**
      * 素材
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */

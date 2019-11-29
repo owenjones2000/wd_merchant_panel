@@ -148,13 +148,18 @@ class Campaign extends Model
             if(isset($params['asset'])){
                 $asset_id_list = array_column($params['asset'], 'type', 'id');
                 $ad->assets()
-                    ->whereNotIn('id', array_keys($asset_id_list))
-                    ->where('ad_id', $ad['id'])
+                    ->where(function($query) use($ad, $asset_id_list){
+                        $query->whereNotIn('id', array_keys($asset_id_list))
+                            ->orWhereNotIn('type_id', $ad['type']['need_asset_type']);
+                    })
                     ->update([
                         'ad_id' => null
                     ]);
                 Asset::query()
-                    ->whereIn('id', array_keys($asset_id_list))
+                    ->where(function($query) use($ad, $asset_id_list){
+                        $query->whereIn('id', array_keys($asset_id_list))
+                            ->whereIn('type_id', $ad['type']['need_asset_type']);
+                    })
                     ->whereNull('ad_id')
                     ->update([
                         'ad_id' => $ad['id']

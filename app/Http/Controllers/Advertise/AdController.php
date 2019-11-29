@@ -110,6 +110,33 @@ class AdController extends Controller
         }
         return view('advertise.campaign.ad.edit',compact('ad'));
     }
+    
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function save(Request $request, $campaign_id, $id = null)
+    {
+        $this->validate($request,[
+            'name'  => 'required|string|unique:a_campaign,name,'.$id,
+        ]);
+        /** @var Campaign $campaign */
+        $campaign = Campaign::query()->where([
+            'id' => $campaign_id,
+            'main_user_id' => Auth::user()->getMainId(),
+        ])->firstOrFail();
+        $params = $request->all();
+        $params['id'] = $id;
+        $params['status'] = isset($params['status']) ? 1 : 0;
+        $ad = $campaign->makeAd(Auth::user(), $params);
+        if ($ad){
+            return redirect(route('advertise.campaign.ad.edit', [$ad['campaign_id'], $ad['id']]))->with(['status'=>'更新成功']);
+        }
+        return redirect(route('advertise.campaign.ad.edit', [$ad['campaign_id'], $ad['id']]))->withErrors(['status'=>'系统错误']);
+    }
 
     /**
      * 启动
@@ -137,33 +164,6 @@ class AdController extends Controller
         $ad = Ad::query()->where(['id' => $id, 'campaign_id' => $campaign_id])->firstOrFail();
         $ad->disable();
         return response()->json(['code'=>0,'msg'=>'Successful']);
-    }
-    
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function save(Request $request, $campaign_id, $id = null)
-    {
-        $this->validate($request,[
-            'name'  => 'required|string|unique:a_campaign,name,'.$id,
-        ]);
-        /** @var Campaign $campaign */
-        $campaign = Campaign::query()->where([
-            'id' => $campaign_id,
-            'main_user_id' => Auth::user()->getMainId(),
-        ])->firstOrFail();
-        $params = $request->all();
-        $params['id'] = $id;
-        $params['status'] = isset($params['status']) ? 1 : 0;
-        $ad = $campaign->makeAd(Auth::user(), $params);
-        if ($ad){
-            return redirect(route('advertise.campaign.ad.edit', [$ad['campaign_id'], $ad['id']]))->with(['status'=>'更新成功']);
-        }
-        return redirect(route('advertise.campaign.ad.edit', [$ad['campaign_id'], $ad['id']]))->withErrors(['status'=>'系统错误']);
     }
 
     /**

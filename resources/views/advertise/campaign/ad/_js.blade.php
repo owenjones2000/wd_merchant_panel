@@ -30,7 +30,7 @@
                     // console.log(res);
                     var asset = res.asset;
                     var typeItem = fileList.find('[data-type='+ asset.type_id + ']');
-                    if(typeItem){
+                    if(typeItem.length > 0){
                         typeItem.remove();
                     }
                     var fileItemList = [
@@ -59,6 +59,8 @@
                     var fileItem = $(fileItemList.join(''));
                     fileList.append(fileItem);
                     element.render('collapse');
+                    $('#assetTypeCheckList').children('[data-type='+ asset.type_id + ']')
+                        .children('i').css('color', '#76C81C');
                     return ; //删除文件队列已经上传成功的文件
                 }else{
                     element.progress('uploadProgress', '0%');
