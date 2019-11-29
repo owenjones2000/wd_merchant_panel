@@ -49,8 +49,8 @@ class CampaignController extends Controller
             DB::raw('sum(clicks) as clicks'),
             DB::raw('sum(installations) as installs'),
             DB::raw('round(sum(spend), 2) as spend'),
-            DB::raw('if(sum(installations)=0, 0, round(sum(spend) / sum(installations), 2)) as ecpi'),
-            DB::raw('if(sum(impressions)=0, 0, round(sum(spend) * 1000 / sum(impressions), 2)) as ecpm'),
+            DB::raw('round(sum(spend) / sum(installations), 2) as ecpi'),
+            DB::raw('round(sum(spend) * 1000 / sum(impressions), 2) as ecpm'),
             'campaign_id',
         ]);
         $advertise_kpi_query->groupBy('campaign_id');
