@@ -228,7 +228,7 @@
                                 '    <div class="layui-col-md6">' +
                                 '      <div class="layui-card">' +
                                 '        <div class="layui-card-header">'+ asset.type.name +'</div>' +
-                                '        <div class="layui-card-body">' +
+                                '        <div class="layui-card-body" align="center">' +
                                 '<video width="'+ (asset.spec.width > 240?'240':asset.spec.width) +'px" poster controls controlsList="nodownload">' +
                                 '<source src="'+ asset.url +'" type="video/mp4" />' +
                                 '</video>' +
