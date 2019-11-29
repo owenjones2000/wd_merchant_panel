@@ -29,6 +29,7 @@ class App extends Model
             if (empty($params['id'])) {
                 $apps = new self();
                 $apps->main_user_id = $main_user_id;
+                $apps['status'] = true;
             } else {
                 $apps = self::query()->where([
                     'id' => $params['id'],

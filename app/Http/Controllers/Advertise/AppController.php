@@ -82,7 +82,7 @@ class AppController extends Controller
         ]);
         $params = $request->all();
         $params['id'] = $id;
-        $params['status'] = isset($params['status']) ? 1 : 0;
+//        $params['status'] = isset($params['status']) ? 1 : 0;
         if (App::Make(Auth::user(), $params)){
             return redirect(route('advertise.app.edit', [$id]))->with(['status'=>'更新成功']);
         }
