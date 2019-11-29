@@ -125,12 +125,12 @@
                         {field: 'preview', title: '', templet: '#previewTpl', align:'center', width:50}
                         // ,{field: 'type.name', title: 'Type', templet: '#typeTpl'}
                         ,{field: 'created', title: 'Created', width:110, templet: function(d){return util.toDateString(d.created_at, "yyyy-MM-dd");}}
-                        ,{field: 'impressions', title: 'Impressions'}
-                        ,{field: 'clicks', title: 'Clicks'}
-                        ,{field: 'installs', title: 'Installs'}
-                        ,{field: 'spend', title: 'Spend'}
-                        ,{field: 'ecpi', title: 'eCPI'}
-                        ,{field: 'ecpm', title: 'eCPM'}
+                        ,{field: 'impressions', title: 'Impressions', templet: function(d){return d.impressions || 0;}}
+                        ,{field: 'clicks', title: 'Clicks', templet: function(d){return d.clicks || 0;}}
+                        ,{field: 'installs', title: 'Installs', templet: function(d){return d.installs || 0;}}
+                        ,{field: 'spend', title: 'Spend', templet: function(d){return '$' + (d.spend || '0.00');}}
+                        ,{field: 'ecpi', title: 'eCPI', templet: function(d){return '$' + (d.ecpi || '0.00');}}
+                        ,{field: 'ecpm', title: 'eCPM', templet: function(d){return '$' + (d.ecpm || '0.00');}}
                         ,{field: 'status', title: 'Status', templet: '#status', align:'center', width:70}
                         // ,{fixed: 'right', width: 220, align:'center', toolbar: '#options'}
                     ]]

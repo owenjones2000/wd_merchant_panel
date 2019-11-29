@@ -131,12 +131,13 @@ class AdController extends Controller
         ])->firstOrFail();
         $params = $request->all();
         $params['id'] = $id;
-        $params['status'] = isset($params['status']) ? 1 : 0;
+//        $params['status'] = isset($params['status']) ? 1 : 0;
         $ad = $campaign->makeAd(Auth::user(), $params);
         if ($ad){
-            return redirect(route('advertise.campaign.ad.edit', [$ad['campaign_id'], $ad['id']]))->with(['status'=>'更新成功']);
+            return redirect(route('advertise.campaign.ad.edit', [$ad['campaign_id'], $ad['id']]))
+                ->with(['status'=>'Save successfully.'.($ad['status']?:' But ad is not running.')]);
         }
-        return redirect(route('advertise.campaign.ad.edit', [$ad['campaign_id'], $ad['id']]))->withErrors(['status'=>'系统错误']);
+        return redirect(route('advertise.campaign.ad.edit', [$ad['campaign_id'], $ad['id']]))->withErrors(['status'=>'Error']);
     }
 
     /**

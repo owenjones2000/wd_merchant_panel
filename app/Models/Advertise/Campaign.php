@@ -15,7 +15,7 @@ class Campaign extends Model
 
     protected $table = 'a_campaign';
 
-    protected $fillable = ['name', 'status', 'app_id', 'main_user_id'];
+    protected $fillable = ['name', 'app_id', 'main_user_id'];
 
     /**
      * 构造Campaign
@@ -29,6 +29,7 @@ class Campaign extends Model
             if (empty($params['id'])) {
                 $campaign = new self();
                 $campaign->main_user_id = $main_user_id;
+                $campaign['status'] = true;
             } else {
                 $campaign = self::query()->where([
                     'id' => $params['id'],
@@ -137,6 +138,7 @@ class Campaign extends Model
                 $ad = new Ad();
                 $ad['campaign_id'] = $this['id'];
                 $ad['app_id'] = $this['app_id'];
+                $ad['status'] = false;
             } else {
                 $ad = $this->ads()->where([
                     'id' => $params['id'],
