@@ -65,7 +65,8 @@ class AdController extends Controller
         if(!empty($order_by_ids)){
             $ad_base_query->orderByRaw(DB::raw("FIELD(id,{$order_by_ids}) desc"));
         }
-        $ad_list = $ad_base_query->orderBy($request->get('field','status'),$request->get('order','desc'))
+        $ad_list = $ad_base_query->with('assets')
+            ->orderBy($request->get('field','status'),$request->get('order','desc'))
             ->paginate($request->get('limit',30))
             ->toArray();
 

@@ -12,6 +12,8 @@ class Asset extends Model
 
     protected $fillable = ['url', 'file_path', 'type_id', 'width', 'height', 'duration', 'spec', 'ad_id'];
 
+    protected $appends = ['type'];
+
     protected $casts = [
         'spec' => 'json'
     ];

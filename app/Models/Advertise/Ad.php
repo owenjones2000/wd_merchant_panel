@@ -12,6 +12,8 @@ class Ad extends Model
 
     protected $fillable = ['name', 'status', 'type_id', 'campaign_id'];
 
+    protected $appends = ['type'];
+
     /**
      * 启用
      * @throws \Throwable

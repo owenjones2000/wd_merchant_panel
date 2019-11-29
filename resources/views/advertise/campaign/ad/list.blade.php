@@ -38,7 +38,12 @@
                 @can('advertise.campaign.ad.edit')
                     </a>
                 @endcan
-
+            </script>
+            <script type="text/html" id="previewTpl">
+                <i class="layui-icon layui-icon-template-1" lay-event="preview"></i>
+            </script>
+            <script type="text/html" id="typeTpl">
+                @{{ d.type.name }}
             </script>
             <script type="text/html" id="status">
                 @{{# if(d.status){ }}
@@ -99,11 +104,12 @@
                             });
                         }
                     }
-                    ,cols: [[ //表头
+                    ,cols: [[ //表头previewTpl
                         //{checkbox: true,fixed: true}
                         // ,{field: 'id', title: 'ID', sort: true,width:80}
-                        {field: 'name', title: 'Ad', templet: '#nameTpl', width:300}
-                        // ,{field: 'app.name', title: 'App', templet: '#appTpl'}
+                        {field: 'name', title: 'Ad', templet: '#nameTpl', width:300},
+                        {field: 'preview', title: '', templet: '#previewTpl', align:'center', width:50}
+                        // ,{field: 'type.name', title: 'Type', templet: '#typeTpl'}
                         ,{field: 'created', title: 'Created', width:110, templet: function(d){return util.toDateString(d.created_at, "yyyy-MM-dd");}}
                         ,{field: 'impressions', title: 'Impressions'}
                         ,{field: 'clicks', title: 'Clicks'}
@@ -170,6 +176,9 @@
                                     });
                             });
                             break;
+                        case 'preview':
+                            previewAd(data);
+                            break;
                     }
                 });
 
@@ -208,7 +217,58 @@
                         page:{curr:1}
                     })
                 })
-            })
+            });
+            function previewAd(ad) {
+                var preview_html = '<div style="padding: 20px; background-color: #F2F2F2;">' +
+                    '<div class="layui-row layui-col-space15">';
+                $(ad.assets).each(function(index, asset){
+                    switch(asset.type.mime_type){
+                        case 'video':
+                            var template_video =
+                                '    <div class="layui-col-md6">' +
+                                '      <div class="layui-card">' +
+                                '        <div class="layui-card-header">'+ asset.type.name +'</div>' +
+                                '        <div class="layui-card-body">' +
+                                '<video width="'+ (asset.spec.width > 300?'300':asset.spec.width) +'px" poster controls controlsList="nodownload">' +
+                                '<source src="'+ asset.url +'" type="video/mp4" />' +
+                                '</video>' +
+                                '        </div>' +
+                                '      </div>' +
+                                '    </div>';
+                            preview_html = preview_html.concat(template_video);
+                            break;
+                        case 'image':
+                            var template_image =
+                                '    <div class="layui-col-md6">' +
+                                '      <div class="layui-card">' +
+                                '        <div class="layui-card-header">'+ asset.type.name +'</div>' +
+                                '        <div class="layui-card-body" align="center">' +
+                                '<img src="'+ asset.url +'" width="'+ (asset.spec.width > 300?'300':asset.spec.width) +'px">' +
+                                '        </div>' +
+                                '    </div>' +
+                                '  </div>';
+                            preview_html = preview_html.concat(template_image);
+                            break;
+                    }
+                });
+                preview_html = preview_html.concat(
+                    '  </div>' +
+                    '</div> '
+                );
+
+                //弹出层
+                layer.open({
+                    type: 1,
+                    //offset: 't',
+                    //maxHeight: 660,
+                    //area: [1024 + 'px',768+'px'],
+                    area: ['800px', '700px'],
+                    shadeClose: true,
+                    //skin: 'layui-layer-rim', //加上边框
+                    title: "preview",
+                    content: preview_html
+                });
+            }
         </script>
     @endcan
 @endsection
