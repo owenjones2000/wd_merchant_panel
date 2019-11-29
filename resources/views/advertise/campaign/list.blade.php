@@ -119,6 +119,7 @@
                         ,{field: 'clicks', title: 'Clicks', templet: function(d){return d.clicks || 0;}}
                         ,{field: 'installs', title: 'Installs', templet: function(d){return d.installs || 0;}}
                         ,{field: 'spend', title: 'Spend', templet: function(d){return '$' + (d.spend || '0.00');}}
+                        ,{field: 'budget', title: 'Budget', templet: function(d){return '$' + (d.budget || '0.00');}}
                         ,{field: 'ecpi', title: 'eCPI', templet: function(d){return '$' + (d.ecpi || '0.00');}}
                         ,{field: 'ecpm', title: 'eCPM', templet: function(d){return '$' + (d.ecpm || '0.00');}}
                         ,{field: 'status', title: 'Status', templet: '#status', align:'center', width:70}
