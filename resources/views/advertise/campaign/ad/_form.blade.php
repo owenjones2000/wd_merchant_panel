@@ -1,7 +1,7 @@
 {{csrf_field()}}
 
 @php
-    $selected_ad_type = \App\Models\Advertise\AdType::get(empty($ad['type_id'])?\App\Models\Advertise\AssetType::Landscape_Short:$ad['type_id']);
+    $selected_ad_type = \App\Models\Advertise\AdType::get(empty($ad['type_id'])?\App\Models\Advertise\AdType::Video_Landscape_Short:$ad['type_id']);
 @endphp
 <div class="layui-form-item">
     <label for="" class="layui-form-label">Ad Type</label>
