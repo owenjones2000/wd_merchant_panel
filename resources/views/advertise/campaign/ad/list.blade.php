@@ -279,7 +279,7 @@
                     area: ['800px', '700px'],
                     shadeClose: true,
                     //skin: 'layui-layer-rim', //加上边框
-                    title: "preview",
+                    title: 'AD preview: ' + ad.name,
                     content: preview_html
                 });
             }
