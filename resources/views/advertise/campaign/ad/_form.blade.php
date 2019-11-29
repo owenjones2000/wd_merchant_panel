@@ -64,12 +64,12 @@
 
 <div class="layui-form-item">
     <ul id="assetTypeCheckList">
-    @foreach($ad['type']['need_asset_type'] as $asset_type_id)
-        <li data-type="{{$asset_type_id}}" >
-            <i class="layui-icon layui-icon-radio" style="color: @if($ad->assets->contains('type_id', $asset_type_id))#76C81C;@else#666;@endif"></i>
-            {{ \App\Models\Advertise\AssetType::get($asset_type_id)['name'] }}
-        </li>
-    @endforeach
+    {{--@foreach($ad['type']['need_asset_type']??[] as $asset_type_id)--}}
+        {{--<li data-type="{{$asset_type_id}}" >--}}
+            {{--<i class="layui-icon layui-icon-radio" style="color: @if($ad->assets->contains('type_id', $asset_type_id))#76C81C;@else#666;@endif"></i>--}}
+            {{--{{ \App\Models\Advertise\AssetType::get($asset_type_id)['name'] }}--}}
+        {{--</li>--}}
+    {{--@endforeach--}}
     </ul>
 </div>
 
