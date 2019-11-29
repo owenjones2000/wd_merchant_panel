@@ -152,7 +152,7 @@ class AdController extends Controller
             /** @var Ad $ad */
             $ad = Ad::query()->where(['id' => $id, 'campaign_id' => $campaign_id])->firstOrFail();
             $ad->enable();
-            return response()->json(['code'=>0,'msg'=>'Successful']);
+            return response()->json(['code'=>0,'msg'=>'Enabled']);
         } catch (\Exception $ex) {
             return response()->json(['code'=>-1,'msg'=>$ex->getMessage()]);
         }
@@ -170,7 +170,7 @@ class AdController extends Controller
         /** @var Ad $ad */
         $ad = Ad::query()->where(['id' => $id, 'campaign_id' => $campaign_id])->firstOrFail();
         $ad->disable();
-        return response()->json(['code'=>0,'msg'=>'Successful']);
+        return response()->json(['code'=>0,'msg'=>'Disabled']);
     }
 
     /**

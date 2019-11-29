@@ -128,7 +128,7 @@ class CampaignController extends Controller
         /** @var Campaign $campaign */
         $campaign = Campaign::findOrFail($id);
         $campaign->enable();
-        return response()->json(['code'=>0,'msg'=>'Successful']);
+        return response()->json(['code'=>0,'msg'=>'Enabled']);
     }
 
     /**
@@ -142,7 +142,7 @@ class CampaignController extends Controller
         /** @var Campaign $campaign */
         $campaign = Campaign::findOrFail($id);
         $campaign->disable();
-        return response()->json(['code'=>0,'msg'=>'Successful']);
+        return response()->json(['code'=>0,'msg'=>'Disabled']);
     }
 
     /**
@@ -161,9 +161,9 @@ class CampaignController extends Controller
         $params['id'] = $id;
 //        $params['status'] = isset($params['status']) ? 1 : 0;
         if (Campaign::Make(Auth::user(), $params)){
-            return redirect(route('advertise.campaign.edit', [$id]))->with(['status'=>'更新成功']);
+            return redirect(route('advertise.campaign.edit', [$id]))->with(['status'=>'Save successfully.']);
         }
-        return redirect(route('advertise.campaign.edit', [$id]))->withErrors(['status'=>'系统错误']);
+        return redirect(route('advertise.campaign.edit', [$id]))->withErrors(['status'=>'Error']);
     }
 
     /**
@@ -172,15 +172,15 @@ class CampaignController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request)
-    {
-        $ids = $request->get('ids');
-        if (empty($ids)){
-            return response()->json(['code'=>1,'msg'=>'请选择删除项']);
-        }
-        if (Campaign::destroy($ids)){
-            return response()->json(['code'=>0,'msg'=>'删除成功']);
-        }
-        return response()->json(['code'=>1,'msg'=>'删除失败']);
-    }
+//    public function destroy(Request $request)
+//    {
+//        $ids = $request->get('ids');
+//        if (empty($ids)){
+//            return response()->json(['code'=>1,'msg'=>'请选择删除项']);
+//        }
+//        if (Campaign::destroy($ids)){
+//            return response()->json(['code'=>0,'msg'=>'删除成功']);
+//        }
+//        return response()->json(['code'=>1,'msg'=>'删除失败']);
+//    }
 }
