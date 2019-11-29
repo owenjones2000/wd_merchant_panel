@@ -20,8 +20,12 @@ class Ad extends Model
      */
     public function enable(){
         if(!$this->status){
-            $this->status = true;
-            $this->saveOrFail();
+            if($this->is_upload_completed){
+                $this->status = true;
+                $this->saveOrFail();
+            } else {
+                throw new \Exception('Lack of assets.');
+            }
         }
     }
 

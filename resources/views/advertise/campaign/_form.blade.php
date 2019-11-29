@@ -23,12 +23,12 @@
     </div>
 </div>
 
-<div class="layui-form-item">
-    <label class="layui-form-label">Status</label>
-    <div class="layui-input-block">
-        <input type="checkbox" name="status" @if($campaign->status??false) checked @endif lay-skin="switch" lay-filter="switchStatus" lay-text="">
-    </div>
-</div>
+{{--<div class="layui-form-item">--}}
+    {{--<label class="layui-form-label">Status</label>--}}
+    {{--<div class="layui-input-block">--}}
+        {{--<input type="checkbox" name="status" @if($campaign->status??false) checked @endif lay-skin="switch" lay-filter="switchStatus" lay-text="">--}}
+    {{--</div>--}}
+{{--</div>--}}
 
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
     <legend>Targeting</legend>

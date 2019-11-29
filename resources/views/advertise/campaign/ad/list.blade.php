@@ -45,7 +45,7 @@
                     <i class="layui-icon layui-icon-carousel" style="color: #76C81C;"></i>
                 </a>
                 @{{# } else { }}
-                <a lay-event="preview" title="Preview (Lack of assets)" href="javascript:;">
+                <a lay-event="edit" title="Preview (Lack of assets)" href="javascript:;">
                     <i class="layui-icon layui-icon-tips" style="color: #FFB800;"></i>
                 </a>
                 @{{# } }}
@@ -57,7 +57,13 @@
                 @{{# if(d.status){ }}
                 <a lay-event="disable" title="Click to pause" href="javascript:;"><i class="layui-icon layui-icon-radio" style="color: #76C81C;"></i></a>
                 @{{# } else { }}
-                <a lay-event="enable" title="Click to activate" href="javascript:;"><i class="layui-icon layui-icon-radio" style="color: #666;"></i></a>
+                    @{{# if(d.is_upload_completed){ }}
+                        <a lay-event="enable" title="Click to activate" href="javascript:;"><i class="layui-icon layui-icon-radio" style="color: #666;"></i></a>
+                    @{{# } else { }}
+                        <a class="layui-table-link" title="Lack of assets" lay-event="edit" href="javascript:;">
+                            <i class="layui-icon layui-icon-radio" style="color: #FFB800;"></i>
+                        </a>
+                    @{{# } }}
                 @{{# } }}
             </script>
         </div>
