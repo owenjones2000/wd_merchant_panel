@@ -40,7 +40,15 @@
                 @endcan
             </script>
             <script type="text/html" id="previewTpl">
-                <i class="layui-icon layui-icon-template-1" lay-event="preview"></i>
+                @{{# if(d.is_upload_completed){ }}
+                <a lay-event="preview" title="Preview" href="javascript:;">
+                    <i class="layui-icon layui-icon-carousel" style="color: #76C81C;"></i>
+                </a>
+                @{{# } else { }}
+                <a lay-event="preview" title="Preview (Lack of assets)" href="javascript:;">
+                    <i class="layui-icon layui-icon-tips" style="color: #FFB800;"></i>
+                </a>
+                @{{# } }}
             </script>
             <script type="text/html" id="typeTpl">
                 @{{ d.type.name }}

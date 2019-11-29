@@ -12,7 +12,7 @@ class Ad extends Model
 
     protected $fillable = ['name', 'status', 'type_id', 'campaign_id'];
 
-    protected $appends = ['type'];
+    protected $appends = ['type', 'is_upload_completed'];
 
     /**
      * 启用
@@ -59,6 +59,19 @@ class Ad extends Model
      */
     public function getTypeAttribute(){
         return AdType::get($this->type_id);
+    }
+
+    /**
+     * 素材是否满足
+     * @return bool
+     */
+    public function getIsUploadCompletedAttribute(){
+        foreach ($this['type']['need_asset_type'] as $need_asset_type_id){
+            if(!$this['assets']->contains('type_id', $need_asset_type_id)){
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
