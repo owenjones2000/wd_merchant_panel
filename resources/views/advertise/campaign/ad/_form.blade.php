@@ -1,11 +1,14 @@
 {{csrf_field()}}
 
+@php
+    $selected_ad_type = \App\Models\Advertise\AssetType::get(empty($ad['type_id'])?\App\Models\Advertise\AssetType::Landscape_Short:$ad['type_id']);
+@endphp
 <div class="layui-form-item">
     <label for="" class="layui-form-label">Ad Type</label>
     <div class="layui-input-inline">
         <select name="type_id" id="type_id" lay-filter="selectType" @if($ad->assets->count()>0) disabled @endif lay-verify="required">
             @foreach(\App\Models\Advertise\AdType::$list as $ad_type)
-                <option @if(($ad['type_id']??0) == $ad_type['id']) selected @endif value="{{ $ad_type['id']}}">{{ $ad_type['name'] }}</option>
+                <option @if($selected_ad_type['id'] == $ad_type['id']) selected @endif value="{{ $ad_type['id']}}">{{ $ad_type['name'] }}</option>
             @endforeach
         </select>
     </div>
@@ -64,12 +67,12 @@
 
 <div class="layui-form-item">
     <ul id="assetTypeCheckList">
-    {{--@foreach($ad['type']['need_asset_type']??[] as $asset_type_id)--}}
-        {{--<li data-type="{{$asset_type_id}}" >--}}
-            {{--<i class="layui-icon layui-icon-radio" style="color: @if($ad->assets->contains('type_id', $asset_type_id))#76C81C;@else#666;@endif"></i>--}}
-            {{--{{ \App\Models\Advertise\AssetType::get($asset_type_id)['name'] }}--}}
-        {{--</li>--}}
-    {{--@endforeach--}}
+    @foreach($selected_ad_type['need_asset_type'] as $asset_type_id)
+        <li data-type="{{$asset_type_id}}" >
+            <i class="layui-icon layui-icon-radio" style="color: @if($ad->assets->contains('type_id', $asset_type_id))#76C81C;@else#666;@endif"></i>
+            {{ \App\Models\Advertise\AssetType::get($asset_type_id)['name'] }}
+        </li>
+    @endforeach
     </ul>
 </div>
 

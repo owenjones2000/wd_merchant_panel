@@ -59,8 +59,7 @@
                     var fileItem = $(fileItemList.join(''));
                     fileList.append(fileItem);
                     element.render('collapse');
-                    $('#assetTypeCheckList').children('[data-type='+ asset.type_id + ']')
-                        .children('i').css('color', '#76C81C');
+                    updateAssetTypeStatus();
                     return ; //删除文件队列已经上传成功的文件
                 }else{
                     element.progress('uploadProgress', '0%');
@@ -71,5 +70,38 @@
                 layer.alert(res.msg, {title:'upload failed'});
             }
         });
+
+        form.on('select(selectType)', function(data){
+            updateAssetTypeCheckList(data.value);
+        });
     });
+    function updateAssetTypeCheckList(type_id){
+        var asset_type_li = [];
+        switch(type_id){
+            @foreach(\App\Models\Advertise\AdType::$list as $ad_type)
+            case '{{$ad_type['id']}}':
+                asset_type_li = [
+                    @foreach($ad_type['need_asset_type'] as $asset_type_id)
+                    '<li data-type="{{$asset_type_id}}" >',
+                    '<i class="layui-icon layui-icon-radio" style="color:#666;"></i> ',
+                        '{{ \App\Models\Advertise\AssetType::get($asset_type_id)['name'] }}',
+                    '</li>',
+                    @endforeach
+                ].join('');
+                break;
+            @endforeach
+        }
+        $('#assetTypeCheckList').html(asset_type_li);
+        updateAssetTypeStatus();
+    }
+    function updateAssetTypeStatus(){
+        var li_list = $('#assetTypeCheckList').children('li');
+        li_list.each(function (index, li){
+            if($('#fileList').find('[data-type='+ $(li).data('type') + ']').length > 0){
+                $(li).children('i').css('color', '#76C81C');
+            }else{
+                $(li).children('i').css('color', '#666');
+            }
+        });
+    }
 </script>
