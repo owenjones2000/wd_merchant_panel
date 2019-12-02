@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
 
 class UserCreateRequest extends FormRequest
 {
@@ -24,9 +25,9 @@ class UserCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => 'required|email',
+            'email' => 'required|email|unique:a_users,email',
             'phone'   => 'nullable|numeric|regex:/(^1[3456789][0-9]{9}$)/',
-            'username'  => 'required|min:2|max:14',
+            'username'  => 'required|string|alpha_dash|min:2|max:14',
             'password'  => 'required|confirmed|min:2|max:14'
         ];
     }
