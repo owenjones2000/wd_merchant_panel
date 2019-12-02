@@ -1,6 +1,7 @@
 <?php
 namespace App\Models\Advertise;
 
+use App\Exceptions\BizException;
 use App\Scopes\TenantScope;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
@@ -35,6 +36,9 @@ class App extends Model
                     'id' => $params['id'],
                     'main_user_id' => $main_user_id
                 ])->firstOrFail();
+            }
+            if($params['track_platform_id'] == TrackPlatform::Adjust && empty($params['track_code'])){
+                throw new BizException('Track code required.');
             }
             $apps->fill($params);
             $apps->saveOrFail();

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Advertise;
 
+use App\Exceptions\BizException;
 use App\Models\Advertise\App;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -80,13 +81,14 @@ class AppController extends Controller
             'name'  => 'required|string|unique:a_app,name,'.$id,
             'bundle_id'  => 'required|unique:a_app,bundle_id,'.$id,
         ]);
-        $params = $request->all();
-        $params['id'] = $id;
-//        $params['status'] = isset($params['status']) ? 1 : 0;
-        if (App::Make(Auth::user(), $params)){
+        try{
+            $params = $request->all();
+            $params['id'] = $id;
+            App::Make(Auth::user(), $params);
             return redirect(route('advertise.app.edit', [$id]))->with(['status'=>'更新成功']);
+        } catch(BizException $ex){
+            return redirect(route('advertise.app.edit', [$id]))->withErrors(['status'=>$ex->getMessage()]);
         }
-        return redirect(route('advertise.app.edit', [$id]))->withErrors(['status'=>'系统错误']);
     }
 
     /**
