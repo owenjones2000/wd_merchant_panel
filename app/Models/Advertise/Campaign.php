@@ -17,6 +17,8 @@ class Campaign extends Model
 
     protected $fillable = ['name', 'app_id', 'main_user_id'];
 
+    protected $appends = ['default_budget'];
+
     /**
      * 构造Campaign
      * @param User $user
@@ -179,6 +181,15 @@ class Campaign extends Model
             return $ad;
         }, 3);
         return $ad;
+    }
+
+    public function getDefaultBudgetAttribute(){
+        $default_budget = $this->budgets->where('country', 'ALL')->first();
+        if(empty($default_budget)){
+            return 0;
+        }else{
+            return $default_budget['amount'];
+        }
     }
 
     /**

@@ -114,12 +114,12 @@
                         // ,{field: 'id', title: 'ID', sort: true,width:80}
                         {field: 'name', title: 'Campaign', templet: '#nameTpl', width:300}
                         // ,{field: 'app.name', title: 'App', templet: '#appTpl'}
+                        ,{field: 'budget', title: 'Budget', templet: function(d){return '$' + (d.default_budget || '0.00');}}
                         ,{field: 'created', title: 'Created', width:110, templet: function(d){return util.toDateString(d.created_at, "yyyy-MM-dd");}}
                         ,{field: 'impressions', title: 'Impressions', templet: function(d){return d.impressions || 0;}}
                         ,{field: 'clicks', title: 'Clicks', templet: function(d){return d.clicks || 0;}}
                         ,{field: 'installs', title: 'Installs', templet: function(d){return d.installs || 0;}}
                         ,{field: 'spend', title: 'Spend', templet: function(d){return '$' + (d.spend || '0.00');}}
-                        ,{field: 'budget', title: 'Budget', templet: function(d){return '$' + (d.budget || '0.00');}}
                         ,{field: 'ecpi', title: 'eCPI', templet: function(d){return '$' + (d.ecpi || '0.00');}}
                         ,{field: 'ecpm', title: 'eCPM', templet: function(d){return '$' + (d.ecpm || '0.00');}}
                         ,{field: 'status', title: 'Status', templet: '#status', align:'center', width:70}
