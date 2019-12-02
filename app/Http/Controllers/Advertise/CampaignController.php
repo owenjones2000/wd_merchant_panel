@@ -6,6 +6,7 @@ use App\Models\Advertise\AdvertiseKpi;
 use App\Models\Advertise\App;
 use App\Models\Advertise\Campaign;
 use App\Models\Advertise\Region;
+use App\Rules\AdvertiseName;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -118,6 +119,27 @@ class CampaignController extends Controller
     }
 
     /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function save(Request $request, $id = null)
+    {
+        $this->validate($request,[
+            'name'  => ['required','string','unique:a_campaign,name,'.$id, new AdvertiseName()]
+        ]);
+        $params = $request->all();
+        $params['id'] = $id;
+//        $params['status'] = isset($params['status']) ? 1 : 0;
+        if (Campaign::Make(Auth::user(), $params)){
+            return redirect(route('advertise.campaign.edit', [$id]))->with(['status'=>'Save successfully.']);
+        }
+        return redirect(route('advertise.campaign.edit', [$id]))->withErrors(['status'=>'Error']);
+    }
+
+    /**
      * 启动
      * @param $id
      * @return \Illuminate\Http\JsonResponse
@@ -143,27 +165,6 @@ class CampaignController extends Controller
         $campaign = Campaign::findOrFail($id);
         $campaign->disable();
         return response()->json(['code'=>0,'msg'=>'Disabled']);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function save(Request $request, $id = null)
-    {
-        $this->validate($request,[
-            'name'  => 'required|string|unique:a_campaign,name,'.$id,
-        ]);
-        $params = $request->all();
-        $params['id'] = $id;
-//        $params['status'] = isset($params['status']) ? 1 : 0;
-        if (Campaign::Make(Auth::user(), $params)){
-            return redirect(route('advertise.campaign.edit', [$id]))->with(['status'=>'Save successfully.']);
-        }
-        return redirect(route('advertise.campaign.edit', [$id]))->withErrors(['status'=>'Error']);
     }
 
     /**

@@ -6,6 +6,7 @@ use App\Models\Advertise\AdvertiseKpi;
 use App\Models\Advertise\App;
 use App\Models\Advertise\Ad;
 use App\Models\Advertise\Campaign;
+use App\Rules\AdvertiseName;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -122,7 +123,7 @@ class AdController extends Controller
     public function save(Request $request, $campaign_id, $id = null)
     {
         $this->validate($request,[
-            'name'  => 'required|string|unique:a_campaign,name,'.$id,
+            'name'  => ['required','string','unique:a_ad,name,'.$id, new AdvertiseName()],
         ]);
         /** @var Campaign $campaign */
         $campaign = Campaign::query()->where([

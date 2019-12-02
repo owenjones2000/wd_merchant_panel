@@ -2,24 +2,31 @@
 @section('style')
     <link rel="stylesheet" href="/static/admin/layuiadmin/style/formSelects-v4.css" media="all">
 @endsection
+@php
+$disable_basic_info = $campaign['ads']->count() > 0;
+@endphp
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
     <legend>Basic info</legend>
 </fieldset>
 <div class="layui-form-item">
     <label for="" class="layui-form-label">Name</label>
     <div class="layui-input-block">
-        <input type="text" name="name" value="{{ $campaign->name ?? old('name') }}" lay-verify="required" placeholder="" autocomplete="off" class="layui-input" >
+        <input type="text" name="name" value="{{ $campaign->name ?? old('name') }}" lay-verify="required" placeholder="" autocomplete="off" class="layui-input @if($disable_basic_info) layui-disabled @endif" >
     </div>
 </div>
 
 <div class="layui-form-item">
     <label class="layui-form-label">App</label>
     <div class="layui-input-block">
-        <select name="app_id" lay-filter="app">
-            @foreach($apps as $app_item)
-                <option @if(isset($campaign['app_id']) && $campaign['app_id'] == $app_item['id']) selected @endif value="{{$app_item['id']}}">{{$app_item['name']}}</option>
-            @endforeach
-        </select>
+        @if($disable_basic_info)
+            <input type="text" value="{{ $campaign['app']['name'] ?? '' }}" placeholder="" autocomplete="off" class="layui-input layui-disabled">
+        @else
+            <select name="app_id" lay-filter="app">
+                @foreach($apps as $app_item)
+                    <option @if(isset($campaign['app_id']) && $campaign['app_id'] == $app_item['id']) selected @endif value="{{$app_item['id']}}">{{$app_item['name']}}</option>
+                @endforeach
+            </select>
+        @endif
     </div>
 </div>
 
@@ -60,7 +67,7 @@
                 <label class="layui-form-label">Default</label>
                 <div class="layui-input-inline">
                     <input type="hidden" name="budget[0][region_code]" value="0">
-                    <input type="text" name="budget[0][amount]" value="{{ $budget_for_all_region['amount']??'' }}" placeholder="$" autocomplete="off" class="layui-input" lay-verify="required" >
+                    <input type="text" name="budget[0][amount]" value="{{ $budget_for_all_region['amount']??old('budget.0.amount', '') }}" placeholder="$" autocomplete="off" class="layui-input" lay-verify="required" >
                 </div>
             </div>
 
@@ -101,7 +108,7 @@
                 <label class="layui-form-label">Default</label>
                 <div class="layui-input-inline">
                     <input type="hidden" name="bid[0][region_code]" value="0">
-                    <input type="text" name="bid[0][amount]" value="{{ $bid_for_all_region['amount']??'' }}" lay-verify="required" placeholder="$" autocomplete="off" class="layui-input" >
+                    <input type="text" name="bid[0][amount]" value="{{ $bid_for_all_region['amount']??old('bid.0.amount', '') }}" lay-verify="required" placeholder="$" autocomplete="off" class="layui-input" >
                 </div>
             </div>
 
