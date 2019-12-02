@@ -128,7 +128,17 @@ class CampaignController extends Controller
     public function save(Request $request, $id = null)
     {
         $this->validate($request,[
-            'name'  => ['required','string','unique:a_campaign,name,'.$id, new AdvertiseName()]
+            'name'  => ['required','string','unique:a_campaign,name,'.$id, new AdvertiseName()],
+            'app_id' => 'exists:a_app,id',
+            'regions' => 'string',
+            'budget' => 'array',
+            'budget.*.region_code' => 'required|string|max:3',
+            'budget.*.amount' => 'required|numeric',
+            'bid_by_region' => 'bool',
+            'bid' => 'array',
+            'bid.*.region_code' => 'required|string|max:3',
+            'bid.*.amount' => 'required|numeric'
+
         ]);
         $params = $request->all();
         $params['id'] = $id;

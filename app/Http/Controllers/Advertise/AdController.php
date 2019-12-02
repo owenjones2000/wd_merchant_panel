@@ -124,6 +124,11 @@ class AdController extends Controller
     {
         $this->validate($request,[
             'name'  => ['required','string','unique:a_ad,name,'.$id, new AdvertiseName()],
+            'app_id' => 'exists:a_app,id',
+            'regions' => 'string',
+            'asset' => 'array',
+            'asset.*.id' => 'required|numeric',
+            'asset.*.type' => 'required|numeric',
         ]);
         /** @var Campaign $campaign */
         $campaign = Campaign::query()->where([
