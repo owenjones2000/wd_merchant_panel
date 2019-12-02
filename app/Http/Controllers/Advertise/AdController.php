@@ -135,7 +135,7 @@ class AdController extends Controller
         $ad = $campaign->makeAd(Auth::user(), $params);
         if ($ad){
             return redirect(route('advertise.campaign.ad.edit', [$ad['campaign_id'], $ad['id']]))
-                ->with(['status'=>'Save successfully.'.($ad['status']?:' But ad is not running.')]);
+                ->with(['status'=>'Save successfully.'.($ad['status'] ? '':' But ad is not running.')]);
         }
         return redirect(route('advertise.campaign.ad.edit', [$ad['campaign_id'], $ad['id']]))->withErrors(['status'=>'Error']);
     }
