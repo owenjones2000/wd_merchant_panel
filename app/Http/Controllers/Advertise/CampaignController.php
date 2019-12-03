@@ -50,6 +50,7 @@ class CampaignController extends Controller
             DB::raw('sum(clicks) as clicks'),
             DB::raw('sum(installations) as installs'),
             DB::raw('round(sum(clicks) * 100 / sum(impressions), 2) as ctr'),
+            DB::raw('round(sum(installations) * 100 / sum(clicks), 2) as cvr'),
             DB::raw('round(sum(installations) * 100 / sum(impressions), 2) as ir'),
             DB::raw('round(sum(spend), 2) as spend'),
             DB::raw('round(sum(spend) / sum(installations), 2) as ecpi'),
