@@ -50,6 +50,8 @@ class ChannelController extends Controller
             DB::raw('sum(impressions) as impressions'),
             DB::raw('sum(clicks) as clicks'),
             DB::raw('sum(installations) as installs'),
+            DB::raw('round(sum(clicks) / sum(impressions), 2) as ctr'),
+            DB::raw('round(sum(installations) / sum(impressions), 2) as ir'),
             DB::raw('round(sum(spend), 2) as spend'),
             DB::raw('round(sum(spend) / sum(installations), 2) as ecpi'),
             DB::raw('round(sum(spend) * 1000 / sum(impressions), 2) as ecpm'),
