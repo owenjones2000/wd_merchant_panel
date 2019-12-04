@@ -126,7 +126,11 @@ class AdController extends Controller
     public function save(Request $request, $campaign_id, $id = null)
     {
         $this->validate($request,[
-            'name'  => ['required','string','unique:a_ad,name,'.$id, new AdvertiseName()],
+            'name'  => [
+                'required','string','max:100',
+                'unique:a_ad,name,'.$id.',id,campaign_id,'.$campaign_id,
+                new AdvertiseName()
+            ],
             'app_id' => 'exists:a_app,id',
             'regions' => 'string',
             'asset' => 'array',
