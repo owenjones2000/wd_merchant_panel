@@ -136,11 +136,11 @@ class CampaignController extends Controller
             'regions' => 'string',
             'budget' => 'array',
             'budget.*.region_code' => 'required|string|max:3',
-            'budget.*.amount' => 'required|numeric',
+            'budget.*.amount' => 'numeric',
             'bid_by_region' => 'bool',
             'bid' => 'array',
             'bid.*.region_code' => 'required|string|max:3',
-            'bid.*.amount' => 'required|numeric'
+            'bid.*.amount' => 'numeric'
 
         ]);
         $params = $request->all();
