@@ -119,6 +119,9 @@ class Campaign extends Model
      * @throws \Throwable
      */
     public function enable(){
+        if($this->is_admin_disable){
+            throw new \Exception('This campaign has been disabled by the administrator.');
+        }
         if(!$this->status){
             $this->status = true;
             $this->saveOrFail();

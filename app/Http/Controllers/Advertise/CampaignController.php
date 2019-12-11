@@ -160,10 +160,14 @@ class CampaignController extends Controller
      */
     public function enable($id)
     {
-        /** @var Campaign $campaign */
-        $campaign = Campaign::findOrFail($id);
-        $campaign->enable();
-        return response()->json(['code'=>0,'msg'=>'Enabled']);
+        try {
+            /** @var Campaign $campaign */
+            $campaign = Campaign::findOrFail($id);
+            $campaign->enable();
+            return response()->json(['code' => 0, 'msg' => 'Enabled']);
+        } catch (\Exception $ex) {
+            return response()->json(['code' => -1, 'msg' => $ex->getMessage()]);
+        }
     }
 
     /**

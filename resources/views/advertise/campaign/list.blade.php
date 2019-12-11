@@ -167,11 +167,11 @@
                                 $.post('/advertise/campaign/'+data.id+'/enable',
                                     {},
                                     function (result) {
-                                        if (result.code==0){
-                                        }
-                                        layer.close(index);
                                         layer.msg(result.msg);
-                                        dataTable.reload();
+                                        layer.close(index);
+                                        if (result.code==0){
+                                            dataTable.reload();
+                                        }
                                     });
                             });
                             break;

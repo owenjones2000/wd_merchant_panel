@@ -19,6 +19,9 @@ class Ad extends Model
      * @throws \Throwable
      */
     public function enable(){
+        if($this->is_admin_disable){
+            throw new \Exception('This ad has been disabled by the administrator.');
+        }
         if(!$this->status){
             if($this->is_upload_completed){
                 $this->status = true;

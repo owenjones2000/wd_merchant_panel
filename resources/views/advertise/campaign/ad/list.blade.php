@@ -177,11 +177,11 @@
                                 $.post('/advertise/campaign/{{$campaign['id']}}/ad/'+data.id+'/enable',
                                     {},
                                     function (result) {
-                                        if (result.code==0){
-                                        }
                                         layer.close(index);
                                         layer.msg(result.msg);
-                                        dataTable.reload();
+                                        if (result.code==0){
+                                            dataTable.reload();
+                                        }
                                     });
                             });
                             break;
