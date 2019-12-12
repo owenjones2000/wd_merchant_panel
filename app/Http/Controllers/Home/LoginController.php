@@ -27,10 +27,10 @@ class LoginController extends Controller
      * 用于登录的字段
      * @return string
      */
-    public function username()
-    {
-        return 'username';
-    }
+//    public function username()
+//    {
+//        return 'username';
+//    }
 
     /**
      * 登录成功后的跳转地址
