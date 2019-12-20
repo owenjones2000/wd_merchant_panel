@@ -16,7 +16,7 @@
 <div class="layui-form-item">
     <label class="layui-form-label">Icon</label>
     <div>
-        <img id="upload-icon" name="icon_url" style="width: 48px; height: 48px;" src="{{ $apps->icon_url }}" onerror="src='/image/noimage.png';onerror=null;"/>
+        <img id="upload-icon" name="icon_url" style="height: 48px;" src="{{ $apps->icon_url }}" onerror="src='/image/none_add.png';onerror=null;"/>
         <input type="hidden" id="input_icon" name="icon_url" value="{{ $apps->icon_url }}">
     </div>
 </div>

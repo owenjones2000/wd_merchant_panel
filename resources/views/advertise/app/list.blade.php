@@ -28,6 +28,7 @@
                 </div>
             </script>
             <script type="text/html" id="nameTpl">
+                <img width="24px" height="24px" src="@{{ d.icon_url ? d.icon_url : '/image/none.png' }}" />
                 @can('advertise.app.edit')
                 <a class="layui-table-link" lay-event="edit" href="javascript:;">
                     @endcan
@@ -82,6 +83,7 @@
                         {field: 'name', title: 'Name', templet: '#nameTpl', width:300}
                         ,{field: 'bundle_id', title: 'Package Name'}
                         ,{field: 'os', title: 'Platform'}
+                        ,{field: 'description', title: 'Description'}
                         ,{field: 'track', title: 'Track', templet: '#track'}
                         ,{field: 'status', title: 'Status', templet: '#status', align:'center', width:70}
                         // ,{field: 'created_at', title: 'Created'}
