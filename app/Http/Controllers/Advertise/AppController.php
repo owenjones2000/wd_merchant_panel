@@ -89,9 +89,9 @@ class AppController extends Controller
             $params = $request->all();
             $params['id'] = $id;
             App::Make(Auth::user(), $params);
-            //return redirect(route('advertise.app.edit', [$id]))->with(['status'=>'更新成功']);
+            return redirect(route('advertise.app.edit', [$id]))->with(['status'=>'更新成功']);
         } catch(BizException $ex){
-            //return redirect(route('advertise.app.edit', [$id]))->withErrors(['status'=>$ex->getMessage()]);
+            return redirect(route('advertise.app.edit', [$id]))->withErrors(['status'=>$ex->getMessage()]);
         }
     }
 
