@@ -16,7 +16,8 @@ class App extends Model
     protected $table = 'a_app';
     protected $appends = ['track'];
 
-    protected $fillable = ['name', 'bundle_id', 'os', 'track_platform_id', 'track_code', 'status'];
+    protected $fillable = ['name', 'description', 'icon_url', 'bundle_id',
+        'os', 'track_platform_id', 'track_code', 'status'];
 
     /**
      * 构造Campaign

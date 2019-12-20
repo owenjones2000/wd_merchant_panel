@@ -107,10 +107,14 @@ Route::group(['namespace'=>'Advertise','prefix'=>'advertise','middleware'=>['aut
         Route::get('data', 'AppController@data')->name('advertise.app.data');
         Route::get('list', 'AppController@index')->name('advertise.app');
         //编辑
-        Route::get('{id?}', 'AppController@edit')->name('advertise.app.edit')->middleware('permission:advertise.app.edit');
-        Route::post('{id?}', 'AppController@save')->name('advertise.app.save')->middleware('permission:advertise.app.edit');
+        Route::get('{id?}', 'AppController@edit')->name('advertise.app.edit')->middleware('permission:advertise.app.edit')
+            ->where('id', '\d+');
+        Route::post('{id?}', 'AppController@save')->name('advertise.app.save')->middleware('permission:advertise.app.edit')
+            ->where('id', '\d+');
         Route::post('{id}/enable', 'AppController@enable')->name('advertise.app.enable')->middleware('permission:advertise.app.edit');
         Route::post('{id}/disable', 'AppController@disable')->name('advertise.app.disable')->middleware('permission:advertise.app.edit');
+        Route::post('icon', 'AppController@uplodeIcon')->name('advertise.app.icon')->middleware('permission:advertise.app.edit');
+
 
         //删除
 //        Route::delete('destroy', 'AppController@destroy')->name('advertise.app.destroy')->middleware('permission:advertise.app.destroy');
@@ -155,6 +159,5 @@ Route::group(['namespace'=>'Advertise','prefix'=>'advertise','middleware'=>['aut
     });
 
     //文件
-    Route::post('Asset', 'AssetController@processMediaFiles')->name('advertise.asset.process');
-
+    Route::post('Asset', 'AssetController@processMediaFiles')->name('advertise.asset.process'); // 素材
 });

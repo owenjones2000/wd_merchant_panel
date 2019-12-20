@@ -14,6 +14,21 @@
 </div>
 
 <div class="layui-form-item">
+    <label class="layui-form-label">Icon</label>
+    <div>
+        <img id="upload-icon" name="icon_url" style="width: 48px; height: 48px;" src="{{ $apps->icon_url }}" onerror="src='/image/noimage.png';onerror=null;"/>
+        <input type="hidden" id="input_icon" name="icon_url" value="{{ $apps->icon_url }}">
+    </div>
+</div>
+
+<div class="layui-form-item">
+    <label class="layui-form-label">Description</label>
+    <div class="layui-input-block">
+        <input type="text" name="description" value="{{ $apps->description ?? old('description') }}" placeholder="description will be displayed in the ad" autocomplete="off" class="layui-input">
+    </div>
+</div>
+
+<div class="layui-form-item">
     <label class="layui-form-label">Platform</label>
     <div class="layui-input-block">
         <select name="os" lay-filter="os">
@@ -53,5 +68,18 @@
 </div>
 
 @section('script')
+    <script>
+        layui.use('upload', function() {
+            layui.upload.render({
+                url: '{{ route('advertise.app.icon') }}'
+                , elem: '#upload-icon' //指定原始元素，默认直接查找class="layui-upload-file"
+                , method: 'post' //上传接口的http类型
+                , done: function (res) {
+                    $('#upload-icon').attr('src', res.url);
+                    $('#input_icon').val(res.url);
+                }
+            });
+        });
+    </script>
     @include('layout.common_edit')
 @endsection
