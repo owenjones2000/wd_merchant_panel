@@ -27,9 +27,9 @@
             </script>
             <script type="text/html" id="status">
                 @{{# if(d.status){ }}
-                    <span class="layui-bg-green">Enabled</span>
+                    <a lay-event="disable" title="Click to pause" href="javascript:;"><i class="layui-icon layui-icon-radio" style="color: #76C81C;"></i></a>
                 @{{# } else { }}
-                    <span class="layui-bg-red">Disabled</span>
+                    <a lay-event="enable" title="Click to activate" href="javascript:;"><i class="layui-icon layui-icon-radio" style="color: #666;"></i></a>
                 @{{# } }}
             </script>
         </div>
@@ -98,9 +98,43 @@
                         ,{field: 'spend', title: 'Spend', templet: function(d){return '$' + (d.spend || '0.00');}}
                         ,{field: 'ecpi', title: 'eCPI', templet: function(d){return '$' + (d.ecpi || '0.00');}}
                         ,{field: 'ecpm', title: 'eCPM', templet: function(d){return '$' + (d.ecpm || '0.00');}}
-                        //,{field: 'status', title: 'Status', templet: '#status', width:90}
+                        ,{field: 'status', title: 'Status', templet: '#status', width:90}
                         // ,{fixed: 'right', width: 220, align:'center', toolbar: '#options'}
                     ]]
+                });
+
+                //监听工具条
+                table.on('tool(dataTable)', function(obj){ //注：tool是工具条事件名，dataTable是table原始容器的属性 lay-filter="对应的值"
+                    var data = obj.data //获得当前行数据
+                        ,layEvent = obj.event; //获得 lay-event 对应的值
+                    switch(layEvent) {
+                        case 'enable':
+                            layer.confirm('Confirm activate [ '+data.channel.name_hash+' ] for ' + data.app.name + '?', function(index){
+                                $.post('/advertise/app/'+data.app_id+'/channel/' + data.target_app_id + '/enable',
+                                    {},
+                                    function (result) {
+                                        layer.msg(result.msg);
+                                        layer.close(index);
+                                        if (result.code==0){
+                                            dataTable.reload();
+                                        }
+                                    });
+                            });
+                            break;
+                        case 'disable':
+                            layer.confirm('Confirm pause [ '+data.channel.name_hash+' ] for ' + data.app.name + '?', function(index){
+                                $.post('/advertise/app/'+data.app_id+'/channel/' + data.target_app_id + '/disable',
+                                    {},
+                                    function (result) {
+                                        if (result.code==0){
+                                        }
+                                        layer.close(index);
+                                        layer.msg(result.msg);
+                                        dataTable.reload();
+                                    });
+                            });
+                            break;
+                    }
                 });
 
                 //监听排序事件

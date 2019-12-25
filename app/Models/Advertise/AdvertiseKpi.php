@@ -11,6 +11,14 @@ class AdvertiseKpi extends Model
     protected $table = 'z_sub_tasks';
 
     /**
+     * 应用
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function app(){
+        return $this->belongsTo(App::class, 'app_id', 'id');
+    }
+
+    /**
      * 广告活动
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */

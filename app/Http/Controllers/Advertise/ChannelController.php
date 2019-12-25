@@ -42,7 +42,10 @@ class ChannelController extends Controller
         $advertise_kpi_query = AdvertiseKpi::multiTableQuery(function($query) use($start_date, $end_date, $channel_id_query, $campaign_id){
             $query->whereBetween('date', [$start_date, $end_date])
                 ->where('campaign_id', $campaign_id)
-                ->whereIn('target_app_id', $channel_id_query);
+                ->whereIn('target_app_id', $channel_id_query)
+                ->select(['impressions', 'clicks', 'installations', 'spend',
+                    'date', 'app_id', 'campaign_id', 'target_app_id',
+                ]);
             return $query;
         }, $start_date, $end_date);
 
@@ -56,16 +59,22 @@ class ChannelController extends Controller
             DB::raw('round(sum(spend), 2) as spend'),
             DB::raw('round(sum(spend) / sum(installations), 2) as ecpi'),
             DB::raw('round(sum(spend) * 1000 / sum(impressions), 2) as ecpm'),
+            'campaign_id',
+            'app_id',
             'target_app_id',
         ]);
         $advertise_kpi_query->groupBy('target_app_id');
 
         $advertise_kpi_list = $advertise_kpi_query
-            ->with('channel')
+            ->with('channel:id,name_hash')
+            ->with(['app:id,name', 'app.disableChannels'])
             ->orderBy('spend','desc')
-            ->paginate($request->get('limit',30))
-            ->toArray();
+            ->paginate($request->get('limit',30));
+        foreach($advertise_kpi_list as $advertise_kpi){
+            $advertise_kpi['status'] = !$advertise_kpi['app']['disableChannels']->contains($advertise_kpi['target_app_id']);
+        }
 
+        $advertise_kpi_list = $advertise_kpi_list->toArray();
         $data = [
             'code' => 0,
             'msg'   => '正在请求中...',
@@ -73,5 +82,33 @@ class ChannelController extends Controller
             'data'  => $advertise_kpi_list['data']
         ];
         return response()->json($data);
+    }
+
+    /**
+     * 启动
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Throwable
+     */
+    public function enable($app_id, $channel_id)
+    {
+        /** @var App $apps */
+        $apps = App::findOrFail($app_id);
+        $apps->disableChannels()->detach($channel_id);
+        return response()->json(['code'=>0,'msg'=>'Successful']);
+    }
+
+    /**
+     * 停止
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Throwable
+     */
+    public function disable($app_id, $channel_id)
+    {
+        /** @var App $apps */
+        $apps = App::findOrFail($app_id);
+        $apps->disableChannels()->attach($channel_id);
+        return response()->json(['code'=>0,'msg'=>'Successful']);
     }
 }

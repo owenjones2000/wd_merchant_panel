@@ -41,7 +41,10 @@ class CampaignController extends Controller
         $campaign_id_query->select('id');
         $advertise_kpi_query = AdvertiseKpi::multiTableQuery(function($query) use($start_date, $end_date, $campaign_id_query){
             $query->whereBetween('date', [$start_date, $end_date])
-                ->whereIn('campaign_id', $campaign_id_query);
+                ->whereIn('campaign_id', $campaign_id_query)
+                ->select(['impressions', 'clicks', 'installations', 'spend',
+                    'date', 'campaign_id',
+                ]);
             return $query;
         }, $start_date, $end_date);
 

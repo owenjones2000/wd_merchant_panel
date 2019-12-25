@@ -76,6 +76,15 @@ class App extends Model
     }
 
     /**
+     * 禁用投放渠道
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function disableChannels(){
+        return $this->belongsToMany(Channel::class, 'a_app_disable_target_app',
+            'app_id','target_app_id', 'id', 'id');
+    }
+
+    /**
      *  模型的 「启动」 方法.
      *
      * @return void
