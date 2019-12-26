@@ -80,7 +80,7 @@ class App extends Model
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function disableChannels(){
-        return $this->belongsToMany(Channel::class, 'a_app_disable_target_app',
+        return $this->belongsToMany(Channel::class, 'a_app_target_app_disabled',
             'app_id','target_app_id', 'id', 'id');
     }
 
