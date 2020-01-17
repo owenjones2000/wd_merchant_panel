@@ -57,6 +57,7 @@ class UserController extends Controller
                     $data
                 );
             $user['main_user_id'] = $op_user->getMainId();
+            $user['status'] = true;
             $user->saveOrFail();
             return true;
         }, 3);
