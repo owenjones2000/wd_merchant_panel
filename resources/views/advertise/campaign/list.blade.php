@@ -116,7 +116,7 @@
                         // ,{field: 'app.name', title: 'App', templet: '#appTpl'}
                         ,{field: 'budget', title: 'Budget', templet: function(d){return '$' + (d.default_budget || '0.00');}}
                         ,{field: 'created', title: 'Created', width:110, templet: function(d){return util.toDateString(d.created_at, "yyyy-MM-dd");}}
-                        ,{field: 'impressions', title: 'Impressions', templet: function(d){return d.impressions || 0;}}
+                        ,{field: 'impressions', title: 'Impressions', templet: function(d){return d.impressions || 0;}, width:90}
                         ,{field: 'clicks', title: 'Clicks', templet: function(d){return d.clicks || 0;}}
                         ,{field: 'installs', title: 'Installs', templet: function(d){return d.installs || 0;}}
                         ,{field: 'ctr', title: 'CTR', templet: function(d){return (d.ctr || '0.00') + '%';}}
