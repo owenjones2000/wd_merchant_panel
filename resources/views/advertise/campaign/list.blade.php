@@ -112,7 +112,7 @@
                     ,cols: [[ //表头
                         //{checkbox: true,fixed: true}
                         // ,{field: 'id', title: 'ID', sort: true,width:80}
-                        {field: 'name', title: 'Campaign', templet: '#nameTpl', width:300}
+                        {field: 'name', title: 'Campaign', templet: '#nameTpl', width:300, fixed: true}
                         // ,{field: 'app.name', title: 'App', templet: '#appTpl'}
                         ,{field: 'budget', title: 'Budget', templet: function(d){return '$' + (d.default_budget || '0.00');}}
                         ,{field: 'created', title: 'Created', width:110, templet: function(d){return util.toDateString(d.created_at, "yyyy-MM-dd");}}
