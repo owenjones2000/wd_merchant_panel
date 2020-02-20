@@ -11,7 +11,7 @@
         var uploadListIns = upload.render({
             elem: '#upload'
             ,accept: 'file'
-            ,exts: 'mp4|png|jpg'
+            ,exts: 'mp4|png|jpg|html|htm'
             ,url: '{{ route('advertise.asset.process') }}'
             ,data: {
                 ad_type_id: function(){
@@ -38,7 +38,7 @@
                         '<h2 class="layui-colla-title">'+ asset.type.name +'</h2>',
                         '<div class="layui-colla-content layui-show">',
                     ];
-                    var media_width = asset.spec.width < 300 ? asset.spec.width : 300;
+                    var media_width = asset.spec.hasOwnProperty('width') ? (asset.spec.width < 300 ? asset.spec.width : 300) : 300;
                     if(asset.type.mime_type == 'video'){
                         fileItemList = fileItemList.concat([
                             '<video width="'+ media_width +'px" height="auto" controls="controls">',
@@ -48,6 +48,10 @@
                     }else if(asset.type.mime_type == 'image'){
                         fileItemList = fileItemList.concat([
                             '<img src="'+ asset.url +'" width="'+ media_width +'px">'
+                        ]);
+                    }else if(asset.type.mime_type == 'html'){
+                        fileItemList = fileItemList.concat([
+                            '<a href="'+ asset.url +'" target="_blank" class="layui-btn layui-btn-normal">Click to preview</a>'
                         ]);
                     }
                     fileItemList = fileItemList.concat([
@@ -81,7 +85,7 @@
             @foreach(\App\Models\Advertise\AdType::$list as $ad_type)
             case '{{$ad_type['id']}}':
                 asset_type_li = [
-                    @foreach($ad_type['need_asset_type'] as $asset_type_id)
+                    @foreach($ad_type['support_asset_type'] as $asset_type_id)
                     '<li data-type="{{$asset_type_id}}" >',
                     '<i class="layui-icon layui-icon-radio" style="color:#666;"></i> ',
                         '{{ \App\Models\Advertise\AssetType::get($asset_type_id)['name'] }}',

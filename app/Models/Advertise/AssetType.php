@@ -65,6 +65,13 @@ class AssetType
                     'height' => $height
                 ];
                 break;
+            case 'text':
+                if (in_array($file->getClientOriginalExtension(), ['html', 'htm'])) {
+                    $file_info = [
+                        'type' => AssetType::Html,
+                    ];
+                }
+                break;
             default:
                 throw new \Exception('file type not support.');
         }

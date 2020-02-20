@@ -35,7 +35,7 @@
     <div class="layui-collapse" id="fileList">
         @foreach($ad->assets as $asset)
             @php
-                $media_width = $asset['spec']['width'] < 300 ? $asset['spec']['width'] : 300;
+                $media_width = isset($asset['spec']['width']) ? ($asset['spec']['width'] < 300 ? $asset['spec']['width'] : 300) : 300;
             @endphp
         <div class="layui-colla-item" data-type="{{$asset['type_id']}}">
             <h2 class="layui-colla-title">{{ \App\Models\Advertise\AssetType::get($asset['type_id'])['name'] }}</h2>
@@ -46,6 +46,8 @@
                     </video>
                 @elseif($asset['type']['mime_type'] == 'image')
                     <img src="{{ $asset['url'] }}" width="{{$media_width}}px">
+                @elseif($asset['type']['mime_type'] == 'html')
+                    <a href="{{ $asset['url'] }}" target="_blank" class="layui-btn layui-btn-normal">Click to preview</a>
                 @endif
                 <input type="hidden" name="asset[{{$asset['type_id']}}][id]" value="{{ $asset['id'] }}">
                 <input type="hidden" name="asset[{{$asset['type_id']}}][type]" value="{{ $asset['type_id'] }}">
@@ -67,7 +69,7 @@
 
 <div class="layui-form-item">
     <ul id="assetTypeCheckList">
-    @foreach($selected_ad_type['need_asset_type'] as $asset_type_id)
+    @foreach($selected_ad_type['support_asset_type'] as $asset_type_id)
         <li data-type="{{$asset_type_id}}" >
             <i class="layui-icon layui-icon-radio" style="color: @if($ad->assets->contains('type_id', $asset_type_id))#76C81C;@else#666;@endif"></i>
             {{ \App\Models\Advertise\AssetType::get($asset_type_id)['name'] }}

@@ -173,7 +173,7 @@ class Campaign extends Model
                 $ad->assets()
                     ->where(function($query) use($ad, $asset_id_list){
                         $query->whereNotIn('id', array_keys($asset_id_list))
-                            ->orWhereNotIn('type_id', $ad['type']['need_asset_type']);
+                            ->orWhereNotIn('type_id', $ad['type']['support_asset_type']);
                     })
                     ->update([
                         'ad_id' => null
@@ -181,7 +181,8 @@ class Campaign extends Model
                 Asset::query()
                     ->where(function($query) use($ad, $asset_id_list){
                         $query->whereIn('id', array_keys($asset_id_list))
-                            ->whereIn('type_id', $ad['type']['need_asset_type']);
+                            ->whereIn('type_id', $ad['type']['support_asset_type'])
+                        ;
                     })
                     ->whereNull('ad_id')
                     ->update([

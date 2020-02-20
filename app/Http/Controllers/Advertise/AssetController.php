@@ -24,8 +24,8 @@ class AssetController extends Controller
             $file_info = AssetType::decide($file);
             $ad_type = AdType::get($request->input('ad_type_id', null));
             if($ad_type != null){
-                if(!in_array($file_info['type'], $ad_type['need_asset_type'])){
-                    throw new \Exception('file type not support.');
+                if(!in_array($file_info['type'], $ad_type['support_asset_type'])){
+                    throw new \Exception('file type not support by ad.');
                 }
             }
             $main_id = Auth::user()->getMainId();
