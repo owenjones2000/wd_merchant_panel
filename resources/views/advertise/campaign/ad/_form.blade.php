@@ -84,7 +84,7 @@
 <div class="layui-form-item">
     <div class="layui-input-block">
         <button type="submit" class="layui-btn" lay-submit="">Save</button>
-        <button class="layui-btn close-iframe">Cancel</button>
+        <button class="layui-btn layui-btn-primary close-iframe">Cancel</button>
     </div>
 </div>
 

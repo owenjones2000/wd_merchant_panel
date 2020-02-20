@@ -73,8 +73,19 @@ class Ad extends Model
      * @return bool
      */
     public function getIsUploadCompletedAttribute(){
-        foreach ($this['type']['support_asset_type'] as $support_asset_type_id){
-            if(!$this['assets']->contains('type_id', $support_asset_type_id)){
+        if (isset($this['type']['need_asset_type']) && is_array($this['type']['need_asset_type'])) {
+            foreach ($this['type']['need_asset_type'] as $need_asset_type) {
+                if (is_array($need_asset_type)) {
+                    foreach ($need_asset_type as $need_asset_type_item) {
+                        if($this['assets']->contains('type_id', $need_asset_type_item)){
+                            continue 2;
+                        }
+                    }
+                } else {
+                    if($this['assets']->contains('type_id', $need_asset_type)){
+                        continue ;
+                    }
+                }
                 return false;
             }
         }
