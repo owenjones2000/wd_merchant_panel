@@ -112,7 +112,7 @@ class AssetType
         ],
         self::Html => [
             'id' => self::Html,
-            'name' => 'HTML File',
+            'name' => 'HTML File ( Only for testing purpose )',
             'mime_type' => 'html'
         ],
     ];
