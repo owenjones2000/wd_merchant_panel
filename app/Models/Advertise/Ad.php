@@ -24,6 +24,7 @@ class Ad extends Model
         }
         if(!$this->status){
             if($this->is_upload_completed){
+                $this->is_cold = true;
                 $this->status = true;
                 $this->saveOrFail();
             } else {
