@@ -23,13 +23,15 @@ class Ad extends Model
             throw new \Exception('This ad has been disabled by the administrator.');
         }
         if(!$this->status){
-            if($this->is_upload_completed){
-                $this->is_cold = true;
-                $this->status = true;
-                $this->saveOrFail();
-            } else {
+            if(!$this->is_upload_completed){
                 throw new \Exception('Lack of assets.');
             }
+            if($this->need_review){
+                throw new \Exception('Need review by administrator.');
+            }
+            $this->is_cold = true;
+            $this->status = true;
+            $this->saveOrFail();
         }
     }
 

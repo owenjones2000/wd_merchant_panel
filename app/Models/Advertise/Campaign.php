@@ -178,14 +178,19 @@ class Campaign extends Model
                     ->update([
                         'ad_id' => null
                     ]);
-                Asset::query()
+                $append_asset_query = Asset::query()
                     ->where(function($query) use($ad, $asset_id_list){
                         $query->whereIn('id', array_keys($asset_id_list))
                             ->whereIn('type_id', $ad['type']['support_asset_type'])
                         ;
                     })
-                    ->whereNull('ad_id')
-                    ->update([
+                    ->whereNull('ad_id');
+                if ((clone $append_asset_query)->where('type_id', AssetType::Html)->exists()) {
+                    $ad['need_review'] = true;
+                    $ad['status'] = false;
+                    $ad->saveOrFail();
+                }
+                $append_asset_query->update([
                         'ad_id' => $ad['id']
                     ]);
             }
