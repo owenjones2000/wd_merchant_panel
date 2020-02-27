@@ -49,19 +49,20 @@
                 var laydate = layui.laydate;
                 laydate.render({
                     elem: '#rangedate'
+                    ,lang: 'en'
                     ,range: '~' //或 range: '~' 来自定义分割字符
                     ,value: '{{ $rangedate }}' //util.toDateString(new Date(), 'yyyy-MM-dd ~ yyyy-MM-dd')
                     ,extrabtns: [
-                        {id:'today', text:'今天', range:[new Date(), new Date()]},
-                        {id:'yesterday', text:'昨天', range:[new Date(new Date().setDate(new Date().getDate()-1)),
+                        // {id:'today', text:'Today', range:[new Date(), new Date()]},
+                        {id:'yesterday', text:'Yesterday', range:[new Date(new Date().setDate(new Date().getDate()-1)),
                                 new Date(new Date().setDate(new Date().getDate()-1))]},
-                        {id:'lastday-7', text:'过去7天', range:[new Date(new Date().setDate(new Date().getDate()-7)),
+                        {id:'lastday-7', text:'Last 7 days', range:[new Date(new Date().setDate(new Date().getDate()-7)),
                                 new Date(new Date().setDate(new Date().getDate()-1))]},
-                        {id:'lastday-28', text:'过去28天', range:[new Date(new Date().setDate(new Date().getDate()-28)),
+                        {id:'lastday-28', text:'Last 28 days', range:[new Date(new Date().setDate(new Date().getDate()-28)),
                                 new Date(new Date().setDate(new Date().getDate()-1))]},
-                        {id:'thismonth', text:'本月', range:[new Date(new Date().setDate(1)),
+                        {id:'thismonth', text:'This month', range:[new Date(new Date().setDate(1)),
                                 new Date(new Date(new Date().setMonth(new Date().getMonth()+1)).setDate(0))]},
-                        {id:'lastmonth', text:'上个月', range:[new Date(new Date(new Date().setMonth(new Date().getMonth()-1)).setDate(1)),
+                        {id:'lastmonth', text:'Last month', range:[new Date(new Date(new Date().setMonth(new Date().getMonth()-1)).setDate(1)),
                                 new Date(new Date().setDate(0))]}
                     ],
                 });
