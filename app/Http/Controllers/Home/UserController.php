@@ -53,7 +53,7 @@ class UserController extends Controller
         $data['password_hash'] = Hash::make($data['password']);
         $result = DB::transaction(function () use($data, $op_user) {
             $user = User::firstOrNew(
-                    ['username' => $data['username']],
+                    ['email' => $data['email']],
                     $data
                 );
             $user['main_user_id'] = $op_user->getMainId();

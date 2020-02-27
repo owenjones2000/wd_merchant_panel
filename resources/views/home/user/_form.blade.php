@@ -1,8 +1,8 @@
 {{csrf_field()}}
 <div class="layui-form-item">
-    <label for="" class="layui-form-label">User Name:</label>
+    <label for="" class="layui-form-label">Email:</label>
     <div class="layui-input-inline">
-        <input type="text" name="username" value="{{ $user->username ?? old('username') }}" lay-verify="required" placeholder="please input login account" autocomplete="username" class="layui-input" >
+        <input type="email" name="email" value="{{$user->email??old('email')}}" lay-verify="email" placeholder="please input email" autocomplete="off" class="layui-input" >
     </div>
 </div>
 
@@ -10,13 +10,6 @@
     <label for="" class="layui-form-label">Real Name:</label>
     <div class="layui-input-inline">
         <input type="text" name="realname" value="{{ $user->realname ?? old('realname') }}" lay-verify="required" placeholder="please input real name" autocomplete="off" class="layui-input" >
-    </div>
-</div>
-
-<div class="layui-form-item">
-    <label for="" class="layui-form-label">Email:</label>
-    <div class="layui-input-inline">
-        <input type="email" name="email" value="{{$user->email??old('email')}}" lay-verify="email" placeholder="please input email" autocomplete="off" class="layui-input" >
     </div>
 </div>
 

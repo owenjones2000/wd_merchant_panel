@@ -47,7 +47,7 @@ Route::group(['namespace'=>'Home','prefix'=>'home','middleware'=>['auth','operat
 
         //编辑
         Route::get('user/{id}/edit','UserController@edit')->name('home.user.edit')->middleware('permission:system.user.edit');
-        Route::put('user/{id}/update','UserController@update')->name('home.user.update')->middleware('permission:system.user.edit');
+        Route::post('user/{id}/update','UserController@update')->name('home.user.update')->middleware('permission:system.user.edit');
         //删除
         Route::delete('user/destroy','UserController@destroy')->name('home.user.destroy')->middleware('permission:system.user.destroy');
 

@@ -27,7 +27,7 @@ class UserCreateRequest extends FormRequest
         return [
             'email' => 'required|email|unique:a_users,email',
             'phone'   => 'nullable|numeric|regex:/(^1[3456789][0-9]{9}$)/',
-            'username'  => 'required|string|alpha_dash|min:2|max:14',
+            'username'  => 'string|alpha_dash|min:2|max:14',
             'password'  => 'required|confirmed|min:2|max:14'
         ];
     }

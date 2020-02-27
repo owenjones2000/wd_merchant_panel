@@ -8,7 +8,7 @@
         <div class="layui-card-body">
             <form class="layui-form" action="{{route('home.user.update',['id'=>$user])}}" method="post">
                 <input type="hidden" name="id" value="{{$user->id}}">
-                {{method_field('put')}}
+                {{method_field('post')}}
                 @include('home.user._form')
             </form>
         </div>

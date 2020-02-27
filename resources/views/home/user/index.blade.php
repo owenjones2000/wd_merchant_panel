@@ -71,9 +71,9 @@
                 ,cols: [[ //表头
                     {checkbox: true,fixed: true}
                     // ,{field: 'id', title: 'ID', sort: true,width:80}
-                    ,{field: 'username', title: 'Login Account'}
-                    ,{field: 'realname', title: 'Real Name'}
+                    // ,{field: 'username', title: 'Login Account'}
                     ,{field: 'email', title: 'Email'}
+                    ,{field: 'realname', title: 'Real Name'}
                     ,{field: 'phone', title: 'Phone'}
                     ,{field: 'created_at', title: 'Created'}
                     ,{field: 'updated_at', title: 'Updated'}
