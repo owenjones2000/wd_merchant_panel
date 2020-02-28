@@ -124,13 +124,13 @@
         </div>
 
 
-        {{--<div class="layui-col-sm12">--}}
+        <div class="layui-col-sm12">
 
-            {{--<div class="layui-card">--}}
+            <div class="layui-card">
 
-                {{--<div class="layui-card-header">--}}
+                <div class="layui-card-header">
 
-                    {{--访问量--}}
+                    Trends
 
                     {{--<div class="layui-btn-group layuiadmin-btn-group">--}}
 
@@ -140,25 +140,22 @@
 
                     {{--</div>--}}
 
-                {{--</div>--}}
+                </div>
 
-                {{--<div class="layui-card-body">--}}
+                <div class="layui-card-body">
 
-                    {{--<div class="layui-row">--}}
+                    <div class="layui-row">
 
-                        {{--<div class="layui-col-sm8">--}}
+                        <div class="layui-col-sm12">
 
-                            {{--<div class="layui-carousel layadmin-carousel layadmin-dataview" data-anim="fade" lay-filter="LAY-index-pagetwo">--}}
 
-                                {{--<div carousel-item id="LAY-index-pagetwo">--}}
+                                <div class="layadmin-dataview" id="chart">
 
-                                    {{--<div><i class="layui-icon layui-icon-loading1 layadmin-loading"></i></div>--}}
+                                    <div><i class="layui-icon layui-icon-loading1 layadmin-loading"></i></div>
 
-                                {{--</div>--}}
+                                </div>
 
-                            {{--</div>--}}
-
-                        {{--</div>--}}
+                        </div>
 
                         {{--<div class="layui-col-sm4">--}}
 
@@ -206,13 +203,13 @@
 
                         {{--</div>--}}
 
-                    {{--</div>--}}
+                    </div>
 
-                {{--</div>--}}
+                </div>
 
-            {{--</div>--}}
+            </div>
 
-        {{--</div>--}}
+        </div>
     </div>
 @endsection
 

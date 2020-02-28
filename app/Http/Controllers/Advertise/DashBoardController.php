@@ -26,11 +26,11 @@ class DashBoardController extends Controller
 
     public function data(Request $request)
     {
-        $range_date = $request->get('rangedate', 'now');
-        if($range_date != 'now'){
-            $range_date = explode(' ~ ',$request->get('rangedate'));
+        $range_date = $request->get('range_date', null);
+        if($range_date != 'now' && $range_date != null){
+            $range_date = explode(' ~ ',$request->get('range_date'));
         }
-        $start_date = date('Ymd', strtotime($range_date[0]??'now'));
+        $start_date = date('Ymd', strtotime($range_date[0]??'-7 day'));
         $end_date = date('Ymd', strtotime($range_date[1]??'now'));
         $campaign_base_query = Campaign::query();
 
@@ -60,12 +60,11 @@ class DashBoardController extends Controller
         $advertise_kpi_query->groupBy('date');
 
         $advertise_kpi_list = $advertise_kpi_query
-            ->orderBy('spend','desc')
+            ->orderBy('date','desc')
             ->get()
-            ->keyBy('date')
             ->toArray();
         if ($range_date == 'now') {
-            $result = $advertise_kpi_list[date('Ymd')] ?? [];
+            $result = $advertise_kpi_list[0] ?? [];
         } else {
             $result = $advertise_kpi_list;
         }
