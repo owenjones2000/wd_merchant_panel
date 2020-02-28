@@ -102,6 +102,12 @@ Route::group(['namespace'=>'Home','prefix'=>'home','middleware'=>['auth','operat
 //投放管理
 Route::group(['namespace'=>'Advertise','prefix'=>'advertise','middleware'=>['auth','operation.log','permission:advertise.manage']],function (){
 
+    // 控制台
+    Route::group(['prefix'=>'dashboard', 'middleware' => 'permission:advertise.manage'], function () {
+        Route::get('data', 'DashBoardController@data')->name('advertise.dashboard.data');
+        Route::get('overview', 'DashBoardController@view')->name('advertise.dashboard.view');
+    });
+
     // 应用管理
     Route::group(['prefix'=>'app', 'middleware' => 'permission:advertise.app'], function () {
         Route::get('data', 'AppController@data')->name('advertise.app.data');
@@ -121,7 +127,7 @@ Route::group(['namespace'=>'Advertise','prefix'=>'advertise','middleware'=>['aut
 
         //删除
 //        Route::delete('destroy', 'AppController@destroy')->name('advertise.app.destroy')->middleware('permission:advertise.app.destroy');
-        });
+    });
 
     // 活动管理
     Route::group(['prefix'=>'campaign', 'middleware' => 'permission:advertise.campaign'], function () {
