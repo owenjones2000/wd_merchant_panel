@@ -60,11 +60,11 @@ class DashBoardController extends Controller
         $advertise_kpi_query->groupBy('date');
 
         $advertise_kpi_list = $advertise_kpi_query
-            ->orderBy('date','desc')
+            ->orderBy('date','asc')
             ->get()
             ->toArray();
         if ($range_date == 'now') {
-            $result = $advertise_kpi_list[0] ?? [];
+            $result = $advertise_kpi_list[count($advertise_kpi_list) - 1] ?? [];
         } else {
             $result = $advertise_kpi_list;
         }
