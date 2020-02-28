@@ -5,9 +5,9 @@
             function (result) {
                 if (result.code==0){
                     var kpi = result['data'];
-                    $('#impressions').text(kpi['impressions']);
-                    $('#clicks').text(kpi['clicks']);
-                    $('#installs').text(kpi['installs']);
+                    $('#impressions').text(toThousands(kpi['impressions']));
+                    $('#clicks').text(toThousands(kpi['clicks']));
+                    $('#installs').text(toThousands(kpi['installs']));
                     $('#spends').text(kpi['spend']);
                     $('#ir').text(kpi['ir'] ? (kpi['ir'] + '%') : '-');
                     $('#ctr').text(kpi['ctr'] ? (kpi['ctr'] + '%') : '-');
@@ -121,6 +121,16 @@
             }
 
             return {legend_data, xAxis_data, series};
+        }
+
+        function toThousands(num) {
+            var num = (num || 0).toString(), result = '';
+            while (num.length > 3) {
+                result = ',' + num.slice(-3) + result;
+                num = num.slice(0, num.length - 3);
+            }
+            if (num) { result = num + result; }
+            return result;
         }
 
     });
