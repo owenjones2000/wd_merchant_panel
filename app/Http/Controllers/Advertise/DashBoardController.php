@@ -26,7 +26,8 @@ class DashBoardController extends Controller
 
     public function data(Request $request)
     {
-        if(!empty($request->get('rangedate'))){
+        $range_date = $request->get('rangedate', 'now');
+        if($range_date != 'now'){
             $range_date = explode(' ~ ',$request->get('rangedate'));
         }
         $start_date = date('Ymd', strtotime($range_date[0]??'now'));
@@ -63,12 +64,17 @@ class DashBoardController extends Controller
             ->get()
             ->keyBy('date')
             ->toArray();
+        if ($range_date == 'now') {
+            $result = $advertise_kpi_list[date('Ymd')] ?? [];
+        } else {
+            $result = $advertise_kpi_list;
+        }
 
         $data = [
             'code' => 0,
             'msg'   => '正在请求中...',
             'count' => count($advertise_kpi_list),
-            'data'  => $advertise_kpi_list
+            'data'  => $result
         ];
         return response()->json($data);
     }

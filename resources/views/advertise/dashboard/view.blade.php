@@ -113,7 +113,7 @@
 
                         eCPM
 
-                        <span class="layuiadmin-span-color"><span id="ecpm"></span> <i class="layui-inline layui-icon layui-icon-dollar"></i></span>
+                        <span class="layuiadmin-span-color"><span id="ecpm">-</span> <i class="layui-inline layui-icon layui-icon-dollar"></i></span>
 
                     </p>
 

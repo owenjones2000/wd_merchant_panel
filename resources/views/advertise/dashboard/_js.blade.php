@@ -1,17 +1,18 @@
 <script>
     layui.use([],function () {
-        $.get("{{ route('advertise.dashboard.data') }}",
+        $.get("{{ route('advertise.dashboard.data', ['range_date' => 'now']) }}",
             {},
             function (result) {
                 if (result.code==0){
-                    $('#impressions').text(result['data']['20200228']['impressions']);
-                    $('#clicks').text(result['data']['20200228']['clicks']);
-                    $('#installs').text(result['data']['20200228']['installs']);
-                    $('#spends').text(result['data']['20200228']['spend']);
-                    $('#ir').text(result['data']['20200228']['ir'] + '%');
-                    $('#ctr').text(result['data']['20200228']['ctr'] + '%');
-                    $('#cvr').text(result['data']['20200228']['cvr'] + '%');
-                    $('#ecpm').text(result['data']['20200228']['ecpm']);
+                    var kpi = result['data'];
+                    $('#impressions').text(kpi['impressions']);
+                    $('#clicks').text(kpi['clicks']);
+                    $('#installs').text(kpi['installs']);
+                    $('#spends').text(kpi['spend']);
+                    $('#ir').text(kpi['ir'] ? (kpi['ir'] + '%') : '-');
+                    $('#ctr').text(kpi['ctr'] ? (kpi['ctr'] + '%') : '-');
+                    $('#cvr').text(kpi['cvr'] ? (kpi['cvr'] + '%') : '-');
+                    $('#ecpm').text(kpi['ecpm'] ? kpi['ecpm'] : '-');
 
                 }
             });
