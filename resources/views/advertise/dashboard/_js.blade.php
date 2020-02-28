@@ -1,5 +1,5 @@
 <script>
-    layui.use(['index', "carousel", "echarts", 'echartsTheme'],function () {
+    layui.use(['index', "carousel", "echarts"],function () {
         $.get('{{ route('advertise.dashboard.data', ['range_date' => 'now']) }}',
             {},
             function (result) {

@@ -23,7 +23,7 @@
 
                         Impressions to Installs
 
-                        <span class="layuiadmin-span-color"><span id="ir">-</span> <i class="layui-inline layui-icon layui-icon-flag"></i></span>
+                        <span class="layuiadmin-span-color"><span id="ir">-</span> <i class="layui-inline layui-icon layui-icon-user"></i></span>
 
                     </p>
 
@@ -47,15 +47,13 @@
 
                 <div class="layui-card-body layuiadmin-card-list">
 
-
-
                     <p id="clicks" class="layuiadmin-big-font">-</p>
 
                     <p>
 
                         Impressions to Clicks
 
-                        <span class="layuiadmin-span-color"><span id="ctr">-</span> <i class="layui-inline layui-icon layui-icon-user"></i></span>
+                        <span class="layuiadmin-span-color"><span id="ctr">-</span> <i class="layui-inline layui-icon layui-icon-username"></i></span>
 
                     </p>
 
