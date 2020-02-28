@@ -31,7 +31,7 @@ class DashBoardController extends Controller
             $range_date = explode(' ~ ',$request->get('range_date'));
         }
         $start_date = date('Ymd', strtotime($range_date[0]??'-7 day'));
-        $end_date = date('Ymd', strtotime($range_date[1]??'now'));
+        $end_date = date('Ymd', strtotime($range_date[1]??'-1 day'));
         $campaign_base_query = Campaign::query();
 
         $campaign_id_query = clone $campaign_base_query;
