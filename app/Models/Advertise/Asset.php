@@ -10,7 +10,7 @@ class Asset extends Model
 
     protected $table = 'a_asset';
 
-    protected $fillable = ['url', 'file_path', 'type_id', 'width', 'height', 'duration', 'spec', 'ad_id'];
+    protected $fillable = ['url', 'file_path', 'hash', 'type_id', 'width', 'height', 'duration', 'spec', 'ad_id'];
 
     protected $appends = ['type'];
 
