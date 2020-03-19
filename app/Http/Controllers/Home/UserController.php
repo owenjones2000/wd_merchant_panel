@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Home;
 
+use App\Http\Requests\UserAssignRequest;
 use App\Http\Requests\UserCreateRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\User;
@@ -25,6 +26,17 @@ class UserController extends Controller
         return view('home.user.index');
     }
 
+    public function changeMainUser(Request $request){
+        $main_user_id = $request->input('uid', 0);
+        /** @var User $op_user */
+        $op_user = Auth::user();
+        if($op_user->getMainId() != $main_user_id
+            && ($main_user_id == 0 || $op_user['id'] == $main_user_id || $op_user->mainUsers->contains('id', $main_user_id))){
+            $op_user['main_user_id'] = $main_user_id;
+            $op_user->saveOrFail();
+        }
+        return response()->json(['code'=>0,'msg'=>'Successful']);
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -45,9 +57,6 @@ class UserController extends Controller
     {
         /** @var User $user */
         $op_user = Auth::user();
-        if(!$op_user->isMainAccount()){
-            return redirect()->to(route('home.user.create'))->withErrors('Permission denied');
-        }
         $data =  $request->all();
         $data['uuid'] = \Faker\Provider\Uuid::uuid();
         $data['password_hash'] = Hash::make($data['password']);
@@ -66,6 +75,16 @@ class UserController extends Controller
             return redirect()->to(route('home.user.create'))->with(['status'=>'Add user successful.']);
         }
         return redirect()->to(route('home.user.create'))->withErrors('Error');
+    }
+
+    public function assign(UserAssignRequest $request){
+        $user = User::query()->where('email', $request->input('email'))->firstOrFail();
+        /** @var User $op_user */
+        $op_user = Auth::user();
+        if($op_user['email'] != $user['email']){
+            $op_user->advertisers()->syncWithoutDetaching($user);
+        }
+        return response()->json(['code'=>0,'msg'=>'Successful']);
     }
 
     /**
@@ -136,9 +155,7 @@ class UserController extends Controller
         }
         /** @var User $op_user */
         $op_user = Auth::user();
-        $result = User::query()
-            ->whereIn('id', $ids)
-            ->where('main_user_id', $op_user['id'])->delete();
+        $result = $op_user->advertisers()->detach($ids);
         if ($result){
             return response()->json(['code'=>0,'msg'=>'删除成功']);
         }
@@ -214,29 +231,20 @@ class UserController extends Controller
     {
         /** @var User $op_user */
         $op_user = Auth::user();
-        if(!empty($op_user['main_user_id'])){
+        /** @var User $advertiser */
+        $advertiser = $op_user->advertisers()->findOrFail($id);
+        if(!$advertiser){
             return redirect()->to(route('home.user.permission',[$id]))->withErrors('Permission denied.');
         }
-
-        try{
-            $user = User::query()
-                ->where('id', $id)
-                ->where(function($query) use($id, $op_user) {
-                    $query->where('main_user_id', $op_user['id'])
-                        ->orWhere('id', $op_user['id']);
-                })->firstOrFail();
-        }catch (\Exception $ex){
-            return redirect()->to(route('home.user.permission',[$id]))->withErrors('Permission denied.');
-        }
-
 
         $permissions = $request->get('permissions');
 
         if (empty($permissions)){
-            $user->permissions()->detach();
+            $advertiser->permissions()->detach();
             return redirect()->to(route('home.user.permission',[$id]))->with(['status'=>'Update permission successful.']);
         }
-        $user->syncPermissions($permissions);
+        $permissions = array_fill_keys($permissions, ['main_user_id' => $op_user['id']]);
+        $advertiser->permissions()->sync($permissions);
         return redirect()->to(route('home.user.permission',[$id]))->with(['status'=>'Update permission successful.']);
     }
 

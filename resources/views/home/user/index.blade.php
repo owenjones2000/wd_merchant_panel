@@ -6,10 +6,13 @@
         <div class="layui-card-header layuiadmin-card-header-auto">
             <div class="layui-btn-group">
                 @can('system.user.destroy')
-                <button class="layui-btn layui-btn-sm layui-btn-danger" id="listDelete">Remove Selected User</button>
+                <button class="layui-btn layui-btn-sm layui-btn-danger" id="listDelete">Remove Selected</button>
                 @endcan
                 @can('system.user.create')
-                <a class="layui-btn layui-btn-sm" id="user_add">Add User</a>
+                <a class="layui-btn layui-btn-sm" id="user_add">Add</a>
+                @endcan
+                @can('system.user.create')
+                    <a class="layui-btn layui-btn-sm" id="user_assign">Assign</a>
                 @endcan
             </div>
         </div>
@@ -18,12 +21,12 @@
             <table id="dataTable" lay-filter="dataTable"></table>
             <script type="text/html" id="options">
                 <div class="layui-btn-group">
-                    @can('system.user.edit')
-                    <a class="layui-btn layui-btn-sm" lay-event="edit">Edit</a>
-                    @endcan
-                    @can('system.user.role')
+                    {{--@can('system.user.edit')--}}
+                    {{--<a class="layui-btn layui-btn-sm" lay-event="edit">Edit</a>--}}
+                    {{--@endcan--}}
+                    {{--@can('system.user.role')--}}
                     {{--<a class="layui-btn layui-btn-sm" lay-event="role">Role</a>--}}
-                    @endcan
+                    {{--@endcan--}}
                     @can('system.user.permission')
                     <a class="layui-btn layui-btn-sm" lay-event="permission">Permission</a>
                     @endcan
@@ -72,11 +75,11 @@
                     {checkbox: true,fixed: true}
                     // ,{field: 'id', title: 'ID', sort: true,width:80}
                     // ,{field: 'username', title: 'Login Account'}
-                    ,{field: 'email', title: 'Email'}
                     ,{field: 'realname', title: 'Real Name'}
+                    ,{field: 'email', title: 'Email'}
                     ,{field: 'phone', title: 'Phone'}
-                    ,{field: 'created_at', title: 'Created'}
-                    ,{field: 'updated_at', title: 'Updated'}
+                    // ,{field: 'created_at', title: 'Created'}
+                    // ,{field: 'updated_at', title: 'Updated'}
                     ,{fixed: 'right', width: 320, align:'center', toolbar: '#options'}
                 ]]
             });
@@ -86,7 +89,7 @@
                 var data = obj.data //获得当前行数据
                     ,layEvent = obj.event; //获得 lay-event 对应的值
                 if(layEvent === 'del'){
-                    layer.confirm('确认删除吗？', function(index){
+                    layer.confirm('Confirm remove ？', function(index){
                         $.post("{{ route('home.user.destroy') }}",{_method:'delete',ids:[data.id]},function (result) {
                             if (result.code==0){
                                 obj.del(); //删除对应行（tr）的DOM结构
@@ -138,6 +141,35 @@
                     end: function () {
                         dataTable.reload();
                     }
+                });
+            });
+            $('#user_assign').on('click',function () {
+                layer.prompt({
+                    formType: 0,
+                    value: '',
+                    title: 'Advertiser Email',
+                }, function(value, index, elem){
+                    var requestData = {};
+                    requestData['email'] = value;
+                    $.post(
+                        '{{ route('home.user.assign') }}',
+                        requestData,
+                        function (result) {
+                            if(result.hasOwnProperty('code') && result.code === 0){
+                                layer.msg(result.msg);
+                                layer.close(index);
+                                dataTable.reload();
+                            }else{
+                                if(result.errors.email){
+                                    layer.msg(result.errors.email[0]);
+                                }else if(result.message){
+                                    layer.msg(result.message);
+                                }else{
+                                    layer.msg('Unknown error.');
+                                }
+                            }
+                        }
+                    );
                 });
             });
 

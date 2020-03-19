@@ -31,6 +31,8 @@ Route::group(['namespace'=>'Home','middleware'=>'auth'],function (){
     Route::get('/index2','IndexController@index2')->name('home.index2');
     //图标
     Route::get('icons','IndexController@icons')->name('home.icons');
+    //切换广告主
+    Route::post('user/change','UserController@changeMainUser')->name('home.user.change');
 });
 
 //系统管理
@@ -41,6 +43,8 @@ Route::group(['namespace'=>'Home','prefix'=>'home','middleware'=>['auth','operat
     //用户管理
     Route::group(['middleware'=>['permission:system.user']],function (){
         Route::get('user','UserController@index')->name('home.user');
+        Route::post('user/assign','UserController@assign')->name('home.user.assign');
+
         //添加
         Route::get('user/create','UserController@create')->name('home.user.create')->middleware('permission:system.user.create');
         Route::post('user/store','UserController@store')->name('home.user.store')->middleware('permission:system.user.create');

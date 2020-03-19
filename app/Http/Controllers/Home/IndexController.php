@@ -59,11 +59,12 @@ class IndexController extends Controller
         ];
         switch (strtolower($model)) {
             case 'user':
-                $query = new User();
-                $query = $query->where('id', $user['id']);
-                if(empty($user['main_user_id'])){
-                    $query = $query->orWhere('main_user_id', $user['id']);
-                }
+                $query = $user->advertisers();
+//                $query = new User();
+//                $query = $query->where('id', $user['id']);
+//                if(empty($user['main_user_id'])){
+//                    $query = $query->orWhere('main_user_id', $user['id']);
+//                }
                 break;
             case 'role':
                 return response()->json($empty_data);

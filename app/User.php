@@ -2,8 +2,7 @@
 
 namespace App;
 
-use App\Models\Advertise\App;
-use App\Models\Advertise\Campaign;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -21,6 +20,41 @@ class User extends Authenticatable
 
     public function isMainAccount(){
         return empty($this->main_user_id);
+    }
+
+    /**
+     * 广告主
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function mainUsers(){
+        return $this->belongsToMany(User::class, 'a_users_advertiser',
+            'advertiser_user_id', 'main_user_id',
+            'id', 'id'
+        );
+    }
+
+    /**
+     * 广告人员
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function advertisers(){
+        return $this->belongsToMany(User::class, 'a_users_advertiser',
+            'main_user_id', 'advertiser_user_id',
+            'id', 'id');
+    }
+
+    /**
+     * A model may have multiple direct permissions.
+     */
+    public function permissions(): MorphToMany
+    {
+        return $this->morphToMany(
+                config('permission.models.permission'),
+                'model',
+                config('permission.table_names.model_has_permissions'),
+                config('permission.column_names.model_morph_key'),
+                'permission_id')
+            ->wherePivot('main_user_id', $this->getMainId());
     }
 
     public function getAuthPassword()
