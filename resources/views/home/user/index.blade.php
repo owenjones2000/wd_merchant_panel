@@ -89,7 +89,12 @@
                 var data = obj.data //获得当前行数据
                     ,layEvent = obj.event; //获得 lay-event 对应的值
                 if(layEvent === 'del'){
-                    layer.confirm('Confirm remove ？', function(index){
+                    layer.confirm('Confirm remove ？',
+                        {
+                            title: 'Warning',
+                            btn:['Yes', 'Cancel'],
+                        },
+                        function(index){
                         $.post("{{ route('home.user.destroy') }}",{_method:'delete',ids:[data.id]},function (result) {
                             if (result.code==0){
                                 obj.del(); //删除对应行（tr）的DOM结构
@@ -148,6 +153,7 @@
                     formType: 0,
                     value: '',
                     title: 'Advertiser Email',
+                    btn:['Yes', 'Cancel'],
                 }, function(value, index, elem){
                     var requestData = {};
                     requestData['email'] = value;
