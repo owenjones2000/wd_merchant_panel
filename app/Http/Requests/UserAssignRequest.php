@@ -28,4 +28,12 @@ class UserAssignRequest extends FormRequest
             'email' => 'required|email',
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'email.required' => 'We need to know your e-mail address!',
+            'email.email' => 'e-mail address format is incorrect',
+        ];
+    }
 }
