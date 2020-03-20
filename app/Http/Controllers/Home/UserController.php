@@ -28,7 +28,7 @@ class UserController extends Controller
         $main_user_id = $request->input('uid', 0);
         /** @var User $op_user */
         $op_user = Auth::user();
-        if($op_user->getMainId() != $main_user_id
+        if($op_user['main_user_id'] != $main_user_id
             && ($main_user_id == 0 || $op_user['id'] == $main_user_id || $op_user->mainUsers->contains('id', $main_user_id))){
             $op_user['main_user_id'] = $main_user_id;
             $op_user->saveOrFail();
