@@ -80,7 +80,7 @@ class RoleController extends Controller
         $role = Role::findOrFail($id);
         $data = $request->only(['name','display_name']);
         if ($role->update($data)){
-            return redirect()->to(route('home.role.edit',[$id]))->with(['status'=>'更新角色成功']);
+            return redirect()->to(route('home.role.edit',[$id]))->with(['status'=>'Update successfully']);
         }
         return redirect()->to(route('home.role'))->withErrors('系统错误');
     }
@@ -137,10 +137,10 @@ class RoleController extends Controller
 
         if (empty($permissions)){
             $role->permissions()->detach();
-            return redirect()->to(route('home.role.permission',[$id]))->with(['status'=>'已更新角色权限']);
+            return redirect()->to(route('home.role.permission',[$id]))->with(['status'=>'Update successfully']);
         }
         $role->syncPermissions($permissions);
-        return redirect()->to(route('home.role.permission',[$id]))->with(['status'=>'已更新角色权限']);
+        return redirect()->to(route('home.role.permission',[$id]))->with(['status'=>'Update successfully']);
     }
 
 }

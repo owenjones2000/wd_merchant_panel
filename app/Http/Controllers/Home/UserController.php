@@ -134,7 +134,7 @@ class UserController extends Controller
                 }
                 $user->update($data);
             }, 3);
-            return redirect()->to(route('home.user.edit'))->with(['status'=>'更新用户成功']);
+            return redirect()->to(route('home.user.edit'))->with(['status'=>'Update successfully']);
         }catch(\Exception $ex) {
             return redirect()->to(route('home.user.edit'))->withErrors('Permission denied');
         }

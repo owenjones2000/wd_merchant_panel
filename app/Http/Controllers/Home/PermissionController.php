@@ -84,7 +84,7 @@ class PermissionController extends Controller
         $permission = Permission::findOrFail($id);
         $data =  $request->all();
         if ($permission->update($data)){
-            return redirect()->to(route('home.permission.edit',[$id]))->with(['status'=>'更新权限成功']);
+            return redirect()->to(route('home.permission.edit',[$id]))->with(['status'=>'Update successfully']);
         }
         return redirect()->to(route('home.permission'))->withErrors('系统错误');
     }
