@@ -102,9 +102,9 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit()
     {
-        $user = User::findOrFail($id);
+        $user = Auth::user();
         return view('home.user.edit',compact('user'));
     }
 
@@ -115,27 +115,28 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UserUpdateRequest $request, $id)
+    public function update(UserUpdateRequest $request)
     {
         try{
             /** @var User $op_user */
             $op_user = Auth::user();
-            DB::transaction(function () use($id, $request, $op_user) {
-                $user = User::query()
-                    ->where('id', $id)
-                    ->where(function($query) use($id, $op_user) {
-                        $query->where('main_user_id', $op_user['id'])
-                            ->orWhere('id', $op_user['id']);
-                    })->firstOrFail();
+            DB::transaction(function () use($request, $op_user) {
+//                $user = User::query()
+//                    ->where('id', $id)
+//                    ->where(function($query) use($id, $op_user) {
+//                        $query->where('main_user_id', $op_user['id'])
+//                            ->orWhere('id', $op_user['id']);
+//                    })->firstOrFail();
+                $user = $op_user; // 只能修改本人信息
                 $data = $request->except('password');
                 if ($request->get('password')){
                     $data['password_hash'] = Hash::make($request->get('password'));
                 }
                 $user->update($data);
             }, 3);
-            return redirect()->to(route('home.user.edit',[$id]))->with(['status'=>'更新用户成功']);
+            return redirect()->to(route('home.user.edit'))->with(['status'=>'更新用户成功']);
         }catch(\Exception $ex) {
-            return redirect()->to(route('home.user.edit',[$id]))->withErrors('Permission denied');
+            return redirect()->to(route('home.user.edit'))->withErrors('Permission denied');
         }
     }
 

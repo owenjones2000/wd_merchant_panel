@@ -88,7 +88,7 @@
                         <cite>{{auth()->user()->realname}}</cite>
                     </a>
                     <dl class="layui-nav-child">
-                        <dd><a lay-href="{{route('home.user.edit',['id'=>auth()->user()->id])}}">Account</a></dd>
+                        <dd><a lay-href="{{route('home.user.edit',['id'=>auth()->user()->id])}}">Profile</a></dd>
                         <!--dd><a id="change-password">修改密码</a></dd-->
                         {{--<dd><a lay-href="{{route('home.message.mine')}}">我的消息</a></dd>--}}
                         <hr>

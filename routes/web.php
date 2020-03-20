@@ -33,6 +33,10 @@ Route::group(['namespace'=>'Home','middleware'=>'auth'],function (){
     Route::get('icons','IndexController@icons')->name('home.icons');
     //切换广告主
     Route::post('user/change','UserController@changeMainUser')->name('home.user.change');
+    //个人信息编辑
+    Route::get('user/edit','UserController@edit')->name('home.user.edit');
+    Route::post('user/update','UserController@update')->name('home.user.update');
+
 });
 
 //系统管理
@@ -49,9 +53,6 @@ Route::group(['namespace'=>'Home','prefix'=>'home','middleware'=>['auth','operat
         Route::get('user/create','UserController@create')->name('home.user.create')->middleware('permission:system.user.create');
         Route::post('user/store','UserController@store')->name('home.user.store')->middleware('permission:system.user.create');
 
-        //编辑
-        Route::get('user/{id}/edit','UserController@edit')->name('home.user.edit')->middleware('permission:system.user.edit');
-        Route::post('user/{id}/update','UserController@update')->name('home.user.update')->middleware('permission:system.user.edit');
         //删除
         Route::delete('user/destroy','UserController@destroy')->name('home.user.destroy')->middleware('permission:system.user.destroy');
 

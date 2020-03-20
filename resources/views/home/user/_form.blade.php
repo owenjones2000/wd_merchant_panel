@@ -33,12 +33,16 @@
         <input type="password" name="password_confirmation" placeholder="please confirm password" autocomplete="new-password" class="layui-input">
     </div>
 </div>
+
 <div class="layui-form-item">
     <div class="layui-input-block">
         <button type="submit" class="layui-btn" lay-submit="" lay-filter="formDemo">Save</button>
-        <div  class="layui-btn layui-btn-primary close-iframe">Close</div>
+        @if(empty($user->id))
+            <div  class="layui-btn layui-btn-primary close-iframe">Close</div>
+        @endif
     </div>
 </div>
+
 @section('script')
     @include('layout.common_edit')
 @endsection
