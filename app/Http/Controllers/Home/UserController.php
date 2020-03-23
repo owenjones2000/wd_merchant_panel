@@ -156,10 +156,14 @@ class UserController extends Controller
             /** @var User $op_user */
             $op_user = Auth::user();
             DB::transaction(function () use ($ids, $op_user) {
-                if (in_array($op_user['main_user_id'], $ids)) {
-                    $op_user['main_user_id'] = $op_user['id'];
-                    $op_user->saveOrFail();
-                }
+                // 解除授权
+                $op_user->advertisers()->each(function($advertiser) use($op_user){
+                    /** @var User $advertiser */
+                    $advertiser['main_user_id'] = $advertiser['id'];
+                    $advertiser->saveOrFail();
+                    $advertiser->permissions($op_user['id'])->detach();
+                });
+                // 解除关系
                 $op_user->advertisers()->detach($ids);
             });
             return response()->json(['code'=>0,'msg'=>'删除成功']);
