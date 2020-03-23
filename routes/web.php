@@ -118,7 +118,7 @@ Route::group(['namespace'=>'Advertise','prefix'=>'advertise','middleware'=>['aut
         Route::get('data', 'AppController@data')->name('advertise.app.data');
         Route::get('list', 'AppController@index')->name('advertise.app');
         //编辑
-        Route::get('{id?}', 'AppController@edit')->name('advertise.app.edit')->middleware('permission:advertise.app.edit')
+        Route::get('{id?}', 'AppController@edit')->name('advertise.app.edit')->middleware('permission:advertise.app')
             ->where('id', '\d+');
         Route::post('{id?}', 'AppController@save')->name('advertise.app.save')->middleware('permission:advertise.app.edit')
             ->where('id', '\d+');

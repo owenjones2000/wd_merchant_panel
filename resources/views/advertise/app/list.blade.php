@@ -29,11 +29,11 @@
             </script>
             <script type="text/html" id="nameTpl">
                 <img width="24px" height="24px" src="@{{ d.icon_url ? d.icon_url : '/image/none.png' }}" />
-                @can('advertise.app.edit')
+                @can('advertise.app')
                 <a class="layui-table-link" lay-event="edit" href="javascript:;">
                     @endcan
                     @{{ d.name }}
-                    @can('advertise.app.edit')
+                    @can('advertise.app')
                 </a>
                 @endcan
             </script>

@@ -67,6 +67,8 @@
                 --}}
                 <li class="layui-nav-item layui-hide-xs" lay-unselect>
                     <form class="layui-form" action=""  style="color: black;">
+                        <i class="layui-icon layui-icon-service"></i>
+                        <span>Service for &nbsp;</span>
                         <div class="layui-input-inline">
                             <select id="selectProject" lay-filter="selectProject" lay-verify="required">
                                 <option {{ auth()->user()->id == auth()->user()->getMainId() ? 'selected' : '' }} value="{{auth()->user()->id}}">{{auth()->user()->realname}}</option>
@@ -85,14 +87,25 @@
                 </li>
                 <li class="layui-nav-item" lay-unselect>
                     <a href="javascript:;">
+                        <i class="layui-icon layui-icon-username"></i>
                         <cite>{{auth()->user()->realname}}</cite>
                     </a>
                     <dl class="layui-nav-child">
-                        <dd><a lay-href="{{route('home.user.edit',['id'=>auth()->user()->id])}}">Profile</a></dd>
+                        <dd>
+                            <a lay-href="{{route('home.user.edit',['id'=>auth()->user()->id])}}">
+                                <i class="layui-icon layui-icon-set"></i>
+                                Profile
+                            </a>
+                        </dd>
                         <!--dd><a id="change-password">修改密码</a></dd-->
                         {{--<dd><a lay-href="{{route('home.message.mine')}}">我的消息</a></dd>--}}
                         <hr>
-                        <dd><a href="{{route('home.logout')}}">Log out</a></dd>
+                        <dd>
+                            <a href="{{route('home.logout')}}">
+                                <i class="layui-icon layui-icon-close"></i>
+                                Log out
+                            </a>
+                        </dd>
                     </dl>
                 </li>
 
