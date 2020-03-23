@@ -15,7 +15,7 @@ class User extends Authenticatable
     protected $table = 'a_users';
 
     public function getMainId(){
-        return $this->main_user_id > 0 ? $this->main_user_id : $this->id;
+        return $this->main_user_id; // > 0 ? $this->main_user_id : $this->id;
     }
 
     public function isMainAccount(){

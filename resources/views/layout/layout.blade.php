@@ -14,7 +14,6 @@
     <link rel="shortcut icon" href="favicon.icn"/>
 </head>
 <body class="layui-layout-body">
-
 <div id="LAY_app">
     <div class="layui-layout layui-layout-admin">
         <div class="layui-header">
@@ -67,10 +66,13 @@
                 --}}
                 <li class="layui-nav-item layui-hide-xs" lay-unselect>
                     <form class="layui-form" action=""  style="color: black;">
-                        <i class="layui-icon layui-icon-service"></i>
-                        <span>Service for &nbsp;</span>
+
+                        <span @if(0 >= auth()->user()->getMainId()) style="color: red;" @endif>
+                             <i class="layui-icon layui-icon-service"></i> Service for &nbsp;
+                        </span>
                         <div class="layui-input-inline">
                             <select id="selectProject" lay-filter="selectProject" lay-verify="required">
+                                <option value="">Please select advertiser</option>
                                 <option {{ auth()->user()->id == auth()->user()->getMainId() ? 'selected' : '' }} value="{{auth()->user()->id}}">{{auth()->user()->realname}}</option>
                                 @foreach(auth()->user()->mainUsers as $main_user)
                                     <option {{ $main_user['id'] == auth()->user()->getMainId() ? 'selected' : '' }} value="{{$main_user['id']}}">{{$main_user['realname']}}</option>

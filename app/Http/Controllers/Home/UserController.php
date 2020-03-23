@@ -159,7 +159,7 @@ class UserController extends Controller
                 // 解除授权
                 $op_user->advertisers()->each(function($advertiser) use($op_user){
                     /** @var User $advertiser */
-                    $advertiser['main_user_id'] = $advertiser['id'];
+                    $advertiser['main_user_id'] = 0;
                     $advertiser->saveOrFail();
                     $advertiser->permissions($op_user['id'])->detach();
                 });
