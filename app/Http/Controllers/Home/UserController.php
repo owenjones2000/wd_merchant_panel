@@ -199,13 +199,15 @@ class UserController extends Controller
     {
         /** @var User $op_user */
         $op_user = Auth::user();
+        /** @var User $user */
         $user = User::findOrFail($id);
+        $user_permissions = $user->permissions($op_user['id'])->pluck('id');
         $permissions = $this->tree();
         foreach ($permissions as $key1 => &$item1){
-            $permissions[$key1]['own'] = $user->hasDirectPermission($item1['id']) ? 'checked' : false ;
+            $permissions[$key1]['own'] = $user_permissions->contains($item1['id']) ? 'checked' : false ;
             if (isset($item1['_child'])){
                 foreach ($item1['_child'] as $key2 => &$item2){
-                    $permissions[$key1]['_child'][$key2]['own'] = $user->hasDirectPermission($item2['id']) ? 'checked' : false ;
+                    $permissions[$key1]['_child'][$key2]['own'] = $user_permissions->contains($item2['id']) ? 'checked' : false ;
                     if (isset($item2['_child'])){
                         foreach ($item2['_child'] as $key3 => $item3){
                             if(!empty($op_user['main_user_id']) || !empty($user['main_user_id'])){
@@ -214,7 +216,7 @@ class UserController extends Controller
                                     continue;
                                 }
                             }
-                            $permissions[$key1]['_child'][$key2]['_child'][$key3]['own'] = $user->hasDirectPermission($item3['id']) ? 'checked' : false ;
+                            $permissions[$key1]['_child'][$key2]['_child'][$key3]['own'] = $user_permissions->contains($item3['id']) ? 'checked' : false ;
                         }
                     }
                 }
@@ -235,7 +237,6 @@ class UserController extends Controller
         if(!$advertiser){
             return redirect()->to(route('home.user.permission',[$id]))->withErrors('Permission denied.');
         }
-
         $permissions = $request->get('permissions');
 
         if (empty($permissions)){
