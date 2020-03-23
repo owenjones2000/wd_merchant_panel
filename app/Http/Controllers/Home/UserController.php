@@ -152,13 +152,20 @@ class UserController extends Controller
         if (empty($ids)){
             return response()->json(['code'=>1,'msg'=>'请选择删除项']);
         }
-        /** @var User $op_user */
-        $op_user = Auth::user();
-        $result = $op_user->advertisers()->detach($ids);
-        if ($result){
+        try {
+            /** @var User $op_user */
+            $op_user = Auth::user();
+            DB::transaction(function () use ($ids, $op_user) {
+                if (in_array($op_user['main_user_id'], $ids)) {
+                    $op_user['main_user_id'] = $op_user['id'];
+                    $op_user->saveOrFail();
+                }
+                $op_user->advertisers()->detach($ids);
+            });
             return response()->json(['code'=>0,'msg'=>'删除成功']);
+        } catch (\Exception $ex) {
+            return response()->json(['code' => 1, 'msg' => '删除失败']);
         }
-        return response()->json(['code'=>1,'msg'=>'删除失败']);
     }
 
     /**
