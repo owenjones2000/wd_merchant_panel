@@ -31,11 +31,11 @@
                 </div>
             </script>
             <script type="text/html" id="nameTpl">
-                @can('advertise.campaign.ad.edit')
+                @can('advertise.campaign.ad')
                     <a class="layui-table-link" lay-event="edit" href="javascript:;">
                 @endcan
                     @{{ d.name }}
-                @can('advertise.campaign.ad.edit')
+                @can('advertise.campaign.ad')
                     </a>
                 @endcan
             </script>

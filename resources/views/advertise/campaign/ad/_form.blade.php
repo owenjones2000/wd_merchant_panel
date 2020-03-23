@@ -83,7 +83,9 @@
 
 <div class="layui-form-item">
     <div class="layui-input-block">
+        @can('advertise.campaign.ad.edit')
         <button type="submit" class="layui-btn" lay-submit="">Save</button>
+        @endcan
         <button class="layui-btn layui-btn-primary close-iframe">Cancel</button>
     </div>
 </div>

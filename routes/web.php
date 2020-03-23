@@ -151,7 +151,7 @@ Route::group(['namespace'=>'Advertise','prefix'=>'advertise','middleware'=>['aut
             Route::get('data', 'AdController@data')->name('advertise.campaign.ad.data');
             Route::get('list', 'AdController@list')->name('advertise.campaign.ad');
             //编辑
-            Route::get('{id?}', 'AdController@edit')->name('advertise.campaign.ad.edit')->middleware('permission:advertise.campaign.ad.edit');
+            Route::get('{id?}', 'AdController@edit')->name('advertise.campaign.ad.edit')->middleware('permission:advertise.campaign.ad');
             Route::post('{id?}', 'AdController@save')->name('advertise.campaign.ad.save')->middleware('permission:advertise.campaign.ad.edit');
             Route::post('{id}/enable', 'AdController@enable')->name('advertise.ad.enable')->middleware('permission:advertise.campaign.ad.edit');
             Route::post('{id}/disable', 'AdController@disable')->name('advertise.ad.disable')->middleware('permission:advertise.campaign.ad.edit');
