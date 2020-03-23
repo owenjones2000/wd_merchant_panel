@@ -239,11 +239,11 @@ class UserController extends Controller
         $permissions = $request->get('permissions');
 
         if (empty($permissions)){
-            $advertiser->permissions()->detach();
+            $advertiser->permissions($op_user['id'])->detach();
             return redirect()->to(route('home.user.permission',[$id]))->with(['status'=>'Update permission successful.']);
         }
         $permissions = array_fill_keys($permissions, ['main_user_id' => $op_user['id']]);
-        $advertiser->permissions()->sync($permissions);
+        $advertiser->permissions($op_user['id'])->sync($permissions);
         return redirect()->to(route('home.user.permission',[$id]))->with(['status'=>'Update permission successful.']);
     }
 

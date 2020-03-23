@@ -46,7 +46,7 @@ class User extends Authenticatable
     /**
      * A model may have multiple direct permissions.
      */
-    public function permissions(): MorphToMany
+    public function permissions($main_user_id = null): MorphToMany
     {
         return $this->morphToMany(
                 config('permission.models.permission'),
@@ -54,7 +54,7 @@ class User extends Authenticatable
                 config('permission.table_names.model_has_permissions'),
                 config('permission.column_names.model_morph_key'),
                 'permission_id')
-            ->wherePivot('main_user_id', $this->getMainId());
+            ->wherePivot('main_user_id', $main_user_id ?: $this->getMainId());
     }
 
     public function getAuthPassword()
