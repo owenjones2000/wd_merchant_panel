@@ -44,5 +44,7 @@
 </div>
 
 @section('script')
-    @include('layout.common_edit')
+    @if(empty($user->id))
+        @include('layout.common_edit')
+    @endif
 @endsection

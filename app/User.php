@@ -30,7 +30,23 @@ class User extends Authenticatable
         return $this->belongsToMany(User::class, 'a_users_advertiser',
             'advertiser_user_id', 'main_user_id',
             'id', 'id'
-        );
+        )->where('isAdvertiseEnabled', 1);
+    }
+
+    /**
+     * 广告主
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function activeMainUsers(){
+        return $this->mainUsers()->where('isAdvertiseEnabled', 1);
+    }
+
+    /**
+     * 当前广告主
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function currentMainUser(){
+        return $this->belongsTo(User::class, 'main_user_id', 'id');
     }
 
     /**

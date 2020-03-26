@@ -74,7 +74,7 @@
                             <select id="selectProject" lay-filter="selectProject" lay-verify="required">
                                 <option value="">Please select advertiser</option>
                                 <option {{ auth()->user()->id == auth()->user()->getMainId() ? 'selected' : '' }} value="{{auth()->user()->id}}">{{auth()->user()->realname}}</option>
-                                @foreach(auth()->user()->mainUsers as $main_user)
+                                @foreach(auth()->user()->activeMainUsers as $main_user)
                                     <option {{ $main_user['id'] == auth()->user()->getMainId() ? 'selected' : '' }} value="{{$main_user['id']}}">{{$main_user['realname']}}</option>
                                 @endforeach
                             </select>

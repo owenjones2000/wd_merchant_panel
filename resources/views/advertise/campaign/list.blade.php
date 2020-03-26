@@ -49,7 +49,7 @@
                 @endcan
             </script>
             <script type="text/html" id="appTpl">
-                @{{ d.app.name }} (@{{ d.campaign.app.os }})
+                @{{ d.app.name }} (@{{ d.app.os }})
             </script>
             <script type="text/html" id="status">
                 @{{# if(d.status){ }}
@@ -114,9 +114,9 @@
                         //{checkbox: true,fixed: true}
                         // ,{field: 'id', title: 'ID', sort: true,width:80}
                         {field: 'name', title: 'Campaign', templet: '#nameTpl', width:300, fixed: true}
-                        // ,{field: 'app.name', title: 'App', templet: '#appTpl'}
-                        ,{field: 'budget', title: 'Budget', templet: function(d){return '$' + (d.default_budget || '0.00');}}
-                        ,{field: 'created', title: 'Created', width:110, templet: function(d){return util.toDateString(d.created_at, "yyyy-MM-dd");}}
+                        ,{field: 'app.name', title: 'App', templet: '#appTpl', width:180, fixed: true}
+                        ,{field: 'budget', title: 'Budget', width:100, align:'center', templet: function(d){return '$' + (d.default_budget || '0.00');} }
+                        ,{field: 'created', title: 'Created', width:110, align:'center', templet: function(d){return util.toDateString(d.created_at, "yyyy-MM-dd");}}
                         ,{field: 'impressions', title: 'Impressions', templet: function(d){return d.impressions || 0;}, width:80}
                         ,{field: 'clicks', title: 'Clicks', templet: function(d){return d.clicks || 0;}, width:80}
                         ,{field: 'installs', title: 'Installs', templet: function(d){return d.installs || 0;}, width:80}
