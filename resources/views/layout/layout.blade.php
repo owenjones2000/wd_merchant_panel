@@ -75,7 +75,7 @@
                                 <option value="">Please select advertiser</option>
                                 <option {{ auth()->user()->id == auth()->user()->getMainId() ? 'selected' : '' }} value="{{auth()->user()->id}}">{{auth()->user()->realname}}</option>
                                 @foreach(auth()->user()->activeMainUsers as $main_user)
-                                    <option {{ $main_user['id'] == auth()->user()->getMainId() ? 'selected' : '' }} value="{{$main_user['id']}}">{{$main_user['realname']}}</option>
+                                    <option {{ $main_user['id'] == auth()->user()->getMainId() ? 'selected' : '' }} value="{{$main_user['id']}}">{{$main_user['realname']}} ({{$main_user['email']}})</option>
                                 @endforeach
                             </select>
                         </div>
