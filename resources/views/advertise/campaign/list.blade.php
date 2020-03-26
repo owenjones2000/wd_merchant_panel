@@ -49,7 +49,9 @@
                 @endcan
             </script>
             <script type="text/html" id="appTpl">
-                @{{ d.app.name }} (@{{ d.app.os }})
+                @{{# if(d.app){ }}
+                    @{{ d.app.name }} (@{{ d.app.os }})
+                @{{# } }}
             </script>
             <script type="text/html" id="status">
                 @{{# if(d.status){ }}

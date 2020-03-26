@@ -22,10 +22,6 @@ class Permission extends PermissionMiddleware
         if(empty($op_user['currentMainUser'])){
             throw new HttpException(403, 'Please select the advertiser of the service');
         } else if(!$op_user['currentMainUser']['isAdvertiseEnabled']){
-            if($op_user['main_user_id'] != $op_user['id']){
-                $op_user['main_user_id'] = 0;
-                $op_user->saveOrFail();
-            }
             throw new HttpException(403,
                 'The selected advertiser has no permission to advertise');
         }
