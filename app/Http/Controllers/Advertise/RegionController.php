@@ -34,7 +34,15 @@ class RegionController extends Controller
         }
         $start_date = date('Ymd', strtotime($range_date[0]??'now'));
         $end_date = date('Ymd', strtotime($range_date[1]??'now'));
+        $order_by = explode('.', $request->get('field', 'status'));
+        $order_sort = $request->get('order', 'desc') ?: 'desc';
+
         $region_id_query = Region::query();
+        if(!empty($request->get('keyword'))){
+            $like_keyword = '%'.$request->get('keyword').'%';
+            $region_id_query->where('name', 'like', $like_keyword);
+        }
+
         $region_id_query->select('code');
         $advertise_kpi_query = AdvertiseKpi::multiTableQuery(function($query) use($start_date, $end_date, $region_id_query, $campaign_id){
             $query->whereBetween('date', [$start_date, $end_date])
@@ -56,7 +64,10 @@ class RegionController extends Controller
             'country',
         ]);
         $advertise_kpi_query->groupBy('country');
-
+        if($order_by[0] === 'kpi' && isset($order_by[1])){
+            $advertise_kpi_query->orderBy($order_by[1], $order_sort);
+        }
+        
         $advertise_kpi_list = $advertise_kpi_query
             ->with('region')
             ->orderBy('spend','desc')
