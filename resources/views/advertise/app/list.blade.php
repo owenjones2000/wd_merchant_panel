@@ -13,7 +13,7 @@
             </div>
             <div class="layui-form" >
                 <div class="layui-input-inline">
-                    <input type="text" name="name" id="name" placeholder="name" class="layui-input">
+                    <input type="text" name="keyword" id="keyword" placeholder="Keyword" class="layui-input">
                 </div>
                 <button class="layui-btn" id="appSearchBtn">Search</button>
             </div>
@@ -177,10 +177,10 @@
 
                 //搜索
                 $("#appSearchBtn").click(function () {
-                    var name = $("#name").val();
+                    var keyword = $("#keyword").val();
                     var type = $("#type").val();
                     dataTable.reload({
-                        where:{name:name, type:type},
+                        where:{keyword:keyword, type:type},
                         page:{curr:1}
                     })
                 })

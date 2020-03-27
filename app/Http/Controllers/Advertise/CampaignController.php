@@ -31,8 +31,10 @@ class CampaignController extends Controller
         }
         $start_date = date('Ymd', strtotime($range_date[0]??'now'));
         $end_date = date('Ymd', strtotime($range_date[1]??'now'));
-        $campaign_base_query = Campaign::query();
+        $order_by = explode('.', $request->get('field', 'status'));
+        $order_sort = $request->get('order', 'desc') ?: 'desc';
 
+        $campaign_base_query = Campaign::query();
         if(!empty($request->get('keyword'))){
             $like_keyword = '%'.$request->get('keyword').'%';
             $campaign_base_query->where('name', 'like', $like_keyword);
@@ -62,6 +64,9 @@ class CampaignController extends Controller
             'campaign_id',
         ]);
         $advertise_kpi_query->groupBy('campaign_id');
+        if($order_by[0] === 'kpi' && isset($order_by[1])){
+            $advertise_kpi_query->orderBy($order_by[1], $order_sort);
+        }
 
         $advertise_kpi_list = $advertise_kpi_query
             ->orderBy('spend','desc')
@@ -74,13 +79,15 @@ class CampaignController extends Controller
         if(!empty($order_by_ids)){
             $campaign_query->orderByRaw(DB::raw("FIELD(id,{$order_by_ids}) desc"));
         }
-        $campaign_list = $campaign_query->orderBy($request->get('field','status'),$request->get('order','desc'))
-            ->paginate($request->get('limit',30))
+        if($order_by[0] !== 'kpi'){
+            $campaign_query->orderBy($order_by[0], $order_sort);
+        }
+        $campaign_list = $campaign_query->paginate($request->get('limit',30))
             ->toArray();
 
         foreach($campaign_list['data'] as &$campaign){
             if(isset($advertise_kpi_list[$campaign['id']])){
-                $campaign = array_merge($campaign, $advertise_kpi_list[$campaign['id']]);
+                $campaign['kpi'] = $advertise_kpi_list[$campaign['id']];
             }
         }
         $data = [
