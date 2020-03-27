@@ -13,7 +13,7 @@
             </div>
             <div class="layui-form" >
                 <div class="layui-input-inline">
-                    <input type="text" name="name" id="name" placeholder="Name" class="layui-input">
+                    <input type="text" name="keyword" id="keyword" placeholder="Keyword" class="layui-input">
                 </div>
                 <div class="layui-input-inline">
                     <input type="text" name="rangedate" id="rangedate" class="layui-input" autocomplete="off" placeholder="default today">
@@ -117,10 +117,10 @@
                         // ,{field: 'id', title: 'ID', sort: true,width:80}
                         {field: 'name', title: 'Campaign', templet: '#nameTpl', width:300, fixed: true}
                         ,{field: 'app.name', title: 'App', templet: '#appTpl', width:180, fixed: true}
+                        ,{field: 'status', title: 'Status', templet: '#status', align:'center', width:70, fixed: true}
                         ,{field: 'budget', title: 'Budget', width:100, align:'center', templet: function(d){return '$' + (d.default_budget || '0.00');} }
-                        ,{field: 'created', title: 'Created', width:110, align:'center', templet: function(d){return util.toDateString(d.created_at, "yyyy-MM-dd");}}
-                        ,{field: 'impressions', title: 'Impressions', templet: function(d){return d.impressions || 0;}, width:80}
-                        ,{field: 'clicks', title: 'Clicks', templet: function(d){return d.clicks || 0;}, width:80}
+                        ,{field: 'impressions', title: 'Impressions', sort: true, templet: function(d){return d.impressions || 0;}, width:80}
+                        ,{field: 'clicks', title: 'Clicks', sort: true, templet: function(d){return d.clicks || 0;}, width:80}
                         ,{field: 'installs', title: 'Installs', templet: function(d){return d.installs || 0;}, width:80}
                         ,{field: 'ctr', title: 'CTR', templet: function(d){return (d.ctr || '0.00') + '%';}, width:80}
                         ,{field: 'cvr', title: 'CVR', templet: function(d){return (d.cvr || '0.00') + '%';}, width:80}
@@ -128,7 +128,7 @@
                         ,{field: 'spend', title: 'Spend', templet: function(d){return '$' + (d.spend || '0.00');}}
                         ,{field: 'ecpi', title: 'eCPI', templet: function(d){return '$' + (d.ecpi || '0.00');}}
                         ,{field: 'ecpm', title: 'eCPM', templet: function(d){return '$' + (d.ecpm || '0.00');}, width:80}
-                        ,{field: 'status', title: 'Status', templet: '#status', align:'center', width:70}
+                        ,{field: 'created', title: 'Created', width:110, align:'center', templet: function(d){return util.toDateString(d.created_at, "yyyy-MM-dd");}}
                         ,{fixed: 'right', width: 220, align:'center', toolbar: '#options'}
                     ]]
                 });
@@ -258,10 +258,10 @@
 
                 //搜索
                 $("#campaignSearchBtn").click(function () {
-                    var name = $("#name").val();
+                    var keyword = $("#keyword").val();
                     var rangedate = $("#rangedate").val();
                     dataTable.reload({
-                        where:{name:name, rangedate:rangedate},
+                        where:{keyword:keyword, rangedate:rangedate},
                         page:{curr:1}
                     })
                 })

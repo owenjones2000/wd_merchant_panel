@@ -33,8 +33,9 @@ class CampaignController extends Controller
         $end_date = date('Ymd', strtotime($range_date[1]??'now'));
         $campaign_base_query = Campaign::query();
 
-        if(!empty($request->get('name'))){
-            $campaign_base_query->where('name', 'like', '%'.$request->get('name').'%');
+        if(!empty($request->get('keyword'))){
+            $like_keyword = '%'.$request->get('keyword').'%';
+            $campaign_base_query->where('name', 'like', $like_keyword);
         }
 
         $campaign_id_query = clone $campaign_base_query;
