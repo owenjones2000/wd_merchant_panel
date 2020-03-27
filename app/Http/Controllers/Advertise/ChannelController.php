@@ -33,10 +33,15 @@ class ChannelController extends Controller
         }
         $start_date = date('Ymd', strtotime($range_date[0]??'now'));
         $end_date = date('Ymd', strtotime($range_date[1]??'now'));
+        $order_by = explode('.', $request->get('field', 'status'));
+        $order_sort = $request->get('order', 'desc') ?: 'desc';
+
         $channel_base_query = Channel::query();
-        if(!empty($request->get('name'))){
-            $channel_base_query->where('name', 'like', '%'.$request->get('name').'%');
+        if(!empty($request->get('keyword'))){
+            $like_keyword = '%'.$request->get('keyword').'%';
+            $channel_base_query->where('name', 'like', $like_keyword);
         }
+
         $channel_id_query = clone $channel_base_query;
         $channel_id_query->select('id');
         $advertise_kpi_query = AdvertiseKpi::multiTableQuery(function($query) use($start_date, $end_date, $channel_id_query, $campaign_id){
@@ -64,7 +69,10 @@ class ChannelController extends Controller
             'target_app_id',
         ]);
         $advertise_kpi_query->groupBy('target_app_id');
-
+        if($order_by[0] === 'kpi' && isset($order_by[1])){
+            $advertise_kpi_query->orderBy($order_by[1], $order_sort);
+        }
+        
         $advertise_kpi_list = $advertise_kpi_query
             ->with('channel:id,name_hash')
             ->with(['app:id,name', 'app.disableChannels'])

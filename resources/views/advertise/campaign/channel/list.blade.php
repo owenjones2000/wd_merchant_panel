@@ -4,9 +4,9 @@
     <div class="layui-card">
         <div class="layui-card-header layuiadmin-card-header-auto">
             <div class="layui-form" >
-                <div class="layui-input-inline">
-                    <input type="text" name="name" id="name" placeholder="Name" class="layui-input">
-                </div>
+                {{--<div class="layui-input-inline">--}}
+                    {{--<input type="text" name="keyword" id="keyword" placeholder="Keyword" class="layui-input">--}}
+                {{--</div>--}}
                 <div class="layui-input-inline">
                     <input type="text" name="rangedate" id="rangedate" class="layui-input" autocomplete="off" placeholder="default today">
                 </div>
@@ -90,16 +90,15 @@
                         // ,{field: 'id', title: 'ID', sort: true,width:80}
                         {field: 'name', title: 'App', templet: '#nameTpl', width:300}
                         // ,{field: 'app.name', title: 'App', templet: '#appTpl'}
-                        ,{field: 'impressions', title: 'Impressions', templet: function(d){return d.impressions || 0;}}
-                        ,{field: 'clicks', title: 'Clicks', templet: function(d){return d.clicks || 0;}}
-                        ,{field: 'installs', title: 'Installs', templet: function(d){return d.installs || 0;}}
-                        ,{field: 'ctr', title: 'CTR', templet: function(d){return (d.ctr || '0.00') + '%';}}
-                        ,{field: 'cvr', title: 'CVR', templet: function(d){return (d.cvr || '0.00') + '%';}}
-                        ,{field: 'ir', title: 'IR', templet: function(d){return (d.ir || '0.00') + '%';}}
-                        ,{field: 'spend', title: 'Spend', templet: function(d){return '$' + (d.spend || '0.00');}}
-                        ,{field: 'ecpi', title: 'eCPI', templet: function(d){return '$' + (d.ecpi || '0.00');}}
-                        ,{field: 'ecpm', title: 'eCPM', templet: function(d){return '$' + (d.ecpm || '0.00');}}
-                        ,{field: 'status', title: 'Status', templet: '#status', width:90}
+                        ,{field: 'kpi.impressions', title: 'Impressions', sort: true, templet: function(d){return d.impressions || 0;}, width:80}
+                        ,{field: 'kpi.clicks', title: 'Clicks', sort: true, templet: function(d){return d.clicks || 0;}, width:80}
+                        ,{field: 'kpi.installs', title: 'Installs', sort: true, templet: function(d){return d.installs || 0;}, width:80}
+                        ,{field: 'kpi.ctr', title: 'CTR', sort: true, templet: function(d){return (d.ctr || '0.00') + '%';}, width:80}
+                        ,{field: 'kpi.cvr', title: 'CVR', sort: true, templet: function(d){return (d.cvr || '0.00') + '%';}, width:80}
+                        ,{field: 'kpi.ir', title: 'IR', sort: true, templet: function(d){return (d.ir || '0.00') + '%';}, width:80}
+                        ,{field: 'kpi.spend', title: 'Spend', sort: true, templet: function(d){return '$' + (d.spend || '0.00');}}
+                        ,{field: 'kpi.ecpi', title: 'eCPI', sort: true, templet: function(d){return '$' + (d.ecpi || '0.00');}}
+                        ,{field: 'kpi.ecpm', title: 'eCPM', sort: true, templet: function(d){return '$' + (d.ecpm || '0.00');}, width:80}
                         // ,{fixed: 'right', width: 220, align:'center', toolbar: '#options'}
                     ]]
                 });
@@ -154,10 +153,13 @@
 
                 //搜索
                 $("#channelSearchBtn").click(function () {
-                    var name = $("#name").val();
+                    // var keyword = $("#keyword").val();
                     var rangedate = $("#rangedate").val();
                     dataTable.reload({
-                        where:{name:name, rangedate:rangedate},
+                        where:{
+                            // keyword:keyword,
+                            rangedate:rangedate
+                        },
                         page:{curr:1}
                     })
                 })
