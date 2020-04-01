@@ -175,3 +175,32 @@ Route::group(['namespace'=>'Advertise','prefix'=>'advertise','middleware'=>['aut
     //文件
     Route::post('Asset', 'AssetController@processMediaFiles')->name('advertise.asset.process'); // 素材
 });
+
+// 变现管理
+Route::group(['namespace'=>'Publish','prefix'=>'publish','middleware'=>['auth','operation.log','permission:publish.manage']],function (){
+
+    // 应用管理
+    Route::group(['prefix'=>'app', 'middleware' => 'permission:publish.app'], function () {
+        Route::get('data', 'AppController@data')->name('publish.app.data');
+        Route::get('list', 'AppController@index')->name('publish.app');
+        //编辑
+        Route::get('{id?}', 'AppController@edit')->name('publish.app.edit')->middleware('permission:publish.app')
+            ->where('id', '\d+');
+        Route::post('{id?}', 'AppController@save')->name('publish.app.save')->middleware('permission:publish.app.edit')
+            ->where('id', '\d+');
+        Route::post('{id}/enable', 'AppController@enable')->name('publish.app.enable')->middleware('permission:publish.app.edit');
+        Route::post('{id}/disable', 'AppController@disable')->name('publish.app.disable')->middleware('permission:publish.app.edit');
+        Route::post('icon', 'AppController@uplodeIcon')->name('publish.app.icon')->middleware('permission:publish.app.edit');
+
+        Route::post('{app_id}/channel/{channel_id}/enable', 'ChannelController@enable')->name('publish.campaign.channel.enable')->middleware('permission:publish.campaign.edit');
+        Route::post('{app_id}/channel/{channel_id}/disable', 'ChannelController@disable')->name('publish.campaign.channel.disable')->middleware('permission:publish.campaign.edit');
+        // 区域
+        Route::group(['prefix'=>'{campaign_id}/region', 'middleware' => 'permission:publish.campaign'], function () {
+            Route::get('data', 'RegionController@data')->name('publish.campaign.region.data');
+            Route::get('list', 'RegionController@list')->name('publish.campaign.region');
+        });
+
+        //删除
+//        Route::delete('destroy', 'AppController@destroy')->name('advertise.app.destroy')->middleware('permission:advertise.app.destroy');
+    });
+});
