@@ -20,7 +20,7 @@ class App extends Model
         'os', 'track_platform_id', 'track_code', 'status'];
 
     /**
-     * 构造Campaign
+     * 构造App
      * @param User $user
      * @param $params
      * @return mixed
