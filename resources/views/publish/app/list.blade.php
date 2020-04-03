@@ -31,13 +31,13 @@
                 </div>
             </script>
             <script type="text/html" id="nameTpl">
-                <img width="24px" height="24px" src="@{{ d.icon_url ? d.icon_url : '/image/none.png' }}" />
                 @can('publish.app')
-                <a class="layui-table-link" lay-event="edit" href="javascript:;">
-                    @endcan
+                    <a class="layui-table-link" lay-event="edit" href="javascript:;">
+                @endcan
+                    <img width="24px" height="24px" src="@{{ d.icon_url ? d.icon_url : '/image/none.png' }}" />
                     @{{ d.name }}
-                    @can('publish.app')
-                </a>
+                @can('publish.app')
+                    </a>
                 @endcan
             </script>
             <script type="text/html" id="track">
