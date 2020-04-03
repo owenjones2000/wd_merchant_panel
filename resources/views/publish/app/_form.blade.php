@@ -32,6 +32,17 @@
     </div>
 </div>
 
+<div class="layui-form-item">
+    <label class="layui-form-label">Put Mode</label>
+    <div class="layui-input-block">
+        <select name="put_mode" lay-filter="put_mode">
+            @foreach(\App\Models\Advertise\ChannelPutMode::$list as $put_mode_id => $put_mode)
+                <option @if(isset($apps['put_mode']) && $apps['put_mode'] == $put_mode_id) selected @endif value="{{$put_mode_id}}">{{$put_mode['name']}}</option>
+            @endforeach
+        </select>
+    </div>
+</div>
+
 {{--<div class="layui-form-item">--}}
     {{--<label class="layui-form-label">Status</label>--}}
     {{--<div class="layui-input-block">--}}

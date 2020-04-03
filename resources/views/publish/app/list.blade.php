@@ -109,6 +109,7 @@
                         {field: 'name', title: 'Name', templet: '#nameTpl', width:300, fixed: true}
                         ,{field: 'bundle_id', title: 'Package Name', fixed: true}
                         ,{field: 'platform', title: 'Platform', fixed: true}
+                        ,{field: 'put_mode', title: 'Put Mode', templet: function(d){switch(d.put_mode){case 1: return 'Normal'; case 2: return 'Backup'; default: return 'Unknown';}}, fixed: true}
                         ,{field: 'status', title: 'Status', templet: '#status', align:'center', width:70, fixed: true}
                         ,{field: 'kpi.impressions', title: 'Impressions', sort: true, templet: function(d){return d.kpi ? d.kpi.impressions || 0 : '-';}, width:80}
                         ,{field: 'kpi.clicks', title: 'Clicks', sort: true, templet: function(d){return d.kpi ? d.kpi.clicks || 0 : '-';}, width:80}

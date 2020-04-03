@@ -10,7 +10,7 @@ class Channel extends Model
     protected $table = 'a_target_apps';
 
     protected $fillable = ['name', 'icon_url', 'bundle_id',
-        'platform', 'status'];
+        'platform', 'put_mode', 'status'];
 
     /**
      * 构造Channel
