@@ -1,6 +1,6 @@
 <script>
     layui.use(['index', "carousel", "echarts"],function () {
-        $.get('{{ route('advertise.dashboard.data', ['range_date' => 'now']) }}',
+        $.get('{{ route('home.dashboard.data', ['range_date' => 'now']) }}',
             {},
             function (result) {
                 if (result.code==0){
@@ -20,7 +20,7 @@
         var myChart = echarts.init(document.getElementById('chart'));
         myChart.showLoading();
         $.get(
-            '{{ route('advertise.dashboard.data') }}',
+            '{{ route('home.dashboard.data') }}',
             {},
             function (data, status) {
                 if (data != null) {

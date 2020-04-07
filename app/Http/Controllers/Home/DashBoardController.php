@@ -1,15 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Advertise;
+namespace App\Http\Controllers\Home;
 
 use App\Models\Advertise\AdvertiseKpi;
-use App\Models\Advertise\App;
 use App\Models\Advertise\Campaign;
-use App\Models\Advertise\Region;
-use App\Rules\AdvertiseName;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class DashBoardController extends Controller
@@ -21,7 +17,7 @@ class DashBoardController extends Controller
      */
     public function view()
     {
-        return view('advertise.dashboard.view');
+        return view('home.dashboard.view');
     }
 
     public function data(Request $request)

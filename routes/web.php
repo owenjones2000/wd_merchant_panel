@@ -25,6 +25,11 @@ Route::group(['namespace'=>'Home'],function (){
 Route::group(['namespace'=>'Home','middleware'=>'auth'],function (){
     //后台布局
     Route::get('/','IndexController@layout')->name('home.layout');
+    // 控制台
+    Route::group([/*'middleware' => ''*/], function () {
+        Route::get('data', 'DashBoardController@data')->name('home.dashboard.data');
+        Route::get('dashboard', 'DashBoardController@view')->name('home.dashboard.view');
+    });
     //后台首页
     Route::get('/index','IndexController@index')->name('home.index');
     Route::get('/index1','IndexController@index1')->name('home.index1');
@@ -105,13 +110,7 @@ Route::group(['namespace'=>'Home','prefix'=>'home','middleware'=>['auth','operat
 });
 
 //投放管理
-Route::group(['namespace'=>'Advertise','prefix'=>'advertise','middleware'=>['auth','operation.log','permission:advertise.manage']],function (){
-
-    // 控制台
-    Route::group(['prefix'=>'dashboard', 'middleware' => 'permission:advertise.manage'], function () {
-        Route::get('data', 'DashBoardController@data')->name('advertise.dashboard.data');
-        Route::get('overview', 'DashBoardController@view')->name('advertise.dashboard.view');
-    });
+Route::group(['namespace'=>'Advertise','prefix'=>'advertise','middleware'=>['auth','operation.log','permission:advertise.manage', 'product:advertise']],function (){
 
     // 应用管理
     Route::group(['prefix'=>'app', 'middleware' => 'permission:advertise.app'], function () {
@@ -177,7 +176,7 @@ Route::group(['namespace'=>'Advertise','prefix'=>'advertise','middleware'=>['aut
 });
 
 // 变现管理
-Route::group(['namespace'=>'Publish','prefix'=>'publish','middleware'=>['auth','operation.log','permission:publish.manage']],function (){
+Route::group(['namespace'=>'Publish','prefix'=>'publish','middleware'=>['auth','operation.log','permission:publish.manage', 'product:publish']],function (){
 
     // 应用管理
     Route::group(['prefix'=>'app', 'middleware' => 'permission:publish.app'], function () {

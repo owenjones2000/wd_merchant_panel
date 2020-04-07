@@ -212,5 +212,5 @@
 @endsection
 
 @section('script')
-    @include('advertise.dashboard._js')
+    @include('home.dashboard._js')
 @endsection

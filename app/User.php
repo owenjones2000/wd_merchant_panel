@@ -30,7 +30,9 @@ class User extends Authenticatable
         return $this->belongsToMany(User::class, 'a_users_advertiser',
             'advertiser_user_id', 'main_user_id',
             'id', 'id'
-        )->where('isAdvertiseEnabled', 1);
+        )
+            ->where('isAdvertiseEnabled', 1)
+            ->orWhere('isPublishEnabled', 1);
     }
 
     /**
@@ -38,7 +40,9 @@ class User extends Authenticatable
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function activeMainUsers(){
-        return $this->mainUsers()->where('isAdvertiseEnabled', 1);
+        return $this->mainUsers()
+            ->where('isAdvertiseEnabled', 1)
+            ->orWhere('isPublishEnabled', 1);
     }
 
     /**

@@ -127,7 +127,7 @@
                 <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu">
                     <li data-name="home" class="layui-nav-item layui-nav-itemed">
                         <dd data-name="console">
-                            <a lay-href="{{route('advertise.dashboard.view')}}">
+                            <a lay-href="{{route('home.dashboard.view')}}">
                                 <i class="layui-icon layui-icon-home"></i>
                                 <cite>Dashboard</cite>
                             </a>
@@ -177,7 +177,7 @@
 
             <div class="layui-tab" lay-unauto lay-allowClose="true" lay-filter="layadmin-layout-tabs">
                 <ul class="layui-tab-title" id="LAY_app_tabsheader">
-                    <li lay-id="{{route('advertise.dashboard.view')}}" lay-attr="{{route('advertise.dashboard.view')}}" class="layui-this"><i class="layui-icon layui-icon-home"></i>&nbsp;Dashboard</li>
+                    <li lay-id="{{route('home.dashboard.view')}}" lay-attr="{{route('home.dashboard.view')}}" class="layui-this"><i class="layui-icon layui-icon-home"></i>&nbsp;Dashboard</li>
                 </ul>
             </div>
         </div>
@@ -185,7 +185,7 @@
         <!-- 主体内容 -->
         <div class="layui-body" id="LAY_app_body">
             <div class="layadmin-tabsbody-item layui-show">
-                <iframe src="{{route('advertise.dashboard.view')}}" frameborder="0" class="layadmin-iframe"></iframe>
+                <iframe src="{{route('home.dashboard.view')}}" frameborder="0" class="layadmin-iframe"></iframe>
             </div>
         </div>
 
