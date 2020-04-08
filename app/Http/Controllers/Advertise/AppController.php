@@ -81,7 +81,12 @@ class AppController extends Controller
     public function save(Request $request, $id = null)
     {
         $this->validate($request,[
-            'name'  => ['required', 'string', 'unique:a_app,name,'.$id, new AdvertiseName()],
+            'name'  => [
+                'required',
+                'string',
+                'unique:a_app,name,'.$id.',id,os,'.$request->input('os'),
+                new AdvertiseName()
+            ],
             'bundle_id'  => 'required|unique:a_app,bundle_id,'.$id,
             'description' => 'string|max:200',
             'icon_url' => 'string|max:200',
