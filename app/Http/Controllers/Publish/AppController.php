@@ -35,7 +35,7 @@ class AppController extends Controller
         $order_by = explode('.', $request->get('field', 'status'));
         $order_sort = $request->get('order', 'desc') ?: 'desc';
 
-        $channel_base_query = Channel::query();
+        $channel_base_query = Channel::query()->where('main_user_id', Auth::user()->getMainId());
         if(!empty($request->get('keyword'))){
             $like_keyword = '%'.$request->get('keyword').'%';
             $channel_base_query->where('name', 'like', $like_keyword);
