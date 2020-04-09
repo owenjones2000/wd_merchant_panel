@@ -66,6 +66,7 @@ class UserController extends Controller
             $user['main_user_id'] = $op_user->getMainId();
             $user['status'] = true;
             $user->saveOrFail();
+            $op_user->advertisers()->syncWithoutDetaching($user);
             return true;
         }, 3);
         if ($result){
