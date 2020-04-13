@@ -87,7 +87,7 @@ class AppController extends Controller
                 'unique:a_app,name,'.$id.',id,os,'.$request->input('os'),
                 new AdvertiseName()
             ],
-            'bundle_id'  => 'required|unique:a_app,bundle_id,'.$id,
+            'bundle_id'  => 'required|unique:a_app,bundle_id,'.$id.',id,os,'.$request->input('os'),
             'description' => 'string|max:200',
             'icon_url' => 'string|max:200',
         ]);
