@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Models\Site;
+use App\User;
 use Closure;
 
 class OperationLog
@@ -18,10 +19,13 @@ class OperationLog
     {
         // TODO::改为配置
         if (1){
+            /** @var User $op_user */
+            $op_user = auth()->user();
             $data = [
+                'main_user_id' => $op_user->getMainId(),
                 'user_id' => auth()->id(),
-                'username' => auth()->user()->username,
-                'realname' => auth()->user()->realname,
+                'username' => $op_user->username,
+                'realname' => $op_user->realname,
                 'ip' => $request->getClientIp(),
                 'method' => $request->method(),
                 'uri' => $request->path(),

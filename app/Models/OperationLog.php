@@ -7,5 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 class OperationLog extends Model
 {
     protected $table = 'ua_operation_logs';
-    protected $fillable = ['user_id','username','realname','ip','method','uri','query'];
+    protected $fillable = ['main_user_id', 'user_id','username','realname','ip','method','uri','query'];
 }
