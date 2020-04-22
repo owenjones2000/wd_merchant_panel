@@ -29,12 +29,12 @@
                     element.progress('uploadProgress', '100%');
                     // console.log(res);
                     var asset = res.asset;
-                    var typeItem = fileList.find('[data-type='+ asset.type_id + ']');
+                    var typeItem = fileList.find('[data-type='+ asset.type_group_key + ']');
                     if(typeItem.length > 0){
                         typeItem.remove();
                     }
                     var fileItemList = [
-                        '<div class="layui-colla-item" data-type="'+ asset.type_id +'">',
+                        '<div class="layui-colla-item" data-type="'+ asset.type_group_key +'">',
                         '<h2 class="layui-colla-title">'+ asset.type.name +'</h2>',
                         '<div class="layui-colla-content layui-show">',
                     ];
@@ -85,11 +85,23 @@
             @foreach(\App\Models\Advertise\AdType::$list as $ad_type)
             case '{{$ad_type['id']}}':
                 asset_type_li = [
-                    @foreach($ad_type['support_asset_type'] as $asset_type_id)
-                    '<li data-type="{{$asset_type_id}}" >',
-                    '<i class="layui-icon layui-icon-radio" style="color:#666;"></i> ',
-                        '{{ \App\Models\Advertise\AssetType::get($asset_type_id)['name'] }}',
-                    '</li>',
+                    @foreach($ad_type['need_asset_type'] as $asset_type_key => $asset_type_id)
+                        @if(is_array($asset_type_id))
+                                '<li data-type="{{$asset_type_key}}" >',
+                                '<i class="layui-icon layui-icon-radio" style="color:#666;"></i> ',
+                            @foreach($asset_type_id as $option_asset_type_id)
+                                '{{ \App\Models\Advertise\AssetType::get($option_asset_type_id)['name'] }}',
+                                @if(!$loop->last)
+                                     ' or ',
+                                @endif
+                            @endforeach
+                                '</li>',
+                        @else
+                            '<li data-type="{{$asset_type_key}}" >',
+                            '<i class="layui-icon layui-icon-radio" style="color:#666;"></i> ',
+                                '{{ \App\Models\Advertise\AssetType::get($asset_type_id)['name'] }}',
+                            '</li>',
+                        @endif
                     @endforeach
                 ].join('');
                 break;

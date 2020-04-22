@@ -37,7 +37,7 @@
             @php
                 $media_width = isset($asset['spec']['width']) ? ($asset['spec']['width'] < 300 ? $asset['spec']['width'] : 300) : 300;
             @endphp
-        <div class="layui-colla-item" data-type="{{$asset['type_id']}}">
+        <div class="layui-colla-item" data-type="{{ \App\Models\Advertise\AdType::getAssetTypeGroupKey($selected_ad_type['id'], $asset['type_id']) }}">
             <h2 class="layui-colla-title">{{ \App\Models\Advertise\AssetType::get($asset['type_id'])['name'] }}</h2>
             <div class="layui-colla-content">
                 @if($asset['type']['mime_type'] == 'video')
@@ -69,11 +69,23 @@
 
 <div class="layui-form-item">
     <ul id="assetTypeCheckList">
-    @foreach($selected_ad_type['support_asset_type'] as $asset_type_id)
-        <li data-type="{{$asset_type_id}}" >
-            <i class="layui-icon layui-icon-radio" style="color: @if($ad->assets->contains('type_id', $asset_type_id))#76C81C;@else#666;@endif"></i>
-            {{ \App\Models\Advertise\AssetType::get($asset_type_id)['name'] }}
-        </li>
+    @foreach($selected_ad_type['need_asset_type'] as $asset_type_key => $asset_type_id)
+        @if(is_array($asset_type_id))
+            <li data-type="{{$asset_type_key}}" >
+                <i class="layui-icon layui-icon-radio" style="color: @if($ad->assets->whereIn('type_id', $asset_type_id)->count())#76C81C;@else#666;@endif"></i>
+                @foreach($asset_type_id as $sub_asset_type_id)
+                    {{ \App\Models\Advertise\AssetType::get($sub_asset_type_id)['name'] }}
+                    @if(!$loop->last)
+                         or
+                    @endif
+                @endforeach
+            </li>
+        @else
+            <li data-type="{{$asset_type_key}}" >
+                <i class="layui-icon layui-icon-radio" style="color: @if($ad->assets->contains('type_id', $asset_type_id))#76C81C;@else#666;@endif"></i>
+                {{ \App\Models\Advertise\AssetType::get($asset_type_id)['name'] }}
+            </li>
+        @endif
     @endforeach
     </ul>
 </div>

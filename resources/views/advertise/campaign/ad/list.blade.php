@@ -272,6 +272,18 @@
                                 '  </div>';
                             preview_html = preview_html.concat(template_image);
                             break;
+                        case 'html':
+                            var template_image =
+                                '    <div class="layui-col-md6">' +
+                                '      <div class="layui-card">' +
+                                '        <div class="layui-card-header">'+ asset.type.name +'</div>' +
+                                '        <div class="layui-card-body" align="center">' +
+                                '           <a href="'+ asset.url +'" target="_blank" class="layui-btn layui-btn-normal">Click to preview</a>' +
+                                '        </div>' +
+                                '    </div>' +
+                                '  </div>';
+                            preview_html = preview_html.concat(template_image);
+                            break;
                     }
                 });
                 preview_html = preview_html.concat(

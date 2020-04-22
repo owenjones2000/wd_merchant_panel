@@ -41,6 +41,7 @@ class AssetController extends Controller
                 'type_id' => $file_info['type'],
                 'spec' => $file_info
             ]);
+            $asset['type_group_key'] = AdType::getAssetTypeGroupKey($ad_type['id'], $file_info['type']);
             $asset['type'] = AssetType::get($asset['type_id']);
 
             if($path){

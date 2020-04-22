@@ -15,6 +15,20 @@ class AdType
         return null;
     }
 
+    public static function getAssetTypeGroupKey($type_id, $asset_type_id){
+        $ad_type = self::get($type_id);
+        if(!$ad_type){
+            return null;
+        }
+        foreach($ad_type['need_asset_type'] as $group_key => $need_asset_type_item){
+            if((is_array($need_asset_type_item) && in_array($asset_type_id, $need_asset_type_item))
+            || $asset_type_id == $need_asset_type_item){
+                return $group_key;
+            }
+        }
+        return null;
+    }
+
     public static $list = [
         self::Video_Landscape_Short => [
             'id' => self::Video_Landscape_Short,
