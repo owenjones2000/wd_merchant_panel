@@ -119,6 +119,7 @@
                         ,{field: 'app.name', title: 'App', templet: '#appTpl', width:180, fixed: true}
                         ,{field: 'status', title: 'Status', templet: '#status', align:'center', width:70, fixed: true}
                         ,{field: 'budget', title: 'Budget', width:100, align:'center', templet: function(d){return '$' + (d.default_budget || '0.00');} }
+                        ,{field: 'bid', title: 'Bid', width:70, align:'center', templet: function(d){return '$' + (d.default_bid || '0.00');} }
                         ,{field: 'kpi.impressions', title: 'Impressions', sort: true, templet: function(d){return d.kpi ? d.kpi.impressions || 0 : '-';}, width:80}
                         ,{field: 'kpi.clicks', title: 'Clicks', sort: true, templet: function(d){return d.kpi ? d.kpi.clicks || 0 : '-';}, width:80}
                         ,{field: 'kpi.installs', title: 'Installs', sort: true, templet: function(d){return d.kpi ? d.kpi.installs || 0 : '-';}, width:80}

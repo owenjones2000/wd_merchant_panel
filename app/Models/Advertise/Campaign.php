@@ -17,7 +17,7 @@ class Campaign extends Model
 
     protected $fillable = ['name', 'app_id', 'main_user_id'];
 
-    protected $appends = ['default_budget'];
+    protected $appends = ['default_budget', 'default_bid'];
 
     /**
      * 构造Campaign
@@ -196,12 +196,29 @@ class Campaign extends Model
         return $ad;
     }
 
+    /**
+     * 默认预算
+     * @return int
+     */
     public function getDefaultBudgetAttribute(){
         $default_budget = $this->budgets->where('country', 'ALL')->first();
         if(empty($default_budget)){
             return 0;
         }else{
             return $default_budget['amount'];
+        }
+    }
+
+    /**
+     * 默认出价
+     * @return int
+     */
+    public function getDefaultBidAttribute(){
+        $default_bid = $this->bids->where('country', 'ALL')->first();
+        if(empty($default_bid)){
+            return 0;
+        }else{
+            return $default_bid['amount'];
         }
     }
 
