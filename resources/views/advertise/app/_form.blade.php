@@ -75,6 +75,7 @@
             layui.upload.render({
                 url: '{{ route('advertise.app.icon') }}'
                 , elem: '#upload-icon' //指定原始元素，默认直接查找class="layui-upload-file"
+                , acceptMime: 'image/*'
                 , method: 'post' //上传接口的http类型
                 , done: function (res) {
                     $('#upload-icon').attr('src', res.url);
