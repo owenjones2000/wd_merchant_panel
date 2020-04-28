@@ -57,6 +57,26 @@ $disable_basic_info = $campaign['ads']->count() > 0;
     </div>
 
     <div class="layui-colla-item">
+        <h2 class="layui-colla-title">Audience</h2>
+        <div class="layui-colla-content layui-show">
+            <div class="layui-form-item">
+                <label class="layui-form-label">Gender</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="audience[gender]" value="0" title="All" @if(0 == $campaign['audience']['gender']) checked @endif>
+                    <input type="radio" name="audience[gender]" value="1" title="Male" @if(1 == $campaign['audience']['gender']) checked @endif>
+                    <input type="radio" name="audience[gender]" value="2" title="Female" @if(2 == $campaign['audience']['gender']) checked @endif>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">Adult</label>
+                <div class="layui-input-block">
+                    <input type="checkbox" name="audience[adult]" value="1" lay-skin="switch" @if($campaign['audience']['adult']) checked @endif />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-colla-item">
         @php
             // $is_budget_by_all_region = $campaign->budgets->count() == 0 || $campaign->budgets->contains('country', 'ALL');
             $budget_for_all_region = $campaign->budgets->where('country', 'ALL')->first();

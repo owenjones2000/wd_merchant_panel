@@ -151,7 +151,9 @@ class CampaignController extends Controller
             'bid_by_region' => 'bool',
             'bid' => 'array',
             'bid.*.region_code' => 'required|string|max:3',
-            'bid.*.amount' => 'numeric'
+            'bid.*.amount' => 'numeric',
+            'audience.gender' => 'in:0,1,2',
+            'audience.adult' => 'bool',
 
         ]);
         $params = $request->all();
