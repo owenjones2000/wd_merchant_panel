@@ -11,7 +11,7 @@
 
         // 初始化分国列表
         var regions = formSelects.value('selectRegions');
-        updateStateList(regions);
+        // updateStateList(regions);
         // updateCountryList('#track', regions);
         updateCountryList('#budget', regions);
         updateCountryList('#bid', regions);
@@ -23,7 +23,7 @@
             //isAdd:        当前操作选中or取消
             //isDisabled:   当前选项是否是disabled
             // updateCountryList('#track', vals);
-            updateStateList(vals);
+            // updateStateList(vals);
             updateCountryList('#budget', vals);
             updateCountryList('#bid', vals);
             //如果return false, 那么将取消本次操作
