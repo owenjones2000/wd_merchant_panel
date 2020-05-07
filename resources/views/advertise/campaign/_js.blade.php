@@ -7,9 +7,11 @@
 
         // 多选初始化
         formSelects.render('selectRegions', {placeholder:'Countries'});
+        formSelects.render('selectStates', { init: [{{ $campaign['audience']['states'] }}], placeholder: 'States (US only)'});
 
         // 初始化分国列表
         var regions = formSelects.value('selectRegions');
+        updateStateList(regions);
         // updateCountryList('#track', regions);
         updateCountryList('#budget', regions);
         updateCountryList('#bid', regions);
@@ -21,6 +23,7 @@
             //isAdd:        当前操作选中or取消
             //isDisabled:   当前选项是否是disabled
             // updateCountryList('#track', vals);
+            updateStateList(vals);
             updateCountryList('#budget', vals);
             updateCountryList('#bid', vals);
             //如果return false, 那么将取消本次操作
@@ -37,6 +40,17 @@
                 $(data.elem.parentNode).children('.layui-colla-content').addClass('layui-show');
             }
         });
+
+        function updateStateList(regions){
+            for(i = 0,len=regions.length; i < len; i++) {
+                if(regions[i].value === 'US'){
+                    formSelects.render('selectStates', { skin: 'primary'});
+                    return;
+                }
+            }
+            formSelects.render('selectStates', { skin: 'default', init: []});
+            formSelects.disabled('selectStates');
+        }
 
         function updateCountryList(elem, regions){
             var ul = $(elem);

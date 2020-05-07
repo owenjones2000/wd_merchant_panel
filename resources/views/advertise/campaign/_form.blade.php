@@ -60,6 +60,16 @@ $disable_basic_info = $campaign['ads']->count() > 0;
         <h2 class="layui-colla-title">Audience</h2>
         <div class="layui-colla-content @if($campaign['audience']) layui-show @endif">
             <div class="layui-form-item">
+                <label class="layui-form-label">State</label>
+                <div class="layui-input-block">
+                    <select name="audience[states]" xm-select="selectStates" xm-select-search="", lay-filter="selectStates">
+                        @foreach($states as $state)
+                            <option value="{{ $state->id }}">{{ $state->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
                 <label class="layui-form-label">Gender</label>
                 <div class="layui-input-block">
                     <input type="radio" name="audience[gender]" value="0" title="All" @if(0 == $campaign['audience']['gender']) checked @endif>

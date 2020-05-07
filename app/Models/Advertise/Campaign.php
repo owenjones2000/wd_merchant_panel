@@ -40,18 +40,17 @@ class Campaign extends Model
             }
             $campaign->fill($params);
             $campaign->saveOrFail();
-            if(!empty($params['audience'])){
-                if(empty($campaign['audience'])){
-                    $audience = new Audience([
-                        'campaign_id' => $campaign['id']
-                    ]);
-                }else{
-                    $audience = $campaign['audience'];
-                }
-                $audience['gender'] = $params['audience']['gender'] ?? 0;
-                $audience['adult'] = $params['audience']['adult'] ?? false;
-                $audience->saveOrFail();
+            if(empty($campaign['audience'])){
+                $audience = new Audience([
+                    'campaign_id' => $campaign['id']
+                ]);
+            }else{
+                $audience = $campaign['audience'];
             }
+            $audience['gender'] = $params['audience']['gender'] ?? 0;
+            $audience['adult'] = $params['audience']['adult'] ?? false;
+            $audience['states'] = $params['audience']['states'] ?? '';
+            $audience->saveOrFail();
 
             if(empty($params['regions'])){
                 $campaign->regions()->sync([]);
