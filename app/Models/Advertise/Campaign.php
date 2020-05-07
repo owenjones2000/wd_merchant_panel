@@ -49,7 +49,7 @@ class Campaign extends Model
             }
             $audience['gender'] = $params['audience']['gender'] ?? 0;
             $audience['adult'] = $params['audience']['adult'] ?? false;
-            $audience['states'] = $params['audience']['states'] ?? '';
+            $audience['states'] = ',' . ($params['audience']['states'] ?? '') . ',';
             $audience->saveOrFail();
 
             if(empty($params['regions'])){
