@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Advertise;
 use App\Models\Advertise\AdvertiseKpi;
 use App\Models\Advertise\App;
 use App\Models\Advertise\Campaign;
+use App\Models\Advertise\State;
 use App\Models\Advertise\Region;
 use App\Rules\AdvertiseName;
 use Illuminate\Http\Request;
@@ -129,7 +130,8 @@ class CampaignController extends Controller
             ->where('main_user_id', Auth::user()->getMainId())
             ->get();
         $regions = Region::query()->orderBy('sort', 'desc')->get();
-        return view('advertise.campaign.edit',compact('campaign', 'apps', 'regions'));
+        $states = State::query()->get();
+        return view('advertise.campaign.edit',compact('campaign', 'apps', 'regions', 'states'));
     }
 
     /**
@@ -151,7 +153,9 @@ class CampaignController extends Controller
             'bid_by_region' => 'bool',
             'bid' => 'array',
             'bid.*.region_code' => 'required|string|max:3',
-            'bid.*.amount' => 'numeric'
+            'bid.*.amount' => 'numeric',
+            'audience.gender' => 'in:0,1,2',
+            'audience.adult' => 'bool',
 
         ]);
         $params = $request->all();

@@ -40,6 +40,18 @@ class Campaign extends Model
             }
             $campaign->fill($params);
             $campaign->saveOrFail();
+            if(empty($campaign['audience'])){
+                $audience = new Audience([
+                    'campaign_id' => $campaign['id']
+                ]);
+            }else{
+                $audience = $campaign['audience'];
+            }
+            $audience['gender'] = $params['audience']['gender'] ?? 0;
+            $audience['adult'] = $params['audience']['adult'] ?? false;
+            $audience['states'] = ',' . ($params['audience']['states'] ?? '') . ',';
+            $audience->saveOrFail();
+
             if(empty($params['regions'])){
                 $campaign->regions()->sync([]);
             }else{
@@ -245,6 +257,14 @@ class Campaign extends Model
     public function regions(){
         return $this->belongsToMany(Region::class, 'a_campaign_country',
             'campaign_id','country', 'id', 'code');
+    }
+
+    /**
+     * 受众
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function audience(){
+        return $this->hasOne(Audience::class, 'campaign_id', 'id');
     }
 
     /**
