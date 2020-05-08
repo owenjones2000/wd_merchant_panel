@@ -110,14 +110,14 @@
                         ,{field: 'bundle_id', title: 'Package Name', fixed: true}
                         ,{field: 'platform', title: 'Platform', fixed: true}
                         ,{field: 'put_mode', title: 'Put Mode', templet: function(d){switch(d.put_mode){case 1: return 'Normal'; case 2: return 'Backup'; default: return 'Unknown';}}, fixed: true}
-                        ,{field: 'status', title: 'Status', templet: '#status', align:'center', width:70, fixed: true}
+                        // ,{field: 'status', title: 'Status', templet: '#status', align:'center', width:70, fixed: true}
                         ,{field: 'kpi.impressions', title: 'Impressions', sort: true, templet: function(d){return d.kpi ? d.kpi.impressions || 0 : '-';}, width:80}
                         ,{field: 'kpi.clicks', title: 'Clicks', sort: true, templet: function(d){return d.kpi ? d.kpi.clicks || 0 : '-';}, width:80}
                         ,{field: 'kpi.installs', title: 'Installs', sort: true, templet: function(d){return d.kpi ? d.kpi.installs || 0 : '-';}, width:80}
                         ,{field: 'kpi.ctr', title: 'CTR', sort: true, templet: function(d){return d.kpi ? (d.kpi.ctr || '0.00') + '%' : '-';}, width:80}
                         ,{field: 'kpi.cvr', title: 'CVR', sort: true, templet: function(d){return d.kpi ? (d.kpi.cvr || '0.00') + '%' : '-';}, width:80}
                         ,{field: 'kpi.ir', title: 'IR', sort: true, templet: function(d){return d.kpi ? (d.kpi.ir || '0.00') + '%' : '-';}, width:80}
-                        ,{field: 'kpi.spend', title: 'Spend', sort: true, templet: function(d){return d.kpi ? '$' + (d.kpi.spend || '0.00') : '-';}}
+                        ,{field: 'kpi.spend', title: 'Revenue', sort: true, templet: function(d){return d.kpi ? '$' + (d.kpi.spend || '0.00') : '-';}}
                         ,{field: 'kpi.ecpi', title: 'eCPI', sort: true, templet: function(d){return d.kpi ? '$' + (d.kpi.ecpi || '0.00') : '-';}}
                         ,{field: 'kpi.ecpm', title: 'eCPM', sort: true, templet: function(d){return d.kpi ? '$' + (d.kpi.ecpm || '0.00') : '-';}, width:80}
                         // ,{field: 'created_at', title: 'Created'}
