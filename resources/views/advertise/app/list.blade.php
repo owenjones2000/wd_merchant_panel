@@ -84,8 +84,10 @@
                         ,{field: 'bundle_id', title: 'Package Name'}
                         ,{field: 'os', title: 'Platform'}
                         ,{field: 'description', title: 'Description'}
-                        ,{field: 'track', title: 'Track', templet: '#track'}
-                        ,{field: 'track_code', title: 'Track Code'}
+                        ,{field: 'third_domain', title: 'Third Domain'}
+                        ,{field: 'download_url', title: 'Download Url'}
+                        // ,{field: 'track', title: 'Track', templet: '#track'}
+                        // ,{field: 'track_code', title: 'Track Code'}
                         ,{field: 'status', title: 'Status', templet: '#status', align:'center', width:70}
                         // ,{field: 'created_at', title: 'Created'}
                         // ,{field: 'updated_at', title: 'Updated'}

@@ -90,6 +90,8 @@ class AppController extends Controller
             'bundle_id'  => 'required|unique:a_app,bundle_id,'.$id.',id,os,'.$request->input('os'),
             'description' => 'string|max:200',
             'icon_url' => 'string|max:200',
+            'third_domain' => 'string|active_url',
+            'download_url' => 'string|active_url',
         ]);
         try{
             $params = $request->all();
