@@ -39,31 +39,17 @@
     </div>
 </div>
 
-{{--<div class="layui-form-item">--}}
-    {{--<label class="layui-form-label">Tracking</label>--}}
-    {{--<div class="layui-input-inline">--}}
-        {{--<select name="track_platform_id" lay-filter="track">--}}
-            {{--@foreach(\App\Models\Advertise\TrackPlatform::$list as $track_platform)--}}
-                {{--<option @if(isset($apps['track_platform_id']) && $apps['track_platform_id'] == $track_platform['id']) selected @endif value="{{$track_platform['id']}}">{{$track_platform['name']}}</option>--}}
-            {{--@endforeach--}}
-        {{--</select>--}}
-    {{--</div>--}}
-    {{--<div class="layui-input-inline" style="width: 300px;">--}}
-        {{--<input type="text" name="track_code" value="{{ $apps['track_code'] ?? old('track_code') }}" placeholder="track code (or package name)" lay-verify="required" autocomplete="off" class="layui-input" >--}}
-    {{--</div>--}}
-{{--</div>--}}
-
 <div class="layui-form-item">
-    <label class="layui-form-label">Third Domain</label>
-    <div class="layui-input-block">
-        <input type="text" name="third_domain" value="{{ $apps->third_domain ?? old('third_domain') }}" placeholder="Third platform domain to request app information.format:http or https" autocomplete="off" class="layui-input">
+    <label class="layui-form-label">Tracking</label>
+    <div class="layui-input-inline">
+        <select name="track_platform_id" lay-filter="track">
+            @foreach(\App\Models\Advertise\TrackPlatform::$list as $track_platform)
+                <option @if(isset($apps['track_platform_id']) && $apps['track_platform_id'] == $track_platform['id']) selected @endif value="{{$track_platform['id']}}">{{$track_platform['name']}}</option>
+            @endforeach
+        </select>
     </div>
-</div>
-
-<div class="layui-form-item">
-    <label class="layui-form-label">Download Url</label>
-    <div class="layui-input-block">
-        <input type="text" name="download_url" value="{{ $apps->download_url ?? old('download_url') }}" placeholder="android:download url;ios:app store url.format:http or https" autocomplete="off" class="layui-input">
+    <div class="layui-input-inline" style="width: 300px;">
+        <input type="text" name="track_code" value="{{ $apps['track_code'] ?? old('track_code') }}" placeholder="track code (or package name)" lay-verify="required" autocomplete="off" class="layui-input" >
     </div>
 </div>
 

@@ -17,7 +17,7 @@ class App extends Model
     protected $appends = ['track'];
 
     protected $fillable = ['name', 'description', 'icon_url', 'bundle_id',
-        'os', 'track_platform_id', 'track_code', 'status','third_domain','download_url'];
+        'os', 'track_platform_id', 'track_code', 'status'];
 
     /**
      * 构造App
@@ -38,9 +38,9 @@ class App extends Model
                     'main_user_id' => $main_user_id
                 ])->firstOrFail();
             }
-//            if($params['track_platform_id'] == TrackPlatform::Adjust && empty($params['track_code'])){
-//                throw new BizException('Track code required.');
-//            }
+            if($params['track_platform_id'] == TrackPlatform::Adjust && empty($params['track_code'])){
+                throw new BizException('Track code required.');
+            }
             $apps->fill($params);
             $apps->saveOrFail();
 
