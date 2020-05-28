@@ -23,7 +23,7 @@ class TrackPlatform
             'id' => self::Adjust,
             'name' => 'Adjust',
         ],
-        self::Adjust => [
+        self::Kochava => [
             'id' => self::Kochava,
             'name' => 'Kochava',
         ],
