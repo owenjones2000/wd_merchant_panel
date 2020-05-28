@@ -49,7 +49,7 @@
         </select>
     </div>
     <div class="layui-input-inline" style="width: 300px;">
-        <input type="text" name="track_code" value="{{ $apps['track_code'] ?? old('track_code') }}" placeholder="track code (or package name)" lay-verify="required" autocomplete="off" class="layui-input" >
+        <input type="text" name="track_code" value="{{ $apps['track_code'] ?? old('track_code') }}" placeholder="track code (or package name,or kochava campaign_id)" lay-verify="required" autocomplete="off" class="layui-input" >
     </div>
 </div>
 

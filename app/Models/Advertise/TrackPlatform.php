@@ -5,6 +5,7 @@ class TrackPlatform
 {
     const AppsFlyer = 1;
     const Adjust = 2;
+    const Kochava = 3;
 
     public static function get($type_id){
         if(isset(self::$list[$type_id])) {
@@ -21,6 +22,10 @@ class TrackPlatform
         self::Adjust => [
             'id' => self::Adjust,
             'name' => 'Adjust',
+        ],
+        self::Adjust => [
+            'id' => self::Kochava,
+            'name' => 'Kochava',
         ],
     ];
 }
