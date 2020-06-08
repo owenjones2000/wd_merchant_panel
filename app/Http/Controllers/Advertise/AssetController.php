@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Storage;
 
 class AssetController extends Controller
 {
+    const Cdn_Url = 'https://d166x9h50h2w82.cloudfront.net/';
+
     public function processMediaFiles(Request $request)
     {
         //返回信息json
@@ -35,7 +37,8 @@ class AssetController extends Controller
 
 
             $asset = Asset::create([
-                'url' => Storage::url($path),
+                // 'url' => Storage::url($path),
+                'url' => Static::Cdn_Url.$path,
                 'file_path' => $path,
                 'hash' => md5_file($file),
                 'type_id' => $file_info['type'],
