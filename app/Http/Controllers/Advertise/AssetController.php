@@ -37,8 +37,8 @@ class AssetController extends Controller
 
 
             $asset = Asset::create([
-                // 'url' => Storage::url($path),
-                'url' => Static::Cdn_Url.$path,
+                'url' => Storage::url($path),
+                // 'url' => Static::Cdn_Url.$path,
                 'file_path' => $path,
                 'hash' => md5_file($file),
                 'type_id' => $file_info['type'],
