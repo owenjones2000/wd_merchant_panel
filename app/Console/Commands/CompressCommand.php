@@ -58,17 +58,17 @@ class CompressCommand extends Command
                     $save = Storage::disk('local')->put($asset['file_path'], file_get_contents($asset['url']));
                     // exec('chmod -R 777'.storage_path());
                 }
-                if (!isset($asset['spec']['bit_rate'])) {
+                // if (!isset($asset['spec']['bit_rate'])) {
                     // dd($oldfile->getPath());
                     $video_info = $ffprobe->streams($oldfile)->videos()->first()->all();
                     dump($video_info);
                     $asset['spec'] =  array_merge($asset['spec'], [
                         'bit_rate' => $video_info['bit_rate'],
                     ]);
-                }
-                if (!isset($asset['spec']['file_size'])) {
+                // }
+                if (!isset($asset['spec']['size_per_second'])) {
                     $asset['spec'] =  array_merge($asset['spec'], [
-                        'file_size' => filesize($oldfile),
+                        'size_per_second' => round(filesize($oldfile)/round($asset['spec']['duration'],1)),
                     ]);
                 }
                 $asset->save();

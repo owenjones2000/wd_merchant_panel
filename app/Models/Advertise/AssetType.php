@@ -36,7 +36,7 @@ class AssetType
                 $width = Arr::get($video_info, 'width');
                 $height = Arr::get($video_info, 'height');
                 $duration = Arr::get($video_info, 'duration');
-                $bit_rate = Arr::get($video_info, 'bit_rate');
+                // $bit_rate = Arr::get($video_info, 'bit_rate');
                 if ($width >= $height) {
                     $type = $duration > 15 ?
                         AssetType::Landscape_Long : AssetType::Landscape_Short;
@@ -48,7 +48,7 @@ class AssetType
                     'type' => $type,
                     'width' => $width,
                     'height' => $height,
-                    'bit_rate' => $bit_rate,
+                    // 'bit_rate' => $bit_rate,
                     'duration' => $duration
                 ];
                 break;
