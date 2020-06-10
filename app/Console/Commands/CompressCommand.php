@@ -46,7 +46,7 @@ class CompressCommand extends Command
     {
         //
         Log::info('compress start');
-        $assets = Asset::where('id', '>', 2000)->where('spec->size_per_second', '>', 450000)
+        $assets = Asset::where('id', '>', 2110)->where('spec->size_per_second', '>', 450000)
             // ->limit(6)
             ->get();
         // dd( $assets->count(), app()->environment());
@@ -111,6 +111,7 @@ class CompressCommand extends Command
                 }
             }
         }
+        Log::info('compress end');
     }
 
     public function  fileSizeConvert($bytes)
