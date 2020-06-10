@@ -45,7 +45,8 @@ class CompressCommand extends Command
     public function handle()
     {
         //
-        $assets = Asset::where('id', '>', 29)->get();
+        $assets = Asset::where('id', '>', 29)->where('spec->size_per_second', '>', 400000)->get();
+        dd($assets->toArray(), $assets->count());
         foreach ($assets as $key => $asset) {
             if (strpos($asset, 'mp4')) {
                 $exist = Storage::disk('local')->exists($asset['file_path']);
