@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Advertise;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\CompressVideo;
 use App\Models\Advertise\AdType;
 use App\Models\Advertise\Asset;
 use App\Models\Advertise\AssetType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
 class AssetController extends Controller
@@ -34,7 +37,7 @@ class AssetController extends Controller
             $dir = "asset/{$main_id}";
             $file_name = date('Ymd').time().uniqid().".".$file->getClientOriginalExtension();
             $path = Storage::putFileAs($dir, $file, $file_name);
-
+            Storage::disk('local')->putFileAs($dir, $file, $file_name);
 
             $asset = Asset::create([
                 'url' => Storage::url($path),
@@ -44,6 +47,7 @@ class AssetController extends Controller
                 'type_id' => $file_info['type'],
                 'spec' => $file_info
             ]);
+            // dispatch(new CompressVideo($asset));
             $asset['type_group_key'] = AdType::getAssetTypeGroupKey($ad_type['id'], $file_info['type']);
             $asset['type'] = AssetType::get($asset['type_id']);
 
