@@ -60,15 +60,20 @@ class CompressCommand extends Command
                 }
                 // if (!isset($asset['spec']['bit_rate'])) {
                     // dd($oldfile->getPath());
-                    $video_info = $ffprobe->streams($oldfile)->videos()->first()->all();
-                    dump($video_info);
-                    $asset['spec'] =  array_merge($asset['spec'], [
-                        'bit_rate' => $video_info['bit_rate'],
-                    ]);
+                    // $video_info = $ffprobe->streams($oldfile)->videos()->first()->all();
+                    // dump($video_info);
+                    // $asset['spec'] =  array_merge($asset['spec'], [
+                    //     'bit_rate' => $video_info['bit_rate'],
+                    // ]);
                 // }
                 if (!isset($asset['spec']['size_per_second'])) {
                     $asset['spec'] =  array_merge($asset['spec'], [
                         'size_per_second' => round(filesize($oldfile)/round($asset['spec']['duration'],1)),
+                    ]);
+                }
+                if (!isset($asset['spec']['size'])) {
+                    $asset['spec'] =  array_merge($asset['spec'], [
+                        'size' => $this->fileSizeConvert(filesize($oldfile)),
                     ]);
                 }
                 $asset->save();
