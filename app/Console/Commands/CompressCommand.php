@@ -45,6 +45,7 @@ class CompressCommand extends Command
     public function handle()
     {
         //
+        Log::info('compress start');
         $assets = Asset::where('id', '>', 29)->where('spec->size_per_second', '>', 450000)
             // ->limit(6)
             ->get();
