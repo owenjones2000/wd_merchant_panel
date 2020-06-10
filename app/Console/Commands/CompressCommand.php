@@ -61,6 +61,7 @@ class CompressCommand extends Command
                 if (!isset($asset['spec']['bit_rate'])) {
                     // dd($oldfile->getPath());
                     $video_info = $ffprobe->streams($oldfile)->videos()->first()->all();
+                    dump($video_info);
                     $asset['spec'] =  array_merge($asset['spec'], [
                         'bit_rate' => $video_info['bit_rate'],
                     ]);
