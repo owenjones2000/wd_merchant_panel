@@ -45,8 +45,9 @@ class CompressCommand extends Command
     public function handle()
     {
         //
-        $assets = Asset::where('id', '>', 29)->where('spec->size_per_second', '>', 400000)->get();
-        dd($assets->toArray(), $assets->count());
+        $assets = Asset::where('id', '>', 29)->where('spec->size_per_second', '>', 500000)
+            ->limit(10)->get();
+        // dd($assets->toArray(), $assets->count());
         foreach ($assets as $key => $asset) {
             if (strpos($asset, 'mp4')) {
                 $exist = Storage::disk('local')->exists($asset['file_path']);
@@ -60,16 +61,16 @@ class CompressCommand extends Command
                     // exec('chmod -R 777'.storage_path());
                 }
                 // if (!isset($asset['spec']['bit_rate'])) {
-                    // dd($oldfile->getPath());
-                    // $video_info = $ffprobe->streams($oldfile)->videos()->first()->all();
-                    // dump($video_info);
-                    // $asset['spec'] =  array_merge($asset['spec'], [
-                    //     'bit_rate' => $video_info['bit_rate'],
-                    // ]);
+                // dd($oldfile->getPath());
+                // $video_info = $ffprobe->streams($oldfile)->videos()->first()->all();
+                // dump($video_info);
+                // $asset['spec'] =  array_merge($asset['spec'], [
+                //     'bit_rate' => $video_info['bit_rate'],
+                // ]);
                 // }
                 if (!isset($asset['spec']['size_per_second'])) {
                     $asset['spec'] =  array_merge($asset['spec'], [
-                        'size_per_second' => round(filesize($oldfile)/round($asset['spec']['duration'],1)),
+                        'size_per_second' => round(filesize($oldfile) / round($asset['spec']['duration'], 1)),
                     ]);
                 }
                 if (!isset($asset['spec']['size'])) {
@@ -78,26 +79,27 @@ class CompressCommand extends Command
                     ]);
                 }
                 $asset->save();
-                dump($asset->toArray());
-                // $size = $this->fileSizeConvert(filesize($oldfile));
-                // dd($size);
-                // if ($asset['spec']['bit_rate'] > 1500000) {
-                // if ($asset['spec']['bit_rate'] > 1500000) {
-                //     $file_name = date('Ymd') . time() . uniqid() . ".mp4";
-                //     $path = Storage::disk('local')->path('') . 'asset/';
-                //     $dir = 'asset/';
-                //     $newfile = $path . $file_name;
-                //     // dump($asset->toArray());
-                //     exec("ffmpeg -y -i $oldfile -b:v 1000000 $newfile");
-                //     $video_info = $ffprobe->streams($newfile)->videos()->first()->all();
-                //     $upload = Storage::put($dir . $file_name, file_get_contents($newfile));
-                //     // dump($video_info['bit_rate'], $upload);
-                //     $asset['url'] = Storage::url($dir . $file_name);
-                //     $asset['spec'] =  array_merge($asset['spec'], ['bit_rate' => $video_info['bit_rate']]);
-                //     $asset->save();
-                //     Log::info('compress'.$asset['id']);
-                //     // dd($asset->toArray());
-                // }
+                // dump($asset->toArray());
+                if (!isset($asset['spec']['size_per_second_compress'])) {
+                    $file_name = date('Ymd') . time() . uniqid() . ".mp4";
+                    $path = Storage::disk('local')->path('') . 'asset/';
+                    $dir = 'asset/';
+                    $newfile = $path . $file_name;
+                    // dump($asset->toArray());
+                    exec("ffmpeg -y -i $oldfile -b:v 1500000 $newfile");
+                    // $upload = Storage::put($dir . $file_name, file_get_contents($newfile));
+                    // // dump($video_info['bit_rate'], $upload);
+                    // $asset['hash'] = md5_file($newfile);
+                    // $asset['url'] = Storage::url($dir . $file_name);
+                    // $asset['spec'] =  array_merge($asset['spec'], [
+                    //     'size_per_second_compress' => round(filesize($newfile) / round($asset['spec']['duration'], 1)),
+                    //     'size_compress' => $this->fileSizeConvert(filesize($newfile)),
+                    //     'file_path_compress' => $dir.$file_name,
+                    // ]);
+                    // $asset->save();
+                    Log::info('compress' . $asset['id']);
+                    // dd($asset->toArray());
+                }
             }
         }
     }
