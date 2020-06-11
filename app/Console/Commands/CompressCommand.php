@@ -46,13 +46,13 @@ class CompressCommand extends Command
     {
         //
         Log::info('compress start');
-        $assets = Asset::where('id', '>', 2000)->where('spec->size_per_second', '>', 450000)
+        $assets = Asset::where('id', '>', 2110)->where('spec->size_per_second', '>', 450000)
             // ->limit(6)
             ->get();
         // dd( $assets->count(), app()->environment());
         $n = 0;
         foreach ($assets as $key => $asset) {
-            if ($n >= 1) {
+            if ($n >= 5) {
                 break;
             }
             // dump($asset['hash'], md5_file(Storage::disk('local')->path($asset['spec']['file_path_compress'])));
@@ -88,7 +88,7 @@ class CompressCommand extends Command
                 // dump($asset->toArray());
                 if (
                     !isset($asset['spec']['size_per_second_compress'])
-                    // && app()->environment() == 'local'
+                    && app()->environment() == 'local'
                 ) {
                     $file_name = date('Ymd') . time() . uniqid() . ".mp4";
                     $path = Storage::disk('local')->path('') . 'asset/';
