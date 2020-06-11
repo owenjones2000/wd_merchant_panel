@@ -46,14 +46,14 @@ class CompressCommand extends Command
     {
         //
         Log::info('compress start');
-        $assets = Asset::where('id', '>', 2110)->where('spec->size_per_second', '>', 450000)
+        $assets = Asset::where('id', '>', 2000)->where('spec->size_per_second', '>', 450000)
             // ->limit(6)
             ->get();
         // dd( $assets->count(), app()->environment());
-        $n =0;
+        $n = 0;
         foreach ($assets as $key => $asset) {
-            if ($n>=5){
-            break;
+            if ($n >= 1) {
+                break;
             }
             // dump($asset['hash'], md5_file(Storage::disk('local')->path($asset['spec']['file_path_compress'])));
             if (strpos($asset, 'mp4')) {
@@ -86,7 +86,10 @@ class CompressCommand extends Command
                 }
                 $asset->save();
                 // dump($asset->toArray());
-                if (!isset($asset['spec']['size_per_second_compress']) && app()->environment()=='local') {
+                if (
+                    !isset($asset['spec']['size_per_second_compress'])
+                    // && app()->environment() == 'local'
+                ) {
                     $file_name = date('Ymd') . time() . uniqid() . ".mp4";
                     $path = Storage::disk('local')->path('') . 'asset/';
                     $dir = 'asset/';
@@ -100,7 +103,7 @@ class CompressCommand extends Command
                     $asset['spec'] =  array_merge($asset['spec'], [
                         'size_per_second_compress' => round(filesize($newfile) / round($asset['spec']['duration'], 1)),
                         'size_compress' => $this->fileSizeConvert(filesize($newfile)),
-                        'file_path_compress' => $dir.$file_name,
+                        'file_path_compress' => $dir . $file_name,
                     ]);
                     $asset->save();
                     $downloadfile = file_get_contents($asset['url']);
