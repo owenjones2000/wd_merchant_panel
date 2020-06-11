@@ -66,6 +66,7 @@
                 url: '{{ route('publish.app.icon') }}'
                 , elem: '#upload-icon' //指定原始元素，默认直接查找class="layui-upload-file"
                 , method: 'post' //上传接口的http类型
+                , size: 200
                 , done: function (res) {
                     $('#upload-icon').attr('src', res.url);
                     $('#input_icon').val(res.url);
