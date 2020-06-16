@@ -52,7 +52,11 @@ class CompressCommand extends Command
             $assets = Asset::where('id', '>', 100)
             ->whereNull('spec->size_per_second')
             ->get();
+            $n = 0;
             foreach ($assets as $key => $asset) {
+                if ($n >= 50) {
+                    break;
+                }
                 if (strpos($asset->url, 'mp4')) {
                     $exist = Storage::disk('local')->exists($asset['file_path']);
                     $oldfile = Storage::disk('local')->path($asset['file_path']);
@@ -73,6 +77,23 @@ class CompressCommand extends Command
                     $asset->save();
                     Log::info('detect' . $asset['id']);
                     dump($asset->toArray());
+                }
+                if (strpos($asset->url, 'jpg') || strpos($asset->url, 'png')) {
+                    $exist = Storage::disk('local')->exists($asset['file_path']);
+                    $oldfile = Storage::disk('local')->path($asset['file_path']);
+                    if (!$exist) {
+                        $save = Storage::disk('local')->put($asset['file_path'], file_get_contents($asset['url']));
+                    }
+
+                    if (!isset($asset['spec']['size'])) {
+                        $asset['spec'] =  array_merge($asset['spec'], [
+                            'size' => $this->fileSizeConvert(filesize($oldfile)),
+                        ]);
+                    }
+                    $asset->save();
+                    Log::info('detect' . $asset['id']);
+                    dump($asset->toArray());
+                    $n++;
                 }
             }
             Log::info('detect end');
