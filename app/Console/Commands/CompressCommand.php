@@ -71,6 +71,7 @@ class CompressCommand extends Command
                         ]);
                     }
                     $asset->save();
+                    Log::info('detect' . $asset['id']);
                     dump($asset->toArray());
                 }
             }
@@ -85,7 +86,7 @@ class CompressCommand extends Command
             // dd( $assets->count(), app()->environment());
             $n = 0;
             foreach ($assets as $key => $asset) {
-                if ($n >= 3) {
+                if ($n >= 5) {
                     break;
                 }
                 // dump($asset['hash'], md5_file(Storage::disk('local')->path($asset['spec']['file_path_compress'])));
