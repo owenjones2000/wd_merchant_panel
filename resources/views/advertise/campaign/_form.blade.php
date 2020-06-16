@@ -56,7 +56,7 @@ $disable_basic_info = $campaign['ads']->count() > 0;
         </div>
     </div>
 
-    <div class="layui-colla-item" style="display:none">
+    <div class="layui-colla-item" @if($mainUserId != '22') style="display:none" @endif>
         <h2 class="layui-colla-title">Audience</h2>
         <div class="layui-colla-content @if($campaign['audience']) layui-show @endif">
             <div class="layui-form-item">

@@ -125,13 +125,13 @@ class CampaignController extends Controller
             /** @var Campaign $campaign */
             $campaign = Campaign::findOrFail($id);
         }
-
+        $mainUserId = Auth::user()->getMainId();
         $apps = App::query()
             ->where('main_user_id', Auth::user()->getMainId())
             ->get();
         $regions = Region::query()->orderBy('sort', 'desc')->get();
         $states = State::query()->get();
-        return view('advertise.campaign.edit',compact('campaign', 'apps', 'regions', 'states'));
+        return view('advertise.campaign.edit',compact('campaign', 'apps', 'regions', 'states', 'mainUserId'));
     }
 
     /**
