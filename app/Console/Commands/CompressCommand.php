@@ -154,7 +154,8 @@ class CompressCommand extends Command
                         && $asset['spec']['size_i'] > 200000
                     ) {
                         $oldfile = Storage::disk('local')->path($asset['file_path']);
-                        $file_name = date('Ymd') . time() . uniqid() . ".mp4";
+                        // $ext = strpos($asset->url, 'png')? 'png':'jpg';
+                        $file_name = date('Ymd') . time() . uniqid() . ".". pathinfo($oldfile)['extension'];
                         $path = Storage::disk('local')->path('') . 'asset/';
                         $dir = 'asset/';
                         $newfile = $path . $file_name;
