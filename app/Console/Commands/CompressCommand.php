@@ -106,20 +106,20 @@ class CompressCommand extends Command
         } elseif ($action == 'compress') {
             Log::info('compress start');
             $assets = Asset::where('id', '>=', 30)
-            ->where('spec->size_per_second', '>', 250000)
-            ->whereNull('spec->size_per_second_compress')
+            // ->where('spec->size_per_second', '>', 250000)
+            ->whereNull('spec->size_compress')
             // ->limit(6)
             ->get();
             // dd( $assets->count(), app()->environment());
             $n = 0;
             foreach ($assets as $key => $asset) {
-                if ($n >= 1) {
+                if ($n >= 2) {
                     break;
                 }
                 // dump($asset['hash'], md5_file(Storage::disk('local')->path($asset['spec']['file_path_compress'])));
                 if (strpos($asset->url, 'mp4')) {
                     if (
-                        !isset($asset['spec']['size_per_second_compress'])
+                        !isset($asset['spec']['size_compress'])
                         && isset($asset['spec']['size_per_second'])
                         && $asset['spec']['size_per_second'] > 250000
                     ) {
@@ -139,8 +139,40 @@ class CompressCommand extends Command
                             'file_path_compress' => $dir . $file_name,
                         ]);
                         $asset->save();
-                        $downloadfile = file_get_contents($asset['url']);
-                        unset($downloadfile);
+                        // $downloadfile = file_get_contents($asset['url']);
+                        // unset($downloadfile);
+                        Log::info('compress mp4' . $asset['id']);
+                        dump($asset->toArray());
+                        $n++;
+                    }
+                }
+
+                if (strpos($asset->url, 'png') || strpos($asset->url, 'jpg')){
+                    if (
+                        !isset($asset['spec']['size_compress'])
+                        && isset($asset['spec']['size_i'])
+                        && $asset['spec']['size_i'] > 200000
+                    ) {
+                        $oldfile = Storage::disk('local')->path($asset['file_path']);
+                        $file_name = date('Ymd') . time() . uniqid() . ".mp4";
+                        $path = Storage::disk('local')->path('') . 'asset/';
+                        $dir = 'asset/';
+                        $newfile = $path . $file_name;
+
+                        $tinifykey = config('app.tinify_key');
+                        \Tinify\setKey($tinifykey);
+                        $source = \Tinify\fromFile($oldfile);
+                        $source->toFile($newfile);
+
+                        $upload = Storage::put($dir . $file_name, file_get_contents($newfile));
+                        // dump($video_info['bit_rate'], $upload);
+                        $asset['hash'] = md5_file($newfile);
+                        $asset['url'] = Storage::url($dir . $file_name);
+                        $asset['spec'] =  array_merge($asset['spec'], [
+                            'size_compress' => $this->fileSizeConvert(filesize($newfile)),
+                            'file_path_compress' => $dir . $file_name,
+                        ]);
+                        $asset->save();
                         Log::info('compress' . $asset['id']);
                         dump($asset->toArray());
                         $n++;
