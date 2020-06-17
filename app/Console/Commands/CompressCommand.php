@@ -57,7 +57,7 @@ class CompressCommand extends Command
                 if ($n >= 100) {
                     break;
                 }
-                if (strpos($asset->url, 'mp4')) {
+                if (strpos($asset->url, 'mp4') && !isset($asset['spec']['size_per_second'])) {
                     $exist = Storage::disk('local')->exists($asset['file_path']);
                     $oldfile = Storage::disk('local')->path($asset['file_path']);
                     if (!$exist) {
@@ -79,7 +79,7 @@ class CompressCommand extends Command
                     dump($asset->toArray());
                     $n++;
                 }
-                if (strpos($asset->url, 'jpg') || strpos($asset->url, 'png')) {
+                if ((strpos($asset->url, 'jpg') || strpos($asset->url, 'png')) && !isset($asset['spec']['size_i'])) {
                     $exist = Storage::disk('local')->exists($asset['file_path']);
                     $oldfile = Storage::disk('local')->path($asset['file_path']);
                     if (!$exist) {
