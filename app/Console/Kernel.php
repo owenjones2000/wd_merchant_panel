@@ -28,7 +28,8 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')
         //          ->hourly();
         $schedule->command(CompressCommand::class)->everyTenMinutes()->runInBackground();
-        $schedule->command(CompressCommand::class,['compress'])->cron('0 1-10 * * *')->runInBackground();
+        // $schedule->command(CompressCommand::class,['compress'])->cron('0 1-10 * * *')->runInBackground();
+        $schedule->command(CompressCommand::class,['compress'])->cron('* 1-10 * * *')->runInBackground();
     }
 
     /**

@@ -227,5 +227,5 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
     ],
-
+    'tinify_key' => env('TINIFY_KEY', ''),
 ];

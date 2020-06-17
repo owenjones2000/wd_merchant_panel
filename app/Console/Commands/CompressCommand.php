@@ -106,14 +106,14 @@ class CompressCommand extends Command
         } elseif ($action == 'compress') {
             Log::info('compress start');
             $assets = Asset::where('id', '>=', 30)
-            ->where('spec->size_per_second', '>', 400000)
+            ->where('spec->size_per_second', '>', 250000)
             ->whereNull('spec->size_per_second_compress')
             // ->limit(6)
             ->get();
             // dd( $assets->count(), app()->environment());
             $n = 0;
             foreach ($assets as $key => $asset) {
-                if ($n >= 15) {
+                if ($n >= 1) {
                     break;
                 }
                 // dump($asset['hash'], md5_file(Storage::disk('local')->path($asset['spec']['file_path_compress'])));
