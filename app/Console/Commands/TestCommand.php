@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use FFMpeg\FFMpeg;
 use FFMpeg\FFProbe;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 
 class TestCommand extends Command
 {
@@ -63,5 +64,11 @@ class TestCommand extends Command
         // exec("ffmpeg -i $inputVideo -c:v libx264 -crf 30 -c:a aac $outputVideo");
         // exec("ffmpeg -i $inputVideo  -crf 30  $outputVideo", $output);
         return $outputVideo;
+    }
+
+    public function test2()
+    {
+        $res = DB::table('a_asset')->select('id', 'spec')->whereNull('spec->duration')->orderBy('spec->size', 'desc')->toSql();
+        dd($res);
     }
 }
