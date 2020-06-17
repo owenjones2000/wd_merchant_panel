@@ -54,9 +54,9 @@ class CompressCommand extends Command
             ->get();
             $n = 0;
             foreach ($assets as $key => $asset) {
-                if ($n >= 100) {
-                    break;
-                }
+                // if ($n >= 100) {
+                //     break;
+                // }
                 if (strpos($asset->url, 'mp4') && !isset($asset['spec']['size_per_second'])) {
                     $exist = Storage::disk('local')->exists($asset['file_path']);
                     $oldfile = Storage::disk('local')->path($asset['file_path']);
