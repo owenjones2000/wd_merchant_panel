@@ -49,7 +49,7 @@ class CompressCommand extends Command
         $action = $this->argument('action');
         if ($action == 'detect'){
             Log::info('detect start');
-            $assets = Asset::where('id', '>', 100)
+            $assets = Asset::where('id', '>=', 30)
             // ->whereNull('spec->size')
             ->get();
             $n = 0;
@@ -105,7 +105,7 @@ class CompressCommand extends Command
             Log::info('detect end');
         } elseif ($action == 'compress') {
             Log::info('compress start');
-            $assets = Asset::where('id', '>', 100)
+            $assets = Asset::where('id', '>=', 30)
             ->where('spec->size_per_second', '>', 400000)
             ->whereNull('spec->size_per_second_compress')
             // ->limit(6)

@@ -56,13 +56,15 @@ class TestCommand extends Command
             'ffmpeg.binaries' => env('FFMPEG_BIN_PATH', '/usr/local/bin/ffmpeg'),
             'ffprobe.binaries' => env('FFPROBE_BIN_PATH', '/usr/local/bin/ffprobe')
         ]);
-        $inputVideo = public_path('a.mp4');
-        $outputVideo = public_path('a31.mp4');
+        $inputVideo = storage_path('app/asset/2020050815889320075eb52da7e852b.png');
+        $outputVideo = storage_path('app/asset/test26.png');
         $output = [];
-        $video_info = $ffprobe->streams($outputVideo)->videos()->first()->all();dd($video_info);
-        exec("ffmpeg -i $inputVideo -b 1000000 $outputVideo");
+        // ffprobe -hide_banner -v quiet -print_format json -show_format -show_streams
+        // exec("ffmpeg -i $inputVideo -b 1000000 $outputVideo");
         // exec("ffmpeg -i $inputVideo -c:v libx264 -crf 30 -c:a aac $outputVideo");
         // exec("ffmpeg -i $inputVideo  -crf 30  $outputVideo", $output);
+        // exec("ffmpeg  -hide_banner -i $inputVideo   -pix_fmt rgb24  $outputVideo");
+        exec("ffmpeg  -i $inputVideo   -pix_fmt rgba  $outputVideo");
         return $outputVideo;
     }
 
