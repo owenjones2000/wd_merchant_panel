@@ -121,7 +121,7 @@ class CompressCommand extends Command
                     if (
                         !isset($asset['spec']['size_compress'])
                         && isset($asset['spec']['size_per_second'])
-                        && $asset['spec']['size_per_second'] > 250000
+                        && $asset['spec']['size_per_second'] > 200000
                     ) {
                         $oldfile = Storage::disk('local')->path($asset['file_path']);
                         $file_name = date('Ymd') . time() . uniqid() ."." . pathinfo($oldfile)['extension'];
@@ -150,8 +150,8 @@ class CompressCommand extends Command
                 if (strpos($asset->url, 'png') || strpos($asset->url, 'jpg')){
                     if (
                         !isset($asset['spec']['size_compress'])
-                        && isset($asset['spec']['size_i'])
-                        && $asset['spec']['size_i'] > 200000
+                        // && isset($asset['spec']['size_i'])
+                        // && $asset['spec']['size_i'] > 200000
                     ) {
                         $oldfile = Storage::disk('local')->path($asset['file_path']);
                         // $ext = strpos($asset->url, 'png')? 'png':'jpg';
