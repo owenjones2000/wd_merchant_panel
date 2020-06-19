@@ -107,8 +107,7 @@ class CompressCommand extends Command
             Log::info('compress start');
             $assets = Asset::where('id', '>=', 30)
             // ->where('spec->size_per_second', '>', 250000)
-            ->whereNull('spec->size_compress')
-            // ->limit(6)
+            // ->whereNull('spec->size_compress')
             ->get();
             // dd( $assets->count(), app()->environment());
             $n = 0;
@@ -116,19 +115,21 @@ class CompressCommand extends Command
                 if ($n >= 5) {
                     break;
                 }
-                // dump($asset['hash'], md5_file(Storage::disk('local')->path($asset['spec']['file_path_compress'])));
                 if (strpos($asset->url, 'mp4')) {
                     if (
-                        !isset($asset['spec']['size_compress'])
-                        && isset($asset['spec']['size_per_second'])
-                        && $asset['spec']['size_per_second'] > 200000
+                        // !isset($asset['spec']['size_compress'])
+                        // && isset($asset['spec']['size_per_second'])
+                        // && $asset['spec']['size_per_second'] > 200000
+                        $asset['spec']['size_per_second'] > 160000
+                        || $asset['spec']['"size_per_second_compress": ']> 160000
                     ) {
                         $oldfile = Storage::disk('local')->path($asset['file_path']);
                         $file_name = date('Ymd') . time() . uniqid() ."." . pathinfo($oldfile)['extension'];
                         $path = Storage::disk('local')->path('') . 'asset/';
                         $dir = 'asset/';
                         $newfile = $path . $file_name;
-                        exec("ffmpeg -y -i $oldfile -b 1000000 $newfile");
+                        // exec("ffmpeg -y -i $oldfile -b 1000000 $newfile");
+                        exec("ffmpeg -y -i $oldfile  -crf 30  $newfile");
                         $upload = Storage::put($dir . $file_name, file_get_contents($newfile));
                         // dump($video_info['bit_rate'], $upload);
                         $asset['hash'] = md5_file($newfile);

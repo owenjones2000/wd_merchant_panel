@@ -57,21 +57,22 @@ class TestCommand extends Command
             'ffmpeg.binaries' => env('FFMPEG_BIN_PATH', '/usr/local/bin/ffmpeg'),
             'ffprobe.binaries' => env('FFPROBE_BIN_PATH', '/usr/local/bin/ffprobe')
         ]);
-        $inputVideo = storage_path('app/asset/2020050815889320075eb52da7e852b.png');
-        $outputVideo = storage_path('app/asset/tinify.png');
+        $inputVideo = storage_path('app/asset/2020030415833033515e5f4ab7da035.mp4');
+        $outputVideo = storage_path('app/asset/crf33.mp4');
         $output = [];
         $tinifykey = config('app.tinify_key');
         
-        \Tinify\setKey($tinifykey);
+        // \Tinify\setKey($tinifykey);
         // $compressionsThisMonth = \Tinify\compressionCount();
         // dd($compressionsThisMonth);
-        $source = \Tinify\fromFile($inputVideo);
+        // $source = \Tinify\fromFile($inputVideo);
         // $source = \Tinify\fromUrl("https://tinypng.com/images/panda-happy.png");
-        $source->toFile($outputVideo);
+        // $source->toFile($outputVideo);
+          
         // ffprobe -hide_banner -v quiet -print_format json -show_format -show_streams
-        // exec("ffmpeg -i $inputVideo -b 1000000 $outputVideo");
+        // exec("ffmpeg -i $inputVideo -b 500000 $outputVideo");
         // exec("ffmpeg -i $inputVideo -c:v libx264 -crf 30 -c:a aac $outputVideo");
-        // exec("ffmpeg -i $inputVideo  -crf 30  $outputVideo", $output);
+        exec("ffmpeg -i $inputVideo  -crf 33  $outputVideo", $output);
         // exec("ffmpeg  -hide_banner -i $inputVideo   -pix_fmt rgb24  $outputVideo");
         // exec("ffmpeg  -hide_banner -i $inputVideo   -pix_fmt pal8  $outputVideo");
         // exec("ffmpeg  -i $inputVideo   -pix_fmt rgba  $outputVideo");
