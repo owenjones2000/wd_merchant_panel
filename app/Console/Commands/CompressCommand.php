@@ -113,15 +113,15 @@ class CompressCommand extends Command
             // dd( $assets->count(), app()->environment());
             $n = 0;
             foreach ($assets as $key => $asset) {
-                if ($n >= 40) {
+                if ($n >= 2) {
                     break;
                 }
                 // dump($asset['hash'], md5_file(Storage::disk('local')->path($asset['spec']['file_path_compress'])));
                 if (strpos($asset->url, 'mp4')) {
                     if (
                         !isset($asset['spec']['size_compress'])
-                        && isset($asset['spec']['size_per_second'])
-                        && $asset['spec']['size_per_second'] > 200000
+                        // && isset($asset['spec']['size_per_second'])
+                        // && $asset['spec']['size_per_second'] > 200000
                     ) {
                         $oldfile = Storage::disk('local')->path($asset['file_path']);
                         $file_name = date('Ymd') . time() . uniqid() ."." . pathinfo($oldfile)['extension'];
