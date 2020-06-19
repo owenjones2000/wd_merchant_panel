@@ -112,7 +112,7 @@ class CompressCommand extends Command
             // dd( $assets->count(), app()->environment());
             $n = 0;
             foreach ($assets as $key => $asset) {
-                if ($n >= 5) {
+                if ($n >= 10) {
                     break;
                 }
                 if (strpos($asset->url, 'mp4')) {
@@ -175,7 +175,7 @@ class CompressCommand extends Command
                         $asset->save();
                         Log::info('compress' . $asset['id']);
                         dump($asset->toArray());
-                        $n= $n+0.2;
+                        $n++;
                     }
                 }
             }
