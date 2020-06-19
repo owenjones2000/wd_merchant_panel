@@ -142,7 +142,7 @@ class CompressCommand extends Command
                         $asset->save();
                         // $downloadfile = file_get_contents($asset['url']);
                         // unset($downloadfile);
-                        Log::info('compress mp4' . $asset['id']);
+                        Log::info('compress mp4   ' . $asset['id']);
                         dump($asset->toArray());
                         $n++;
                     }
