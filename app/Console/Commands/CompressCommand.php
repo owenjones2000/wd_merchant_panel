@@ -117,11 +117,9 @@ class CompressCommand extends Command
                 }
                 if (strpos($asset->url, 'mp4')) {
                     if (
-                        // !isset($asset['spec']['size_compress'])
-                        // && isset($asset['spec']['size_per_second'])
-                        // && $asset['spec']['size_per_second'] > 200000
-                        $asset['spec']['size_per_second'] > 160000
-                        || $asset['spec']['"size_per_second_compress": ']> 160000
+                        !isset($asset['spec']['size_compress'])
+                        && isset($asset['spec']['size_per_second'])
+                        && $asset['spec']['size_per_second'] > 200000
                     ) {
                         $oldfile = Storage::disk('local')->path($asset['file_path']);
                         $file_name = date('Ymd') . time() . uniqid() ."." . pathinfo($oldfile)['extension'];
@@ -129,7 +127,7 @@ class CompressCommand extends Command
                         $dir = 'asset/';
                         $newfile = $path . $file_name;
                         // exec("ffmpeg -y -i $oldfile -b 1000000 $newfile");
-                        exec("ffmpeg -y -i $oldfile  -crf 30  $newfile");
+                        exec("ffmpeg -y -i $oldfile  -crf 32  $newfile");
                         $upload = Storage::put($dir . $file_name, file_get_contents($newfile));
                         // dump($video_info['bit_rate'], $upload);
                         $asset['hash'] = md5_file($newfile);
