@@ -120,8 +120,8 @@ class CompressCommand extends Command
                 if (strpos($asset->url, 'mp4')) {
                     if (
                         !isset($asset['spec']['size_compress'])
-                        // && isset($asset['spec']['size_per_second'])
-                        // && $asset['spec']['size_per_second'] > 200000
+                        && isset($asset['spec']['size_per_second'])
+                        && $asset['spec']['size_per_second'] > 100000
                     ) {
                         $oldfile = Storage::disk('local')->path($asset['file_path']);
                         $file_name = date('Ymd') . time() . uniqid() ."." . pathinfo($oldfile)['extension'];
