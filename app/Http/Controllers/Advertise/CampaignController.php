@@ -40,6 +40,12 @@ class CampaignController extends Controller
             $like_keyword = '%'.$request->get('keyword').'%';
             $campaign_base_query->where('name', 'like', $like_keyword);
         }
+        if(!empty($request->get('platform'))){
+            $platform  = $request->get('platform');
+            $campaign_base_query->whereHas('app', function($query)use ($platform){
+                $query->where('os', $platform);
+            });
+        }
 
         $campaign_id_query = clone $campaign_base_query;
         $campaign_id_query->select('id');
@@ -100,7 +106,87 @@ class CampaignController extends Controller
         return response()->json($data);
     }
 
-    /**
+
+    public function alldata(Request $request)
+    {
+        if (!empty($request->get('rangedate'))) {
+            $range_date = explode(' ~ ', $request->get('rangedate'));
+        }
+        $start_date = date('Ymd', strtotime($range_date[0] ?? 'now'));
+        $end_date = date('Ymd', strtotime($range_date[1] ?? 'now'));
+        $order_by = explode('.', $request->get('field', 'status'));
+        $order_sort = $request->get('order', 'desc') ?: 'desc';
+
+        $campaign_base_query = Campaign::query();
+        if (!empty($request->get('keyword'))) {
+            $like_keyword = '%' . $request->get('keyword') . '%';
+            $campaign_base_query->where('name', 'like', $like_keyword);
+        }
+        if (!empty($request->get('platform'))) {
+            $platform  = $request->get('platform');
+            $campaign_base_query->whereHas('app', function ($query) use ($platform) {
+                $query->where('os', $platform);
+            });
+        }
+
+        $campaign_id_query = clone $campaign_base_query;
+        $campaign_id_query->select('id');
+        $advertise_kpi_query = AdvertiseKpi::multiTableQuery(function ($query) use ($start_date, $end_date, $campaign_id_query) {
+            $query->whereBetween('date', [$start_date, $end_date])
+                ->whereIn('campaign_id', $campaign_id_query)
+                ->select([
+                    'impressions', 'clicks', 'installations', 'spend',
+                    'date', 'campaign_id',
+                ]);
+            return $query;
+        }, $start_date, $end_date);
+
+        $advertise_kpi_query->select([
+            DB::raw('sum(impressions) as impressions'),
+            DB::raw('sum(clicks) as clicks'),
+            DB::raw('sum(installations) as installs'),
+            DB::raw('round(sum(clicks) * 100 / sum(impressions), 2) as ctr'),
+            DB::raw('round(sum(installations) * 100 / sum(clicks), 2) as cvr'),
+            DB::raw('round(sum(installations) * 100 / sum(impressions), 2) as ir'),
+            DB::raw('round(sum(spend), 2) as spend'),
+            DB::raw('round(sum(spend) / sum(installations), 2) as ecpi'),
+            DB::raw('round(sum(spend) * 1000 / sum(impressions), 2) as ecpm'),
+            'campaign_id',
+        ]);
+        $advertise_kpi_query->groupBy('campaign_id');
+        if ($order_by[0] === 'kpi' && isset($order_by[1])) {
+            $advertise_kpi_query->orderBy($order_by[1], $order_sort);
+        }
+
+        $advertise_kpi_list = $advertise_kpi_query
+            ->orderBy('spend', 'desc')
+            ->get()
+            ->keyBy('campaign_id')
+            ->toArray();
+        $order_by_ids = implode(',', array_reverse(array_keys($advertise_kpi_list)));
+        $campaign_query = clone $campaign_base_query;
+        $campaign_query->with('app');
+        if (!empty($order_by_ids)) {
+            $campaign_query->orderByRaw(DB::raw("FIELD(id,{$order_by_ids}) desc"));
+        }
+        if ($order_by[0] !== 'kpi') {
+            $campaign_query->orderBy($order_by[0], $order_sort);
+        }
+        $campaign_list = $campaign_query->get()
+        ->toArray();
+
+        foreach ($campaign_list as &$campaign) {
+            if (isset($advertise_kpi_list[$campaign['id']])) {
+                $campaign['kpi'] = $advertise_kpi_list[$campaign['id']];
+            }
+        }
+        $data = [
+            'code' => 0,
+            'data'  => $campaign_list
+        ];
+        return response()->json($data);
+    }
+    /** 
      * Display the specified resource.
      *
      * @param  int  $id

@@ -57,8 +57,8 @@ class TestCommand extends Command
             'ffmpeg.binaries' => env('FFMPEG_BIN_PATH', '/usr/local/bin/ffmpeg'),
             'ffprobe.binaries' => env('FFPROBE_BIN_PATH', '/usr/local/bin/ffprobe')
         ]);
-        $inputVideo = storage_path('app/asset/2020030415833033515e5f4ab7da035.mp4');
-        $outputVideo = storage_path('app/asset/crf32.mp4');
+        $inputVideo = storage_path('app/asset/2020061815924445655eeac6952713e.mp4');
+        $outputVideo = storage_path('app/asset/2crf32.mp4');
         $output = [];
         $tinifykey = config('app.tinify_key');
         

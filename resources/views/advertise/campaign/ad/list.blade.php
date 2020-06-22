@@ -19,6 +19,7 @@
                     <input type="text" name="rangedate" id="rangedate" class="layui-input" autocomplete="off" placeholder="default today">
                 </div>
                 <button class="layui-btn" id="adSearchBtn">Run Report</button>
+                <button class="layui-btn" id="export"><i class="iconfont icon-export"></i> Export</button>
             </div>
         </div>
         <div class="layui-card-body">
@@ -116,6 +117,7 @@
                     ,page: true //开启分页
                     ,done: function(res, curr, count){
                         //接口回调，处理一些和表格相关的辅助事项
+                         exportData=res.data;
                         if(res.data.length==0 && count>0){
                             dataTable.reload({
                                 page: {
@@ -230,7 +232,9 @@
                         }
                     });
                 });
-
+                $("#export").click(function(){
+                    table.exportFile(dataTable.config.id,exportData);
+                })
                 //搜索
                 $("#adSearchBtn").click(function () {
                     var keyword = $("#keyword").val();

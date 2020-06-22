@@ -136,6 +136,7 @@ Route::group(['namespace'=>'Advertise','prefix'=>'advertise','middleware'=>['aut
     // 活动管理
     Route::group(['prefix'=>'campaign', 'middleware' => 'permission:advertise.campaign'], function () {
         Route::get('data', 'CampaignController@data')->name('advertise.campaign.data');
+        Route::get('alldata', 'CampaignController@alldata')->name('advertise.campaign.alldata');
         Route::get('list', 'CampaignController@list')->name('advertise.campaign');
         //编辑
         Route::get('{id?}', 'CampaignController@edit')->name('advertise.campaign.edit')->middleware('permission:advertise.campaign.edit');
@@ -148,6 +149,7 @@ Route::group(['namespace'=>'Advertise','prefix'=>'advertise','middleware'=>['aut
         // 广告
         Route::group(['prefix'=>'{campaign_id}/ad', 'middleware' => 'permission:advertise.campaign.ad'], function () {
             Route::get('data', 'AdController@data')->name('advertise.campaign.ad.data');
+            // Route::get('alldata', 'AdController@alldata')->name('advertise.campaign.ad.alldata');
             Route::get('list', 'AdController@list')->name('advertise.campaign.ad');
             //编辑
             Route::get('{id?}', 'AdController@edit')->name('advertise.campaign.ad.edit')->middleware('permission:advertise.campaign.ad');
