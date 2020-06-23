@@ -111,10 +111,11 @@
                 var dataTable = table.render({
                     elem: '#dataTable'
                     ,autoSort: false
-                    ,height: 500
+                    //height: 500
                     ,url: "{{ route('advertise.campaign.ad.data', [$campaign['id']]) }}" //数据接口
                     ,where: {rangedate: '{{$rangedate}}'}
                     ,page: true //开启分页
+                    ,limit:20
                     ,done: function(res, curr, count){
                         //接口回调，处理一些和表格相关的辅助事项
                          exportData=res.data;
