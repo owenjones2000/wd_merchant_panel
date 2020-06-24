@@ -47,9 +47,11 @@ class Campaign extends Model
             }else{
                 $audience = $campaign['audience'];
             }
-            $audience['gender'] = $params['audience']['gender'] ?? 0;
-            $audience['adult'] = $params['audience']['adult'] ?? false;
-            $audience['states'] = ',' . ($params['audience']['states'] ?? '') . ',';
+            if($main_user_id == 22){
+                $audience['gender'] = $params['audience']['gender'] ?? 0;
+                $audience['adult'] = $params['audience']['adult'] ?? false;
+                $audience['states'] = ',' . ($params['audience']['states'] ?? '') . ',';
+            }
             $audience->saveOrFail();
 
             if(empty($params['regions'])){
