@@ -291,6 +291,38 @@ class Campaign extends Model
     }
 
     /**
+     * 禁用投放渠道
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function disableChannels()
+    {
+        return $this->belongsToMany(
+            Channel::class,
+            'a_campaign_target_app_disabled',
+            'campaign_id',
+            'target_app_id',
+            'id',
+            'id'
+        );
+    }
+
+    /**
+     * 投放渠道白名单
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function whiteListChannels()
+    {
+        return $this->belongsToMany(
+            Channel::class,
+            'a_campaign_target_app_whitelist',
+            'campaign_id',
+            'target_app_id',
+            'id',
+            'id'
+        );
+    }
+
+    /**
      *  模型的 「启动」 方法.
      *
      * @return void

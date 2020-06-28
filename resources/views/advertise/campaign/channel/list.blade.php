@@ -111,7 +111,7 @@
                     switch(layEvent) {
                         case 'enable':
                             layer.confirm('Confirm activate [ '+data.channel.name_hash+' ] for ' + data.app.name + '?', function(index){
-                                $.post('/advertise/app/'+data.app_id+'/channel/' + data.target_app_id + '/enable',
+                                $.post('/advertise/campaign/'+data.campaign_id+'/channel/' + data.target_app_id + '/enable',
                                     {},
                                     function (result) {
                                         layer.msg(result.msg);
@@ -124,7 +124,7 @@
                             break;
                         case 'disable':
                             layer.confirm('Confirm pause [ '+data.channel.name_hash+' ] for ' + data.app.name + '?', function(index){
-                                $.post('/advertise/app/'+data.app_id+'/channel/' + data.target_app_id + '/disable',
+                                $.post('/advertise/campaign/'+data.campaign_id+'/channel/' + data.target_app_id + '/disable',
                                     {},
                                     function (result) {
                                         if (result.code==0){

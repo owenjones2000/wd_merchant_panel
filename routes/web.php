@@ -164,6 +164,8 @@ Route::group(['namespace'=>'Advertise','prefix'=>'advertise','middleware'=>['aut
         Route::group(['prefix'=>'{campaign_id}/channel', 'middleware' => 'permission:advertise.campaign'], function () {
             Route::get('data', 'ChannelController@data')->name('advertise.campaign.channel.data');
             Route::get('list', 'ChannelController@list')->name('advertise.campaign.channel');
+            Route::post('{channel_id}/enable', 'ChannelController@enable')->name('advertise.campaign.channel.v2.enable');
+            Route::post('{channel_id}/disable', 'ChannelController@disable')->name('advertise.campaign.channel.v2.disable');
         });
 
         // 区域

@@ -75,11 +75,11 @@ class ChannelController extends Controller
         
         $advertise_kpi_list = $advertise_kpi_query
             ->with('channel:id,name_hash')
-            ->with(['app:id,name', 'app.disableChannels'])
+            ->with(['app:id,name', 'campaign.disableChannels'])
             ->orderBy('spend','desc')
             ->paginate($request->get('limit',30));
         foreach($advertise_kpi_list as $advertise_kpi){
-            $advertise_kpi['status'] = !$advertise_kpi['app']['disableChannels']->contains($advertise_kpi['target_app_id']);
+            $advertise_kpi['status'] = !$advertise_kpi['campaign']['disableChannels']->contains($advertise_kpi['target_app_id']);
         }
 
         $advertise_kpi_list = $advertise_kpi_list->toArray();
@@ -98,11 +98,13 @@ class ChannelController extends Controller
      * @return \Illuminate\Http\JsonResponse
      * @throws \Throwable
      */
-    public function enable($app_id, $channel_id)
+    public function enable($campaign_id, $channel_id)
     {
-        /** @var App $apps */
-        $apps = App::findOrFail($app_id);
-        $apps->disableChannels()->detach($channel_id);
+        // /** @var App $apps */
+        // $apps = App::findOrFail($app_id);
+        /** @var Campaign $campaign */
+        $campaign  = Campaign::findOrFail($campaign_id);
+        $campaign->disableChannels()->detach($channel_id);
         return response()->json(['code'=>0,'msg'=>'Successful']);
     }
 
@@ -112,11 +114,13 @@ class ChannelController extends Controller
      * @return \Illuminate\Http\JsonResponse
      * @throws \Throwable
      */
-    public function disable($app_id, $channel_id)
+    public function disable($campaign_id, $channel_id)
     {
-        /** @var App $apps */
-        $apps = App::findOrFail($app_id);
-        $apps->disableChannels()->attach($channel_id);
+        // /** @var App $apps */
+        // $apps = App::findOrFail($app_id);
+        /** @var Campaign $campaign */
+        $campaign  = Campaign::findOrFail($campaign_id);
+        $campaign->disableChannels()->attach($channel_id);
         return response()->json(['code'=>0,'msg'=>'Successful']);
     }
 }
