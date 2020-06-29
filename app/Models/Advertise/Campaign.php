@@ -47,10 +47,10 @@ class Campaign extends Model
             }else{
                 $audience = $campaign['audience'];
             }
-            if($main_user_id == 22){
+            if($campaign->app->is_audience??0){
                 $audience['gender'] = $params['audience']['gender'] ?? 0;
                 $audience['adult'] = $params['audience']['adult'] ?? false;
-                $audience['states'] = ',' . ($params['audience']['states'] ?? '') . ',';
+                $audience['states'] =  ($params['audience']['states'] ?? '') . ',';
             }
             $audience->saveOrFail();
 
