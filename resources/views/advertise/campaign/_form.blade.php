@@ -4,6 +4,7 @@
 @endsection
 @php
 $disable_basic_info = $campaign['ads']->count() > 0;
+$is_audience = $campaign->app->is_audience??0;
 @endphp
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
     <legend>Basic info</legend>
@@ -56,7 +57,7 @@ $disable_basic_info = $campaign['ads']->count() > 0;
         </div>
     </div>
 
-    @if($mainUserId == '22')
+    @if($is_audience)
         <div class="layui-colla-item">
             <h2 class="layui-colla-title">Audience</h2>
             <div class="layui-colla-content @if($campaign['audience']) layui-show @endif">
