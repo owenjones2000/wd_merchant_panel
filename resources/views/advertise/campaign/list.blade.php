@@ -16,7 +16,7 @@
                     <input type="text" name="keyword" id="keyword" placeholder="Keyword" class="layui-input">
                 </div>
                 <div class="layui-input-inline">
-                    <input type="text" name="rangedate" id="rangedate" class="layui-input" autocomplete="off" placeholder="default today">
+                    <input type="text" name="rangedate" id="rangedate" class="layui-input" autocomplete="off" placeholder="default today" style="min-width: 15rem">
                 </div>
                 <div class="layui-input-inline">
                     <select name="platform" id="platform" lay-verify="">
