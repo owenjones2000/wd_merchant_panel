@@ -9,6 +9,7 @@ use App\Models\Advertise\Channel;
 use App\Rules\AdvertiseName;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Advertise\Impression;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -27,26 +28,27 @@ class AppController extends Controller
 
     public function data(Request $request)
     {
-        if(!empty($request->get('rangedate'))){
-            $range_date = explode(' ~ ',$request->get('rangedate'));
+        if (!empty($request->get('rangedate'))) {
+            $range_date = explode(' ~ ', $request->get('rangedate'));
         }
-        $start_date = date('Ymd', strtotime($range_date[0]??'now'));
-        $end_date = date('Ymd', strtotime($range_date[1]??'now'));
+        $start_date = date('Ymd', strtotime($range_date[0] ?? 'now'));
+        $end_date = date('Ymd', strtotime($range_date[1] ?? 'now'));
         $order_by = explode('.', $request->get('field', 'status'));
         $order_sort = $request->get('order', 'desc') ?: 'desc';
 
         $channel_base_query = Channel::query()->where('main_user_id', Auth::user()->getMainId());
-        if(!empty($request->get('keyword'))){
-            $like_keyword = '%'.$request->get('keyword').'%';
+        if (!empty($request->get('keyword'))) {
+            $like_keyword = '%' . $request->get('keyword') . '%';
             $channel_base_query->where('name', 'like', $like_keyword);
         }
 
         $channel_id_query = clone $channel_base_query;
         $channel_id_query->select('id');
-        $advertise_kpi_query = AdvertiseKpi::multiTableQuery(function($query) use($start_date, $end_date, $channel_id_query){
+        $advertise_kpi_query = AdvertiseKpi::multiTableQuery(function ($query) use ($start_date, $end_date, $channel_id_query) {
             $query->whereBetween('date', [$start_date, $end_date])
                 ->whereIn('target_app_id', $channel_id_query)
-                ->select(['impressions', 'clicks', 'installations', 'spend',
+                ->select([
+                    'impressions', 'clicks', 'installations', 'spend',
                     'date', 'target_app_id',
                 ]);
             return $query;
@@ -65,28 +67,48 @@ class AppController extends Controller
             'target_app_id',
         ]);
         $advertise_kpi_query->groupBy('target_app_id');
-        if($order_by[0] === 'kpi' && isset($order_by[1])){
+        if ($order_by[0] === 'kpi' && isset($order_by[1])) {
             $advertise_kpi_query->orderBy($order_by[1], $order_sort);
         }
 
         $advertise_kpi_list = $advertise_kpi_query
-            ->orderBy('spend','desc')
+            ->orderBy('spend', 'desc')
             ->get()
             ->keyBy('target_app_id')
             ->toArray();
         $order_by_ids = implode(',', array_reverse(array_keys($advertise_kpi_list)));
         $channel_query = clone $channel_base_query;
-        if(!empty($order_by_ids)){
+        if (!empty($order_by_ids)) {
             $channel_query->orderByRaw(DB::raw("FIELD(id,{$order_by_ids}) desc"));
         }
-        if($order_by[0] !== 'kpi'){
+        if ($order_by[0] !== 'kpi') {
             $channel_query->orderBy($order_by[0], $order_sort);
         }
-        $channel_list = $channel_query->paginate($request->get('limit',30))
+        $channel_list = $channel_query->paginate($request->get('limit', 30))
             ->toArray();
 
-        foreach($channel_list['data'] as &$channel){
-            if(isset($advertise_kpi_list[$channel['id']])){
+        //spend 从impression表取
+        $impression_query = Impression::multiTableQuery(function ($query) use ($start_date, $end_date, $channel_id_query) {
+            $query->whereBetween('date', [$start_date, $end_date])
+                ->whereIn('target_app_id', $channel_id_query)
+                ->select([
+                    'ecpm',
+                    'target_app_id',
+                ]);
+            return $query;
+        }, $start_date, $end_date);
+        $impression_list = $impression_query->select([
+            DB::raw('round(sum(ecpm)/1000, 2) as spend'),
+            'target_app_id',
+        ])->groupBy('target_app_id')
+            ->get()
+            ->keyBy('target_app_id')
+            ->toArray();
+        foreach ($advertise_kpi_list as $key => &$kpi) {
+            $kpi['spend'] = $impression_list[$key]['spend'] ?? 0;
+        }
+        foreach ($channel_list['data'] as &$channel) {
+            if (isset($advertise_kpi_list[$channel['id']])) {
                 $channel['kpi'] = $advertise_kpi_list[$channel['id']];
             }
         }
@@ -119,13 +141,13 @@ class AppController extends Controller
      */
     public function edit($id = null)
     {
-        if(empty($id)){
+        if (empty($id)) {
             $apps = new Channel();
-        }else{
+        } else {
             /** @var App $apps */
             $apps = Channel::findOrFail($id);
         }
-        return view('publish.app.edit',compact('apps'));
+        return view('publish.app.edit', compact('apps'));
     }
 
     /**
@@ -137,18 +159,18 @@ class AppController extends Controller
      */
     public function save(Request $request, $id = null)
     {
-        $this->validate($request,[
-            'name'  => ['required', 'string', 'unique:a_target_apps,name,'.$id, new AdvertiseName()],
-            'bundle_id'  => 'required|unique:a_target_apps,bundle_id,'.$id,
+        $this->validate($request, [
+            'name'  => ['required', 'string', 'unique:a_target_apps,name,' . $id, new AdvertiseName()],
+            'bundle_id'  => 'required|unique:a_target_apps,bundle_id,' . $id,
             'icon_url' => 'string|max:200',
         ]);
-        try{
+        try {
             $params = $request->all();
             $params['id'] = $id;
             Channel::Make(Auth::user(), $params);
-            return redirect(route('publish.app.edit', [$id]))->with(['status'=>'Update successfully']);
-        } catch(BizException $ex){
-            return redirect(route('publish.app.edit', [$id]))->withErrors(['status'=>$ex->getMessage()]);
+            return redirect(route('publish.app.edit', [$id]))->with(['status' => 'Update successfully']);
+        } catch (BizException $ex) {
+            return redirect(route('publish.app.edit', [$id]))->withErrors(['status' => $ex->getMessage()]);
         }
     }
 
@@ -162,29 +184,29 @@ class AppController extends Controller
         //返回信息json
         $file = $request->file('file');
 
-        try{
-            if (!$file->isValid()){
+        try {
+            if (!$file->isValid()) {
                 throw new \Exception($file->getErrorMessage());
             }
             $main_id = Auth::user()->getMainId();
             $dir = "icon/{$main_id}";
-            $file_name = date('Ymd').time().uniqid().".".$file->getClientOriginalExtension();
+            $file_name = date('Ymd') . time() . uniqid() . "." . $file->getClientOriginalExtension();
             $path = Storage::putFileAs($dir, $file, $file_name);
 
-            if($path){
+            if ($path) {
                 $data = [
                     'code'  => 0,
                     'msg'   => '上传成功',
                     'url' => Storage::url($path),
                 ];
-            }else{
+            } else {
                 $data['msg'] = $file->getErrorMessage();
             }
             return response()->json($data);
-        }catch (\Exception $ex){
+        } catch (\Exception $ex) {
             $data = [
-                'code'=>1,
-                'msg'=>$ex->getMessage()
+                'code' => 1,
+                'msg' => $ex->getMessage()
             ];
             return response()->json($data);
         }
@@ -201,7 +223,7 @@ class AppController extends Controller
         /** @var Channel $apps */
         $apps = Channel::findOrFail($id);
         $apps->enable();
-        return response()->json(['code'=>0,'msg'=>'Successful']);
+        return response()->json(['code' => 0, 'msg' => 'Successful']);
     }
 
     /**
@@ -215,7 +237,7 @@ class AppController extends Controller
         /** @var Channel $apps */
         $apps = Channel::findOrFail($id);
         $apps->disable();
-        return response()->json(['code'=>0,'msg'=>'Successful']);
+        return response()->json(['code' => 0, 'msg' => 'Successful']);
     }
 
     /**
@@ -224,15 +246,15 @@ class AppController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-//    public function destroy(Request $request)
-//    {
-//        $ids = $request->get('ids');
-//        if (empty($ids)){
-//            return response()->json(['code'=>1,'msg'=>'请选择删除项']);
-//        }
-//        if (Channel::destroy($ids)){
-//            return response()->json(['code'=>0,'msg'=>'删除成功']);
-//        }
-//        return response()->json(['code'=>1,'msg'=>'删除失败']);
-//    }
+    //    public function destroy(Request $request)
+    //    {
+    //        $ids = $request->get('ids');
+    //        if (empty($ids)){
+    //            return response()->json(['code'=>1,'msg'=>'请选择删除项']);
+    //        }
+    //        if (Channel::destroy($ids)){
+    //            return response()->json(['code'=>0,'msg'=>'删除成功']);
+    //        }
+    //        return response()->json(['code'=>1,'msg'=>'删除失败']);
+    //    }
 }
