@@ -10,6 +10,7 @@ use App\Rules\AdvertiseName;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Advertise\Impression;
+use App\Models\ChannelCpm;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -88,24 +89,34 @@ class AppController extends Controller
             ->toArray();
 
         //spend 从impression表取
-        $impression_query = Impression::multiTableQuery(function ($query) use ($start_date, $end_date, $channel_id_query) {
-            $query->whereBetween('date', [$start_date, $end_date])
-                ->whereIn('target_app_id', $channel_id_query)
-                ->select([
-                    'ecpm',
-                    'target_app_id',
-                ]);
-            return $query;
-        }, $start_date, $end_date);
-        $impression_list = $impression_query->select([
-            DB::raw('round(sum(ecpm)/1000, 2) as spend'),
-            'target_app_id',
-        ])->groupBy('target_app_id')
-            ->get()
-            ->keyBy('target_app_id')
-            ->toArray();
+        // $impression_query = Impression::multiTableQuery(function ($query) use ($start_date, $end_date, $channel_id_query) {
+        //     $query->whereBetween('date', [$start_date, $end_date])
+        //         ->whereIn('target_app_id', $channel_id_query)
+        //         ->select([
+        //             'ecpm',
+        //             'target_app_id',
+        //         ]);
+        //     return $query;
+        // }, $start_date, $end_date);
+        // $impression_list = $impression_query->select([
+        //     DB::raw('round(sum(ecpm)/1000, 2) as spend'),
+        //     'target_app_id',
+        // ])->groupBy('target_app_id')
+        //     ->get()
+        //     ->keyBy('target_app_id')
+        //     ->toArray();
+
+        $impression_list = ChannelCpm::whereBetween('date', [$start_date, $end_date])
+            ->whereIn('target_app_id', $channel_id_query)
+            ->select([
+                DB::raw('sum(cpm_revenue) as cpm'),
+                'target_app_id',
+            ])->groupBy('target_app_id')
+            ->get()->keyBy('target_app_id')
+            ->toArray();;
+
         foreach ($advertise_kpi_list as $key => &$kpi) {
-            $kpi['spend'] = $impression_list[$key]['spend'] ?? 0;
+            $kpi['spend'] = $impression_list[$key]['cpm'] ?? 0;
         }
         foreach ($channel_list['data'] as &$channel) {
             if (isset($advertise_kpi_list[$channel['id']])) {
