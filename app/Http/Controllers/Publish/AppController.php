@@ -42,6 +42,11 @@ class AppController extends Controller
             $like_keyword = '%' . $request->get('keyword') . '%';
             $channel_base_query->where('name', 'like', $like_keyword);
         }
+        if (!empty($request->get('platform'))) {
+            $platform  = $request->get('platform');
+            $channel_base_query->where('platform', $platform);
+
+        }
 
         $channel_id_query = clone $channel_base_query;
         $channel_id_query->select('id');

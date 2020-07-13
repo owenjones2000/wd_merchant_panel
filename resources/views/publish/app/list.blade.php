@@ -18,6 +18,13 @@
                 <div class="layui-input-inline">
                     <input type="text" name="rangedate" id="rangedate" class="layui-input" autocomplete="off" placeholder="default today" style="min-width: 15rem">
                 </div>
+                <div class="layui-input-inline">
+                    <select name="platform" id="platform" lay-verify="">
+                    <option value="">platform</option>
+                    <option value="ios">Ios</option>
+                    <option value="android">Android</option>
+                    </select> 
+                </div>
                 <button class="layui-btn" id="appSearchBtn">Search</button>
             </div>
         </div>
@@ -213,8 +220,9 @@
                 $("#appSearchBtn").click(function () {
                     var keyword = $("#keyword").val();
                     var rangedate = $("#rangedate").val();
+                    var platform = $("#platform").val();
                     dataTable.reload({
-                        where:{keyword:keyword, rangedate:rangedate},
+                        where:{keyword:keyword, rangedate:rangedate, platform:platform},
                         page:{curr:1}
                     })
                 })
