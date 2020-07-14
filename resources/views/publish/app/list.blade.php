@@ -25,6 +25,15 @@
                     <option value="android">Android</option>
                     </select> 
                 </div>
+                <div class="layui-input-inline">
+                    <select name="country" id="country" lay-verify="">
+                    <option value="">country</option>
+                    @foreach($regions as $region)
+                        <option
+                        value="{{ $region->code }}">{{ $region->name }}({{ $region->code }})</option>
+                    @endforeach
+                    </select> 
+                </div>
                 <button class="layui-btn" id="appSearchBtn">Search</button>
             </div>
         </div>
@@ -42,7 +51,7 @@
                     <a class="layui-table-link" lay-event="edit" href="javascript:;">
                 @endcan
                     <img width="24px" height="24px" src="@{{ d.icon_url ? d.icon_url : '/image/none.png' }}" />
-                    @{{ d.name }}
+                    @{{ d.app.name }}
                 @can('publish.app')
                     </a>
                 @endcan
@@ -113,20 +122,21 @@
                     ,cols: [[ //表头
                         // {checkbox: true,fixed: true}
                         // ,{field: 'id', title: 'ID', sort: true,width:80}
-                        {field: 'name', title: 'Name', templet: '#nameTpl', width:300, fixed: true}
-                        ,{field: 'bundle_id', title: 'Package Name', fixed: true}
-                        ,{field: 'platform', title: 'Platform', fixed: true}
-                        ,{field: 'put_mode', title: 'Put Mode', templet: function(d){switch(d.put_mode){case 1: return 'Normal'; case 2: return 'Backup'; default: return 'Unknown';}}, fixed: true}
+                        {field: 'app.name', title: 'Name', templet: '#nameTpl', width:300, fixed: true}
+                        ,{field: 'app.bundle_id', title: 'Package Name', templet: function(d){return  d.app.bundle_id;},fixed: true}
+                        ,{field: 'app.platform', title: 'Platform', templet: function(d){return  d.app.platform;}, fixed: true}
+                        ,{field: 'country', title: 'Country', fixed: true}
+                        ,{field: 'app.put_mode', title: 'Put Mode', templet: function(d){switch(d.app.put_mode){case 1: return 'Normal'; case 2: return 'Backup'; default: return 'Unknown';}}, fixed: true}
                         // ,{field: 'status', title: 'Status', templet: '#status', align:'center', width:70, fixed: true}
-                        ,{field: 'kpi.impressions', title: 'Impressions', sort: true, templet: function(d){return d.kpi ? d.kpi.impressions || 0 : '-';}, width:80}
-                        ,{field: 'kpi.clicks', title: 'Clicks', sort: true, templet: function(d){return d.kpi ? d.kpi.clicks || 0 : '-';}, width:80}
-                        ,{field: 'kpi.installs', title: 'Installs', sort: true, templet: function(d){return d.kpi ? d.kpi.installs || 0 : '-';}, width:80}
-                        ,{field: 'kpi.ctr', title: 'CTR', sort: true, templet: function(d){return d.kpi ? (d.kpi.ctr || '0.00') + '%' : '-';}, width:80}
-                        ,{field: 'kpi.cvr', title: 'CVR', sort: true, templet: function(d){return d.kpi ? (d.kpi.cvr || '0.00') + '%' : '-';}, width:80}
-                        ,{field: 'kpi.ir', title: 'IR', sort: true, templet: function(d){return d.kpi ? (d.kpi.ir || '0.00') + '%' : '-';}, width:80}
-                        ,{field: 'kpi.spend', title: 'Revenue', sort: true, templet: function(d){return d.kpi ? '$' + (d.kpi.spend || '0.00') : '-';}}
-                        ,{field: 'kpi.ecpi', title: 'eCPI', sort: true, templet: function(d){return d.kpi ? '$' + (d.kpi.ecpi || '0.00') : '-';}}
-                        ,{field: 'kpi.ecpm', title: 'eCPM', sort: true, templet: function(d){return d.kpi ? '$' + (d.kpi.ecpm || '0.00') : '-';}, width:80}
+                        ,{field: 'impressions', title: 'Impressions', sort: true, templet: function(d){return  d.impressions || 0 ;}, width:80}
+                        ,{field: 'clicks', title: 'Clicks', sort: true, templet: function(d){return  d.clicks || 0 ;}, width:80}
+                        ,{field: 'installs', title: 'Installs', sort: true, templet: function(d){return  d.installs || 0 ;}, width:80}
+                        ,{field: 'ctr', title: 'CTR', sort: true, templet: function(d){return  (d.ctr || '0.00') + '%' ;}, width:80}
+                        ,{field: 'cvr', title: 'CVR', sort: true, templet: function(d){return  (d.cvr || '0.00') + '%' ;}, width:80}
+                        ,{field: 'ir', title: 'IR', sort: true, templet: function(d){return  (d.ir || '0.00') + '%' ;}, width:80}
+                        ,{field: 'spend', title: 'Revenue', sort: true, templet: function(d){return  '$' + (d.spend || '0.00') ;}}
+                        ,{field: 'ecpi', title: 'eCPI', sort: true, templet: function(d){return  '$' + (d.ecpi || '0.00') ;}}
+                        ,{field: 'ecpm', title: 'eCPM', sort: true, templet: function(d){return  '$' + (d.ecpm || '0.00') ;}, width:80}
                         // ,{field: 'created_at', title: 'Created'}
                         // ,{field: 'updated_at', title: 'Updated'}
                         // ,{fixed: 'right', width: 220, align:'center', toolbar: '#options'}
@@ -155,7 +165,7 @@
                                 type: 2,
                                 title: '',
                                 shadeClose: true, area: ['90%', '90%'],
-                                content: '/publish/app/'+data.id,
+                                content: '/publish/app/'+data.target_app_id,
                                 end: function () {
                                     dataTable.reload();
                                 }
@@ -221,8 +231,9 @@
                     var keyword = $("#keyword").val();
                     var rangedate = $("#rangedate").val();
                     var platform = $("#platform").val();
+                    var country = $("#country").val();
                     dataTable.reload({
-                        where:{keyword:keyword, rangedate:rangedate, platform:platform},
+                        where:{keyword:keyword, rangedate:rangedate, platform:platform, country:country},
                         page:{curr:1}
                     })
                 })
