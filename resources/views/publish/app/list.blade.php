@@ -125,7 +125,7 @@
                         {field: 'app.name', title: 'Name', templet: '#nameTpl', width:300, fixed: true}
                         ,{field: 'app.bundle_id', title: 'Package Name', templet: function(d){return  d.app.bundle_id;},fixed: true}
                         ,{field: 'app.platform', title: 'Platform', templet: function(d){return  d.app.platform;}, fixed: true}
-                        ,{field: 'country', title: 'Country', fixed: true}
+                        ,{field: 'country', title: 'Country',templet: function(d){return  d.country || 'All';}, fixed: true}
                         ,{field: 'app.put_mode', title: 'Put Mode', templet: function(d){switch(d.app.put_mode){case 1: return 'Normal'; case 2: return 'Backup'; default: return 'Unknown';}}, fixed: true}
                         // ,{field: 'status', title: 'Status', templet: '#status', align:'center', width:70, fixed: true}
                         ,{field: 'impressions', title: 'Impressions', sort: true, templet: function(d){return  d.impressions || 0 ;}, width:80}
