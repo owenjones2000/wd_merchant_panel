@@ -133,6 +133,7 @@
                             </a>
                         </dd>
                     </li>
+                    {{-- {{dd($menus->toArray())}} --}}
                     @foreach($menus as $menu)
                         @can($menu->name)
                         <li data-name="{{$menu->name}}" class="layui-nav-item">
@@ -143,7 +144,7 @@
                             @if($menu->childs->isNotEmpty())
                             <dl class="layui-nav-child">
                                 @foreach($menu->childs as $subMenu)
-                                    @can($subMenu->name)
+                                    @can($subMenu->name)   
                                     <dd data-name="{{$subMenu->name}}" >
                                         <a lay-href="{{ route($subMenu->route) }}">{{$subMenu->display_name}}</a>
                                     </dd>

@@ -185,7 +185,9 @@ Route::group(['namespace'=>'Publish','prefix'=>'publish','middleware'=>['auth','
     // 应用管理
     Route::group(['prefix'=>'app', 'middleware' => 'permission:publish.app'], function () {
         Route::get('data', 'AppController@data')->name('publish.app.data');
-        Route::get('list', 'AppController@index')->name('publish.app');
+        Route::get('list', 'AppController@list')->name('publish.app');
+        Route::get('listdata', 'AppController@listdata')->name('publish.app.listdata');
+        Route::get('performance', 'AppController@performance')->name('publish.app.performance');
         //编辑
         Route::get('{id?}', 'AppController@edit')->name('publish.app.edit')->middleware('permission:publish.app')
             ->where('id', '\d+');

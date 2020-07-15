@@ -23,12 +23,36 @@ class AppController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function performance()
     {
         $regions = Region::query()->orderBy('sort', 'desc')->get();
-        return view('publish.app.list', compact('regions'));
+        return view('publish.app.performance', compact('regions'));
     }
 
+    public function list()
+    {
+        return view('publish.app.list');
+    }
+    public function listdata(Request $request)
+    {
+        $channel_base_query = Channel::query()->where('main_user_id', Auth::user()->getMainId());
+        if (!empty($request->get('keyword'))) {
+            $like_keyword = '%' . $request->get('keyword') . '%';
+            $channel_base_query->where('name', 'like', $like_keyword);
+        }
+        if (!empty($request->get('platform'))) {
+            $platform  = $request->get('platform');
+            $channel_base_query->where('platform', $platform);
+        }
+        $channel_list = $channel_base_query->paginate($request->get('limit', 30))->toArray();;
+        $data = [
+            'code' => 0,
+            'msg'   => '正在请求中...',
+            'count' => $channel_list['total'],
+            'data'  => $channel_list['data']
+        ];
+        return response()->json($data);
+    }
     public function data(Request $request)
     {
         if (!empty($request->get('rangedate'))) {
@@ -143,7 +167,6 @@ class AppController extends Controller
                 ->toArray();;
         }
 
-        // dd($impression_list);
         foreach ($advertise_kpi_list['data'] as $key => &$kpi) {
            
             $kpi['app'] = $channel_list[$kpi['target_app_id']] ?? null;
