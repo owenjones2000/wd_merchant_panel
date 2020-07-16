@@ -79,8 +79,13 @@ class AppController extends Controller
             $query->whereBetween('date', [$start_date, $end_date])
                 ->whereIn('target_app_id', $channel_id_query)
                 ->select([
-                    'impressions', 'clicks', 'installations', 'spend',
-                    'date', 'target_app_id', 'country'
+                    'impressions',
+                    'clicks',
+                    // 'installations', 
+                    'spend',
+                    'date',
+                    'target_app_id',
+                    'country'
                 ]);
             if ($country) {
                 $query->where('country', $country);
@@ -91,12 +96,12 @@ class AppController extends Controller
         $advertise_kpi_query->select([
             DB::raw('sum(impressions) as impressions'),
             DB::raw('sum(clicks) as clicks'),
-            DB::raw('sum(installations) as installs'),
+            // DB::raw('sum(installations) as installs'),
             DB::raw('round(sum(clicks) * 100 / sum(impressions), 2) as ctr'),
-            DB::raw('round(sum(installations) * 100 / sum(clicks), 2) as cvr'),
-            DB::raw('round(sum(installations) * 100 / sum(impressions), 2) as ir'),
+            // DB::raw('round(sum(installations) * 100 / sum(clicks), 2) as cvr'),
+            // DB::raw('round(sum(installations) * 100 / sum(impressions), 2) as ir'),
             DB::raw('round(sum(spend), 2) as spend'),
-            DB::raw('round(sum(spend) / sum(installations), 2) as ecpi'),
+            // DB::raw('round(sum(spend) / sum(installations), 2) as ecpi'),
             DB::raw('round(sum(spend) * 1000 / sum(impressions), 2) as ecpm'),
             'target_app_id',
         ]);
@@ -145,20 +150,21 @@ class AppController extends Controller
         //     ->toArray();
         if ($country) {
             $impression_list = ChannelCpm::whereBetween('date', [$start_date, $end_date])
+                ->join('a_target_apps', 'a_target_app_cpm.target_app_id', '=', 'a_target_apps.id')
                 ->whereIn('target_app_id', $channel_id_query)
                 ->select([
-                    DB::raw('sum(cpm_revenue) as cpm'),
+                    DB::raw('sum(cpm_revenue * (1-rate/100)) as cpm'),
                     'target_app_id',
                     'country',
                 ])->groupBy('target_app_id', 'country')
                 ->get()
-                // ->keyBy('target_app_id')
-                ->toArray();;
+                ->toArray();
         } else {
             $impression_list = ChannelCpm::whereBetween('date', [$start_date, $end_date])
+                ->join('a_target_apps', 'a_target_app_cpm.target_app_id', '=', 'a_target_apps.id')
                 ->whereIn('target_app_id', $channel_id_query)
                 ->select([
-                    DB::raw('sum(cpm_revenue) as cpm'),
+                    DB::raw('sum(cpm_revenue * (1-rate/100)) as cpm'),
                     'target_app_id',
                     'country',
                 ])->groupBy('target_app_id')
@@ -173,11 +179,13 @@ class AppController extends Controller
             if ($country) {
                 foreach ($impression_list as $key => $cpm) {
                     if ($cpm['target_app_id'] == $kpi['target_app_id'] && $cpm['country'] == $kpi['country']) {
-                        $kpi['spend'] = $cpm['cpm'];
+                        $kpi['spend'] = round($cpm['cpm'] ?? 0, 2);
+                        $kpi['ecpm'] = round($kpi['spend'] * 1000 / $kpi['impressions'] ?? 0, 2);
                     }
                 }
             } else {
-                $kpi['spend'] = $impression_list[$kpi['target_app_id']]['cpm'] ?? 0;
+                $kpi['spend'] = round($impression_list[$kpi['target_app_id']]['cpm'] ?? 0, 2);
+                $kpi['ecpm'] = round($kpi['spend'] * 1000 / $kpi['impressions'] ?? 0, 2);
             }
         }
         // foreach ($channel_list['data'] as &$channel) {
@@ -207,7 +215,7 @@ class AppController extends Controller
         }
         $start_date = date('Ymd', strtotime($range_date[0] ?? '-7 day'));
         $end_date = date('Ymd', strtotime($range_date[1] ?? '-1 day'));
- 
+        // dd(Auth::user()->getMainId());
         $channel_base_query = Channel::query()->where('main_user_id', Auth::user()->getMainId());
 
         $channel_id_query = clone $channel_base_query;
@@ -222,39 +230,42 @@ class AppController extends Controller
                 ->select([
                     'impressions', 'clicks', 'installations', 'spend',
                     'date',
+                    'target_app_id',
                 ]);
             return $query;
         }, $start_date, $end_date);
 
-        $advertise_kpi_query->select([
-            DB::raw('sum(impressions) as impressions'),
-            DB::raw('sum(clicks) as clicks'),
-            DB::raw('sum(installations) as installs'),
-            DB::raw('round(sum(clicks) * 100 / sum(impressions), 2) as ctr'),
-            DB::raw('round(sum(installations) * 100 / sum(clicks), 2) as cvr'),
-            DB::raw('round(sum(installations) * 100 / sum(impressions), 2) as ir'),
-            DB::raw('round(sum(spend), 2) as spend'),
-            DB::raw('round(sum(spend) / sum(installations), 2) as ecpi'),
-            DB::raw('round(sum(spend) * 1000 / sum(impressions), 2) as ecpm'),
-            'date',
-        ]);
+        $advertise_kpi_query
+            ->select([
+                DB::raw('sum(impressions) as impressions'),
+                DB::raw('sum(clicks) as clicks'),
+                // DB::raw('sum(installations) as installs'),
+                DB::raw('round(sum(clicks) * 100 / sum(impressions), 2) as ctr'),
+                // DB::raw('round(sum(installations) * 100 / sum(clicks), 2) as cvr'),
+                // DB::raw('round(sum(installations) * 100 / sum(impressions), 2) as ir'),
+                DB::raw('round(sum(spend), 2) as spend'),
+                // DB::raw('round(sum(spend) / sum(installations), 2) as ecpi'),
+                DB::raw('round(sum(spend) * 1000 / sum(impressions), 2) as ecpm'),
+                'date',
+            ]);
         $advertise_kpi_query->groupBy('date');
         $advertise_kpi_list = $advertise_kpi_query
             ->orderBy('date', 'asc')
             ->get()
             ->toArray();
         $impression_cpm = ChannelCpm::whereBetween('date', [$start_date, $end_date])
+            ->join('a_target_apps', 'a_target_app_cpm.target_app_id', '=', 'a_target_apps.id')
             ->whereIn('target_app_id', $channel_id_query)
             ->select([
-                DB::raw('sum(cpm_revenue) as cpm'),
+                DB::raw('sum(cpm_revenue * (1-rate/100)) as cpm'),
                 'date',
             ])->groupBy('date')
             ->get()
             ->keyBy('date')
             ->toArray();
         foreach ($advertise_kpi_list as $key => &$kpi) {
-            $kpi['revenue'] = $impression_cpm[$kpi['date']]['cpm'] ?? 0;
-            $kpi['ecpm'] = round($impression_cpm[$kpi['date']]['cpm'] *1000/ $kpi['impressions'] ?? 0, 2);
+            $kpi['revenue'] = round($impression_cpm[$kpi['date']]['cpm'] ?? 0);
+            $kpi['ecpm'] = round($kpi['revenue'] * 1000 / $kpi['impressions'] ?? 0, 2);
         }
         if ($range_date == 'now') {
             $result = $advertise_kpi_list[count($advertise_kpi_list) - 1] ?? [];

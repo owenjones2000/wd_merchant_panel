@@ -3,7 +3,7 @@
 @section('content')
     <div class="layui-row layui-col-space15">
 
-        <div class="layui-col-sm6 layui-col-md3">
+        <div class="layui-col-sm6 layui-col-md4">
 
             <div class="layui-card">
 
@@ -21,9 +21,8 @@
 
                     <p>
 
-                        Impressions to Installs
+                        Impressions 
 
-                        <span class="layuiadmin-span-color"><span id="ir">-</span> <i class="layui-inline layui-icon layui-icon-user"></i></span>
 
                     </p>
 
@@ -33,7 +32,7 @@
 
         </div>
 
-        <div class="layui-col-sm6 layui-col-md3">
+        <div class="layui-col-sm6 layui-col-md4">
 
             <div class="layui-card">
 
@@ -51,7 +50,7 @@
 
                     <p>
 
-                        Impressions to Clicks
+                        CTR
 
                         <span class="layuiadmin-span-color"><span id="ctr">-</span> <i class="layui-inline layui-icon layui-icon-username"></i></span>
 
@@ -63,37 +62,7 @@
 
         </div>
 
-        <div class="layui-col-sm6 layui-col-md3">
-
-            <div class="layui-card">
-
-                <div class="layui-card-header">
-
-                    Installs
-
-                    <span class="layui-badge layui-bg-cyan layuiadmin-badge">Today</span>
-
-                </div>
-
-                <div class="layui-card-body layuiadmin-card-list">
-
-                    <p id="installs" class="layuiadmin-big-font">-</p>
-
-                    <p>
-
-                        Clicks to Installs
-
-                        <span class="layuiadmin-span-color"><span id="cvr">-</span> <i class="layui-inline layui-icon layui-icon-face-smile-b"></i></span>
-
-                    </p>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="layui-col-sm6 layui-col-md3">
+        <div class="layui-col-sm6 layui-col-md4">
 
             <div class="layui-card">
 
@@ -166,52 +135,6 @@
 
                         </div>
 
-                        {{--<div class="layui-col-sm4">--}}
-
-                            {{--<div class="layuiadmin-card-list">--}}
-
-                                {{--<p class="layuiadmin-normal-font">月访问数</p>--}}
-
-                                {{--<span>同上期增长</span>--}}
-
-                                {{--<div class="layui-progress layui-progress-big" lay-showPercent="yes">--}}
-
-                                    {{--<div class="layui-progress-bar" lay-percent="30%"></div>--}}
-
-                                {{--</div>--}}
-
-                            {{--</div>--}}
-
-                            {{--<div class="layuiadmin-card-list">--}}
-
-                                {{--<p class="layuiadmin-normal-font">月下载数</p>--}}
-
-                                {{--<span>同上期增长</span>--}}
-
-                                {{--<div class="layui-progress layui-progress-big" lay-showPercent="yes">--}}
-
-                                    {{--<div class="layui-progress-bar" lay-percent="20%"></div>--}}
-
-                                {{--</div>--}}
-
-                            {{--</div>--}}
-
-                            {{--<div class="layuiadmin-card-list">--}}
-
-                                {{--<p class="layuiadmin-normal-font">月收入</p>--}}
-
-                                {{--<span>同上期增长</span>--}}
-
-                                {{--<div class="layui-progress layui-progress-big" lay-showPercent="yes">--}}
-
-                                    {{--<div class="layui-progress-bar" lay-percent="25%"></div>--}}
-
-                                {{--</div>--}}
-
-                            {{--</div>--}}
-
-                        {{--</div>--}}
-
                     </div>
 
                 </div>
@@ -231,11 +154,8 @@
                     var kpi = result['data'];
                     $('#impressions').text(toThousands(kpi['impressions']));
                     $('#clicks').text(toThousands(kpi['clicks']));
-                    $('#installs').text(toThousands(kpi['installs']));
                     $('#spends').text(kpi['revenue']);
-                    $('#ir').text(kpi['ir'] ? (kpi['ir'] + '%') : '-');
                     $('#ctr').text(kpi['ctr'] ? (kpi['ctr'] + '%') : '-');
-                    $('#cvr').text(kpi['cvr'] ? (kpi['cvr'] + '%') : '-');
                     $('#ecpm').text(kpi['ecpm'] ? kpi['ecpm'] : '-');
                 }
 
@@ -261,7 +181,7 @@
                         }
                     };
 
-                    option = buildLineChartOptions(data.data, ['impressions', 'clicks', 'installs'], 'date', null);
+                    option = buildLineChartOptions(data.data, ['impressions', 'clicks'], 'date', null);
                     option1 = buildLineChartOptions(data.data, ['revenue'], 'date', null);
                     myChart1.hideLoading();
                     myChart.hideLoading();
