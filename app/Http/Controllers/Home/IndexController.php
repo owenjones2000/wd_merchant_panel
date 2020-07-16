@@ -18,6 +18,7 @@ class IndexController extends Controller
      */
     public function layout()
     {
+        $user = Auth::user();
         return view('layout.layout');
     }
 

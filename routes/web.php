@@ -5,6 +5,9 @@
 |--------------------------------------------------------------------------
 |
 */
+
+use Illuminate\Support\Facades\Route;
+
 Route::group(['namespace'=>'Home'],function (){
     //登录、注销
     Route::get('login','LoginController@showLoginForm')->name('home.loginForm');

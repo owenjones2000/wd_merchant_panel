@@ -115,21 +115,21 @@
                     ,cols: [[ //表头
                         // {checkbox: true,fixed: true}
                         // ,{field: 'id', title: 'ID', sort: true,width:80}
-                        {field: 'app.name', title: 'Name', templet: '#nameTpl', width:300, fixed: true}
+                        {field: 'app.name', title: 'Name', templet: '#nameTpl', width:300, fixed: true, width:200}
                         ,{field: 'app.bundle_id', title: 'Package Name', templet: function(d){return  d.app.bundle_id;},fixed: true}
                         ,{field: 'app.platform', title: 'Platform', templet: function(d){return  d.app.platform;}, fixed: true}
                         ,{field: 'country', title: 'Country',templet: function(d){return  d.country || 'All';}, fixed: true}
                         // ,{field: 'app.put_mode', title: 'Put Mode', templet: function(d){switch(d.app.put_mode){case 1: return 'Normal'; case 2: return 'Backup'; default: return 'Unknown';}}, fixed: true}
                         // ,{field: 'status', title: 'Status', templet: '#status', align:'center', width:70, fixed: true}
-                        ,{field: 'impressions', title: 'Impressions', sort: true, templet: function(d){return  d.impressions || 0 ;}, width:100}
-                        ,{field: 'clicks', title: 'Clicks', sort: true, templet: function(d){return  d.clicks || 0 ;}, width:100}
+                        ,{field: 'impressions', title: 'Impressions', sort: true, templet: function(d){return  d.impressions || 0 ;}, }
+                        ,{field: 'clicks', title: 'Clicks', sort: true, templet: function(d){return  d.clicks || 0 ;}, }
                         // ,{field: 'installs', title: 'Installs', sort: true, templet: function(d){return  d.installs || 0 ;}, width:80}
-                        ,{field: 'ctr', title: 'CTR', sort: true, templet: function(d){return  (d.ctr || '0.00') + '%' ;}, width:100}
+                        ,{field: 'ctr', title: 'CTR', sort: true, templet: function(d){return  (d.ctr || '0.00') + '%' ;}, }
                         // ,{field: 'cvr', title: 'CVR', sort: true, templet: function(d){return  (d.cvr || '0.00') + '%' ;}, width:80}
                         // ,{field: 'ir', title: 'IR', sort: true, templet: function(d){return  (d.ir || '0.00') + '%' ;}, width:80}
                         ,{field: 'spend', title: 'Revenue', sort: true, templet: function(d){return  '$' + (d.spend || '0.00') ;}}
                         // ,{field: 'ecpi', title: 'eCPI', sort: true, templet: function(d){return  '$' + (d.ecpi || '0.00') ;}}
-                        ,{field: 'ecpm', title: 'eCPM', sort: true, templet: function(d){return  '$' + (d.ecpm || '0.00') ;}, width:100}
+                        ,{field: 'ecpm', title: 'eCPM', sort: true, templet: function(d){return  '$' + (d.ecpm || '0.00') ;}, }
                         // ,{field: 'created_at', title: 'Created'}
                         // ,{field: 'updated_at', title: 'Updated'}
                         // ,{fixed: 'right', width: 220, align:'center', toolbar: '#options'}
