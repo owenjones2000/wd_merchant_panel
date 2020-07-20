@@ -73,9 +73,17 @@ class AppController extends Controller
             $channel_base_query->where('platform', $platform);
         }
         $country = $request->get('country');
+        $type = $request->get('type');
         $channel_id_query = clone $channel_base_query;
         $channel_id_query->select('id');
-        $advertise_kpi_query = AdvertiseKpi::multiTableQuery(function ($query) use ($start_date, $end_date, $channel_id_query, $country) {
+        // dd($channel_id_query->get());
+        $advertise_kpi_query = AdvertiseKpi::multiTableQuery(function ($query) use (
+            $start_date,
+            $end_date,
+            $channel_id_query,
+            $country,
+            $type
+        ) {
             $query->whereBetween('date', [$start_date, $end_date])
                 ->whereIn('target_app_id', $channel_id_query)
                 ->select([
@@ -85,10 +93,14 @@ class AppController extends Controller
                     'spend',
                     'date',
                     'target_app_id',
-                    'country'
+                    'country',
+                    'type',
                 ]);
             if ($country) {
                 $query->where('country', $country);
+            }
+            if ($type) {
+                $query->where('type', $type);
             }
             return $query;
         }, $start_date, $end_date);
@@ -106,63 +118,49 @@ class AppController extends Controller
             'target_app_id',
         ]);
 
-        if ($country) {
-            $advertise_kpi_query->addSelect('country');
-            $advertise_kpi_query->groupBy('target_app_id', 'country');
-        } else {
-            $advertise_kpi_query->groupBy('target_app_id');
-        }
-
-        // if ($order_by[0] === 'kpi' && isset($order_by[1])) {
-        //     $advertise_kpi_query->orderBy($order_by[1], $order_sort);
+        // if ($country) {
+        //     $advertise_kpi_query->addSelect('country');
+        //     $advertise_kpi_query->groupBy('target_app_id', 'country');
+        // } else {
+        //     $advertise_kpi_query->groupBy('target_app_id');
         // }
+        $advertise_kpi_query->groupBy('target_app_id');
+
 
         $advertise_kpi_list = $advertise_kpi_query
             ->orderBy('spend', 'desc')
             ->paginate($request->get('limit', 30))
             ->toArray();
-        // $order_by_ids = implode(',', array_reverse(array_keys($advertise_kpi_list)));
         $channel_query = clone $channel_base_query;
-        // if (!empty($order_by_ids)) {
-        //     $channel_query->orderByRaw(DB::raw("FIELD(id,{$order_by_ids}) desc"));
-        // }
-        // if ($order_by[0] !== 'kpi') {
-        //     $channel_query->orderBy($order_by[0], $order_sort);
-        // }
+
         $channel_list = $channel_query->get()->keyBy('id')
             ->toArray();
         //spend 从impression表取
-        // $impression_query = Impression::multiTableQuery(function ($query) use ($start_date, $end_date, $channel_id_query) {
-        //     $query->whereBetween('date', [$start_date, $end_date])
+
+        // if ($country) {
+        //     $impression_list = ChannelCpm::whereBetween('date', [$start_date, $end_date])
+        //         ->join('a_target_apps', 'a_target_app_cpm.target_app_id', '=', 'a_target_apps.id')
         //         ->whereIn('target_app_id', $channel_id_query)
+        //         ->when($type, function ($query) use ($type) {
+        //             $query->where('type', $type);
+        //         })
         //         ->select([
-        //             'ecpm',
+        //             DB::raw('sum(cpm_revenue * (1-rate/100)) as cpm'),
         //             'target_app_id',
-        //         ]);
-        //     return $query;
-        // }, $start_date, $end_date);
-        // $impression_list = $impression_query->select([
-        //     DB::raw('round(sum(ecpm)/1000, 2) as spend'),
-        //     'target_app_id',
-        // ])->groupBy('target_app_id')
-        //     ->get()
-        //     ->keyBy('target_app_id')
-        //     ->toArray();
-        if ($country) {
+        //             'country',
+        //         ])->groupBy('target_app_id', 'country')
+        //         ->get()
+        //         ->toArray();
+        // } else {
             $impression_list = ChannelCpm::whereBetween('date', [$start_date, $end_date])
                 ->join('a_target_apps', 'a_target_app_cpm.target_app_id', '=', 'a_target_apps.id')
                 ->whereIn('target_app_id', $channel_id_query)
-                ->select([
-                    DB::raw('sum(cpm_revenue * (1-rate/100)) as cpm'),
-                    'target_app_id',
-                    'country',
-                ])->groupBy('target_app_id', 'country')
-                ->get()
-                ->toArray();
-        } else {
-            $impression_list = ChannelCpm::whereBetween('date', [$start_date, $end_date])
-                ->join('a_target_apps', 'a_target_app_cpm.target_app_id', '=', 'a_target_apps.id')
-                ->whereIn('target_app_id', $channel_id_query)
+                ->when($type, function ($query) use ($type) {
+                    $query->where('type', $type);
+                })
+                ->when($country, function ($query) use ($country) {
+                    $query->where('country', $country);
+                })
                 ->select([
                     DB::raw('sum(cpm_revenue * (1-rate/100)) as cpm'),
                     'target_app_id',
@@ -171,29 +169,30 @@ class AppController extends Controller
                 ->get()
                 ->keyBy('target_app_id')
                 ->toArray();;
-        }
+        // }
 
         foreach ($advertise_kpi_list['data'] as $key => &$kpi) {
-
-            $kpi['app'] = $channel_list[$kpi['target_app_id']] ?? null;
-            if ($country) {
-                foreach ($impression_list as $key => $cpm) {
-                    if ($cpm['target_app_id'] == $kpi['target_app_id'] && $cpm['country'] == $kpi['country']) {
-                        $kpi['spend'] = round($cpm['cpm'] ?? 0, 2);
-                        $kpi['ecpm'] = round($kpi['spend'] * 1000 / $kpi['impressions'] ?? 0, 2);
-                    }
-                }
-            } else {
-                $kpi['spend'] = round($impression_list[$kpi['target_app_id']]['cpm'] ?? 0, 2);
+            $kpi['ecpm'] = 0;
+            $kpi['spend'] = round($impression_list[$kpi['target_app_id']]['cpm'] ?? 0, 2);
+            if ($kpi['spend']){
                 $kpi['ecpm'] = round($kpi['spend'] * 1000 / $kpi['impressions'] ?? 0, 2);
             }
+            $kpi['app'] = $channel_list[$kpi['target_app_id']] ?? null;
+            $kpi['country'] = $country ?? null;
+            $kpi['type'] = $type ?? null;
+            // if ($country) {
+            //     foreach ($impression_list as $key => $cpm) {
+            //         if ($cpm['target_app_id'] == $kpi['target_app_id'] && $cpm['country'] == $kpi['country']) {
+            //             $kpi['spend'] = round($cpm['cpm'] ?? 0, 2);
+            //             $kpi['ecpm'] = round($kpi['spend'] * 1000 / $kpi['impressions'] ?? 0, 2);
+            //         }
+            //     }
+            // } else {
+            //     $kpi['spend'] = round($impression_list[$kpi['target_app_id']]['cpm'] ?? 0, 2);
+            //     $kpi['ecpm'] = round($kpi['spend'] * 1000 / $kpi['impressions'] ?? 0, 2);
+            // }
         }
-        // foreach ($channel_list['data'] as &$channel) {
-        //     if (isset($advertise_kpi_list[$channel['id']])) {
-        //         $channel['kpi'] = $advertise_kpi_list[$channel['id']];
-        //     }
-        // }
-        // dd(($advertise_kpi_list));
+
         $data = [
             'code' => 0,
             'msg'   => '正在请求中...',

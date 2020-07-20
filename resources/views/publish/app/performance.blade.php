@@ -23,6 +23,13 @@
                     </select> 
                 </div>
                 <div class="layui-input-inline">
+                    <select name="Type" id="type" lay-verify="">
+                    <option value="">Type</option>
+                    <option value="1">Reward</option>
+                    <option value="2">Interstitial</option>
+                    </select> 
+                </div>
+                <div class="layui-input-inline">
                     <select name="country" id="country" lay-verify="">
                     <option value="">country</option>
                     @foreach($regions as $region)
@@ -119,6 +126,11 @@
                         ,{field: 'app.bundle_id', title: 'Package Name', templet: function(d){return  d.app.bundle_id;},fixed: true}
                         ,{field: 'app.platform', title: 'Platform', templet: function(d){return  d.app.platform;}, fixed: true}
                         ,{field: 'country', title: 'Country',templet: function(d){return  d.country || 'All';}, fixed: true}
+                        ,{field: 'type', title: 'Type',templet: function(d){
+                            if(d.type==1){return 'Reward';}
+                            else if(d.type==2){return 'Interstitial';}
+                            else{return 'All';}
+                            }, fixed: true}
                         // ,{field: 'app.put_mode', title: 'Put Mode', templet: function(d){switch(d.app.put_mode){case 1: return 'Normal'; case 2: return 'Backup'; default: return 'Unknown';}}, fixed: true}
                         // ,{field: 'status', title: 'Status', templet: '#status', align:'center', width:70, fixed: true}
                         ,{field: 'impressions', title: 'Impressions', sort: true, templet: function(d){return  d.impressions || 0 ;}, }
@@ -225,8 +237,9 @@
                     var rangedate = $("#rangedate").val();
                     var platform = $("#platform").val();
                     var country = $("#country").val();
+                    var type = $("#type").val();
                     dataTable.reload({
-                        where:{keyword:keyword, rangedate:rangedate, platform:platform, country:country},
+                        where:{keyword:keyword, rangedate:rangedate, platform:platform, country:country, type:type},
                         page:{curr:1}
                     })
                 })
