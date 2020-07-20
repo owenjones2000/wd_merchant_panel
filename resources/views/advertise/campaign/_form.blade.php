@@ -15,7 +15,6 @@ $is_audience = $campaign->app->is_audience??0;
         <input type="text" name="name" value="{{ $campaign->name ?? old('name') }}" lay-verify="required" placeholder="" autocomplete="off" class="layui-input @if($disable_basic_info) layui-disabled @endif" >
     </div>
 </div>
-
 <div class="layui-form-item">
     <label class="layui-form-label">App</label>
     <div class="layui-input-block">
@@ -23,8 +22,9 @@ $is_audience = $campaign->app->is_audience??0;
             <input type="text" value="{{ $campaign['app']['name'] ?? '' }}" placeholder="" autocomplete="off" class="layui-input layui-disabled">
         @else
             <select name="app_id" lay-filter="app">
+                
                 @foreach($apps as $app_item)
-                    <option @if(isset($campaign['app_id']) && $campaign['app_id'] == $app_item['id']) selected @endif value="{{$app_item['id']}}">{{$app_item['name']}}</option>
+            <option @if(isset($campaign['app_id']) && $campaign['app_id'] == $app_item['id']) selected @endif value="{{$app_item['id']}}">{{$app_item['name']}}({{$app_item['os']}})</option>
                 @endforeach
             </select>
         @endif
