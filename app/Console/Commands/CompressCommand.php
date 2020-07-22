@@ -173,7 +173,7 @@ class CompressCommand extends Command
                             'file_path_compress' => $dir . $file_name,
                         ]);
                         $asset->save();
-                        Log::info('compress' . $asset['id']);
+                        Log::info('compress jpg' . $asset['id']);
                         dump($asset->toArray());
                         $n++;
                     }
