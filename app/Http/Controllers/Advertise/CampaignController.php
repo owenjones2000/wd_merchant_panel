@@ -10,8 +10,10 @@ use App\Models\Advertise\Region;
 use App\Rules\AdvertiseName;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Advertise\Ad;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Dcat\EasyExcel\Excel;
 
 class CampaignController extends Controller
 {
@@ -25,6 +27,165 @@ class CampaignController extends Controller
         return view('advertise.campaign.list');
     }
 
+    public function performance()
+    {
+        return view('advertise.campaign.performance');
+    }
+
+    public function performanceData(Request $request)
+    {
+        // dd($request->all());
+        $data = $request->input('params');
+        if (isset($data['rangedate'])) {
+            $range_date = explode(' ~ ', $data['rangedate']);
+        }
+        $start_date = date('Ymd', strtotime($range_date[0] ?? 'now'));
+        $end_date = date('Ymd', strtotime($range_date[1] ?? 'now'));
+        unset($data['rangedate']);
+        $group = $data;
+        $groupby = [];
+        if ($group) {
+            $groupby =  array_keys($group);
+        }
+
+        // dd($data,$start_date, $end_date,$groupby);
+        $campaign_id_query = Campaign::query()->select('id');
+        $advertise_kpi_query = AdvertiseKpi::multiTableQuery(function ($query) use ($start_date, $end_date, $campaign_id_query) {
+            $query->whereBetween('date', [$start_date, $end_date])
+                ->whereIn('campaign_id', $campaign_id_query);
+            return $query;
+        }, $start_date, $end_date);
+
+        $advertise_kpi_query->join('a_app', 'a_app.id', '=', 'z_sub_tasks.app_id')
+        ->select([
+            DB::raw('sum(impressions) as impressions'),
+            DB::raw('sum(clicks) as clicks'),
+            DB::raw('sum(installations) as installs'),
+            DB::raw('round(sum(clicks) * 100 / sum(impressions), 2) as ctr'),
+            DB::raw('round(sum(installations) * 100 / sum(clicks), 2) as cvr'),
+            DB::raw('round(sum(installations) * 100 / sum(impressions), 2) as ir'),
+            DB::raw('round(sum(spend), 2) as spend'),
+            DB::raw('round(sum(spend) / sum(installations), 2) as ecpi'),
+            DB::raw('round(sum(spend) * 1000 / sum(impressions), 2) as ecpm'),
+            'z_sub_tasks.campaign_id',
+            'ad_id',
+            'z_sub_tasks.app_id',
+            'date',
+            'country',
+            'a_app.os'
+        ]);
+        if ($groupby) {
+            $advertise_kpi_query->groupBy(...$groupby);
+        }
+        $advertise_kpi_list = $advertise_kpi_query->orderBy('spend', 'desc')->paginate($request->get('limit', 30))->toArray();
+        $campaigns = Campaign::all()->pluck('name', 'id');
+        $ads = Ad::query()->whereIn('campaign_id', $campaign_id_query)->pluck('name', 'id');
+        foreach ($advertise_kpi_list['data'] as $key => &$kpi) {
+            $kpi['campaign'] = $campaigns[$kpi['campaign_id']];
+            $kpi['ad'] = $ads[$kpi['ad_id']];
+            $kpi['ir'] = $kpi['ir'] . '%';
+            $kpi['ctr'] = $kpi['ctr'] . '%';
+            $kpi['cvr'] = $kpi['cvr'] . '%';
+        }
+        $data = [
+            'code' => 0,
+            'msg'   => '正在请求中...',
+            'count' => $advertise_kpi_list['total'],
+            'data'  => $advertise_kpi_list['data']
+        ];
+        return response()->json($data);
+    }
+    public function performanceExport(Request $request)
+    {
+        // dd($request->all());
+        if (!empty($request->get('rangedate'))) {
+            $range_date = explode(' ~ ', $request->get('rangedate'));
+        }
+        $start_date = date('Ymd', strtotime($range_date[0] ?? 'now'));
+        $end_date = date('Ymd', strtotime($range_date[1] ?? 'now'));
+        $group = $request->except('rangedate');
+        $groupby = [];
+        if ($group){
+            $groupby =  array_keys($group);
+        }
+        
+        // dd($start_date, $end_date,$groupby);
+        $campaign_id_query = Campaign::query()->select('id');
+        $advertise_kpi_query = AdvertiseKpi::multiTableQuery(function ($query) use ($start_date, $end_date, $campaign_id_query) {
+            $query->whereBetween('date', [$start_date, $end_date])
+                ->whereIn('campaign_id', $campaign_id_query)
+                ;
+            return $query;
+        }, $start_date, $end_date);
+
+        $advertise_kpi_query->join('a_app', 'a_app.id', '=', 'z_sub_tasks.app_id')
+        ->select([
+            DB::raw('sum(impressions) as impressions'),
+            DB::raw('sum(clicks) as clicks'),
+            DB::raw('sum(installations) as installs'),
+            DB::raw('round(sum(clicks) * 100 / sum(impressions), 2) as ctr'),
+            DB::raw('round(sum(installations) * 100 / sum(clicks), 2) as cvr'),
+            DB::raw('round(sum(installations) * 100 / sum(impressions), 2) as ir'),
+            DB::raw('round(sum(spend), 2) as spend'),
+            DB::raw('round(sum(spend) / sum(installations), 2) as ecpi'),
+            DB::raw('round(sum(spend) * 1000 / sum(impressions), 2) as ecpm'),
+            'z_sub_tasks.campaign_id',
+            'ad_id',
+            'z_sub_tasks.app_id',
+            'date',
+            'country',
+            'a_app.os'
+        ]);
+        if ($groupby){
+            $advertise_kpi_query->groupBy(...$groupby);
+        }
+        $advertise_kpi_list = $advertise_kpi_query->orderBy('spend', 'desc')->get()->toArray();
+        $campaigns = Campaign::all()->pluck('name', 'id');
+        $ads = Ad::query()->whereIn('campaign_id', $campaign_id_query)->pluck('name', 'id');
+        foreach ($advertise_kpi_list as $key => &$kpi) {
+            $kpi['campaign'] = $campaigns[$kpi['campaign_id']];
+            $kpi['ad'] = $ads[$kpi['ad_id']];
+            $kpi['ir'] = $kpi['ir'].'%';
+            $kpi['ctr'] = $kpi['ctr'].'%';
+            $kpi['cvr'] = $kpi['cvr'].'%';
+        }
+
+        $headings = [
+            // 'date'    => 'Day',
+            // 'campaign' => 'Campaign',
+            // 'ad'  => 'Ad',
+            // 'os'  => 'Platform',
+            // 'country' => 'Country',
+            'impressions' => 'Impressions',
+            'clicks' => 'Clicks',
+            'installs' => 'Installs',
+            'ctr' => 'Ctr',
+            // 'cvr' => 'Cvr',
+            'ir' => 'Ir',
+            'ecpi' => 'Ecpi',
+            // 'ecpm' => 'Ecpm',
+            'spend' => 'Spend',
+        ];
+        $headings = array_reverse($headings);
+        if (in_array('country', $groupby)){
+            $headings['country'] = 'Country';
+        }
+        if (in_array('os', $groupby)){
+            $headings['os'] = 'Platform';
+        }
+        if (in_array('ad_id', $groupby)){
+            $headings['ad'] = 'Ad';
+        }
+        if (in_array('campaign_id', $groupby)){
+            $headings['campaign'] = 'Campaign';
+        }
+        if (in_array('date', $groupby)){
+            $headings['date'] = 'Day';
+        }
+        $headings = array_reverse($headings);
+        // dd($advertise_kpi_list);
+        Excel::export($advertise_kpi_list)->headings($headings)->download($request->get('rangedate') .'.csv');
+    }
     public function data(Request $request)
     {
         if(!empty($request->get('rangedate'))){

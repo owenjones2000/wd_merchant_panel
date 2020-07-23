@@ -70,7 +70,12 @@ class App extends Model
             $this->saveOrFail();
         }
     }
-    
+
+    public function ads()
+    {
+        return $this->hasMany(Ad::class, 'app_id', 'id');
+    }
+
     public function getTrackAttribute(){
         return TrackPlatform::get($this['track_platform_id']);
     }

@@ -141,6 +141,9 @@ Route::group(['namespace'=>'Advertise','prefix'=>'advertise','middleware'=>['aut
         Route::get('data', 'CampaignController@data')->name('advertise.campaign.data');
         Route::get('alldata', 'CampaignController@alldata')->name('advertise.campaign.alldata');
         Route::get('list', 'CampaignController@list')->name('advertise.campaign');
+        Route::get('performance', 'CampaignController@performance')->name('advertise.campaign.performance');
+        Route::get('performance-export', 'CampaignController@performanceExport')->name('advertise.campaign.export');
+        Route::get('performance-data', 'CampaignController@performanceData')->name('advertise.campaign.performance-data');
         //编辑
         Route::get('{id?}', 'CampaignController@edit')->name('advertise.campaign.edit')->middleware('permission:advertise.campaign.edit');
         Route::post('{id?}', 'CampaignController@save')->name('advertise.campaign.save')->middleware('permission:advertise.campaign.edit');
