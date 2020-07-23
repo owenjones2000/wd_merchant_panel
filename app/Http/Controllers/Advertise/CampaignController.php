@@ -159,10 +159,10 @@ class CampaignController extends Controller
             'impressions' => 'Impressions',
             'clicks' => 'Clicks',
             'installs' => 'Installs',
-            'ctr' => 'Ctr',
+            'ctr' => 'CTR',
             // 'cvr' => 'Cvr',
-            'ir' => 'Ir',
-            'ecpi' => 'Ecpi',
+            'ir' => 'IR',
+            'ecpi' => 'eCPI',
             // 'ecpm' => 'Ecpm',
             'spend' => 'Spend',
         ];
@@ -184,7 +184,7 @@ class CampaignController extends Controller
         }
         $headings = array_reverse($headings);
         // dd($advertise_kpi_list);
-        Excel::export($advertise_kpi_list)->headings($headings)->download($request->get('rangedate') .'.csv');
+        Excel::export($advertise_kpi_list)->headings($headings)->download('wudiads_report_'.$request->get('rangedate').'.csv');
     }
     public function data(Request $request)
     {

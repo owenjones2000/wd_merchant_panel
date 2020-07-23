@@ -37,7 +37,7 @@
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                    <button class="layui-btn layui-btn-primary" id="reportBtn" type ="button">Run Report</button>
+                    <button class="layui-btn" id="reportBtn" type ="button">Run Report</button>
                     <button class="layui-btn" lay-submit lay-filter="export">Export</button>
                     
                     </div>
@@ -79,10 +79,10 @@
                     {field: 'impressions', title: 'Impressions'},
                     {field: 'clicks', title: 'Clicks'},
                     {field: 'installs', title: 'Installs'},
-                    {field: 'ctr', title: 'Ctr'},
+                    {field: 'ctr', title: 'CTR'},
                     // {field: 'cvr', title: 'Cvr'},
-                    {field: 'ir', title: 'Ir'},
-                    {field: 'ecpi', title: 'Ecpi'},
+                    {field: 'ir', title: 'IR'},
+                    {field: 'ecpi', title: 'eCPI'},
                     // {field: 'ecpm', title: 'Ecpm'},
                     {field: 'spend', title: 'Spend'},
                 ];
