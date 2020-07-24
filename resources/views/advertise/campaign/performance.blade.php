@@ -27,14 +27,28 @@
                 </div>
                 <div class="layui-form-item">
                 <div class="layui-input-block">
+                    <input type="checkbox" name="ad_id" value="ad_id" id="ad_id" title="Ad">
+                </div>   
+                </div>
+                
+                <div class="layui-form-item">
+                <div class="layui-input-block">
                     <input type="checkbox" name="campaign_id" value="campaign_id" id="campaign_id" title="Campaign">
+                </div>   
+                </div>
+                
+
+                <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <input type="checkbox" name="target_app_id" value="target_app_id" id="ad_id" title="Sub Site Id">
                 </div>   
                 </div>
                 <div class="layui-form-item">
                 <div class="layui-input-block">
-                    <input type="checkbox" name="ad_id" value="ad_id" id="ad_id" title="Ad">
+                    <input type="checkbox" name="app_id" value="app_id" id="ad_id" title="App">
                 </div>   
                 </div>
+                
                 <div class="layui-form-item">
                     <div class="layui-input-block">
                     <button class="layui-btn" id="reportBtn" type ="button">Run Report</button>
@@ -169,6 +183,12 @@
                         }
                         if($(this).val() == 'campaign_id') {
                             mycols.unshift({field: 'campaign', title: 'Campaign'})
+                        }
+                        if($(this).val() == 'app_id') {
+                            mycols.unshift({field: 'app', title: 'App'})
+                        }
+                        if($(this).val() == 'target_app_id') {
+                            mycols.unshift({field: 'target_app', title: 'Sub Site Id'})
                         }
                         if($(this).val() == 'date') {
                             mycols.unshift({field: 'date', title: 'Day'})

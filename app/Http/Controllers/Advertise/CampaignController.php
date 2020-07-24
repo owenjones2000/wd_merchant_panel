@@ -11,6 +11,7 @@ use App\Rules\AdvertiseName;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Advertise\Ad;
+use App\Models\Advertise\Channel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Dcat\EasyExcel\Excel;
@@ -42,12 +43,17 @@ class CampaignController extends Controller
         $start_date = date('Ymd', strtotime($range_date[0] ?? 'now'));
         $end_date = date('Ymd', strtotime($range_date[1] ?? 'now'));
         unset($data['rangedate']);
-        $group = $data;
+        
         $groupby = [];
+        if (in_array('app_id', $data)) {
+            unset($data['app_id']);
+            $data['z_sub_tasks.app_id'] = 1;
+        }
+        $group = $data;
         if ($group) {
             $groupby =  array_keys($group);
         }
-
+        
         // dd($data,$start_date, $end_date,$groupby);
         $campaign_id_query = Campaign::query()->select('id');
         $advertise_kpi_query = AdvertiseKpi::multiTableQuery(function ($query) use ($start_date, $end_date, $campaign_id_query) {
@@ -70,6 +76,7 @@ class CampaignController extends Controller
             'z_sub_tasks.campaign_id',
             'ad_id',
             'z_sub_tasks.app_id',
+            'z_sub_tasks.target_app_id',
             'date',
             'country',
             'a_app.os'
@@ -80,9 +87,13 @@ class CampaignController extends Controller
         $advertise_kpi_list = $advertise_kpi_query->orderBy('spend', 'desc')->paginate($request->get('limit', 30))->toArray();
         $campaigns = Campaign::all()->pluck('name', 'id');
         $ads = Ad::query()->whereIn('campaign_id', $campaign_id_query)->pluck('name', 'id');
+        $apps = App::query()->get()->pluck('name', 'id');
+        $channels = Channel::query()->get()->pluck('name_hash', 'id');
         foreach ($advertise_kpi_list['data'] as $key => &$kpi) {
             $kpi['campaign'] = $campaigns[$kpi['campaign_id']];
             $kpi['ad'] = $ads[$kpi['ad_id']];
+            $kpi['app'] = $apps[$kpi['app_id']];
+            $kpi['target_app'] = $channels[$kpi['target_app_id']];
             $kpi['ir'] = $kpi['ir'] . '%';
             $kpi['ctr'] = $kpi['ctr'] . '%';
             $kpi['cvr'] = $kpi['cvr'] . '%';
@@ -132,6 +143,7 @@ class CampaignController extends Controller
             'z_sub_tasks.campaign_id',
             'ad_id',
             'z_sub_tasks.app_id',
+            'z_sub_tasks.target_app_id',
             'date',
             'country',
             'a_app.os'
@@ -142,9 +154,13 @@ class CampaignController extends Controller
         $advertise_kpi_list = $advertise_kpi_query->orderBy('spend', 'desc')->get()->toArray();
         $campaigns = Campaign::all()->pluck('name', 'id');
         $ads = Ad::query()->whereIn('campaign_id', $campaign_id_query)->pluck('name', 'id');
+        $apps = App::query()->get()->pluck('name', 'id');
+        $channels = Channel::query()->get()->pluck('name_hash', 'id');
         foreach ($advertise_kpi_list as $key => &$kpi) {
             $kpi['campaign'] = $campaigns[$kpi['campaign_id']];
             $kpi['ad'] = $ads[$kpi['ad_id']];
+            $kpi['app'] = $apps[$kpi['app_id']];
+            $kpi['target_app'] = $channels[$kpi['target_app_id']];
             $kpi['ir'] = $kpi['ir'].'%';
             $kpi['ctr'] = $kpi['ctr'].'%';
             $kpi['cvr'] = $kpi['cvr'].'%';
@@ -178,6 +194,12 @@ class CampaignController extends Controller
         }
         if (in_array('campaign_id', $groupby)){
             $headings['campaign'] = 'Campaign';
+        }
+        if (in_array('target_app_id', $groupby)){
+            $headings['target_app'] = 'Sub Site Id';
+        }
+        if (in_array('app_id', $groupby)){
+            $headings['app'] = 'App';
         }
         if (in_array('date', $groupby)){
             $headings['date'] = 'Day';
