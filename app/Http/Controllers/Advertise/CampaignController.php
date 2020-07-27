@@ -36,7 +36,7 @@ class CampaignController extends Controller
     public function performanceData(Request $request)
     {
         // dd($request->all());
-        $data = $request->input('params');
+        $data = $request->input('params', []);
         if (isset($data['rangedate'])) {
             $range_date = explode(' ~ ', $data['rangedate']);
         }
