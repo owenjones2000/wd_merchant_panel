@@ -153,7 +153,7 @@
                         case 'campaign':
                             layer.open({
                                 type: 2,
-                                title: 'App: ' + data.name,
+                                title: 'App: ' + data.name +'('+data.os+')',
                                 shadeClose: true,
                                 area: ['95%', '95%'],
                                 content: '/advertise/app/' + data.id + '/campaign/list',

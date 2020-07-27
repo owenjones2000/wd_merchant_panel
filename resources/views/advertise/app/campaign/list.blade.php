@@ -13,13 +13,7 @@
                 <div class="layui-input-inline">
                     <input type="text" name="rangedate" id="rangedate" class="layui-input" autocomplete="off" placeholder="default today" style="min-width: 15rem">
                 </div>
-                <div class="layui-input-inline">
-                    <select name="platform" id="platform" lay-verify="">
-                    <option value="">platform</option>
-                    <option value="ios">Ios</option>
-                    <option value="android">Android</option>
-                    </select> 
-                </div>
+
                 <button class="layui-btn" id="campaignSearchBtn">Run Report</button>
                 <button class="layui-btn" id="export"><i class="iconfont icon-export"></i> Export</button>
             </div>
