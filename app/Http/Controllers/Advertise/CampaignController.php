@@ -27,6 +27,11 @@ class CampaignController extends Controller
     {
         return view('advertise.campaign.list');
     }
+    public function appBelonglist(Request $request, $app_id)
+    {
+        
+        return view('advertise.app.campaign.list', compact('app_id'));
+    }
 
     public function performance()
     {
@@ -218,10 +223,14 @@ class CampaignController extends Controller
         $order_by = explode('.', $request->get('field', 'status'));
         $order_sort = $request->get('order', 'desc') ?: 'desc';
 
+
         $campaign_base_query = Campaign::query();
         if(!empty($request->get('keyword'))){
             $like_keyword = '%'.$request->get('keyword').'%';
             $campaign_base_query->where('name', 'like', $like_keyword);
+        }
+        if(!empty($request->get('app_id'))){
+            $campaign_base_query->where('app_id', $request->get('app_id'));
         }
         if(!empty($request->get('platform'))){
             $platform  = $request->get('platform');

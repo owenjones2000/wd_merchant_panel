@@ -119,6 +119,7 @@ Route::group(['namespace'=>'Advertise','prefix'=>'advertise','middleware'=>['aut
     Route::group(['prefix'=>'app', 'middleware' => 'permission:advertise.app'], function () {
         Route::get('data', 'AppController@data')->name('advertise.app.data');
         Route::get('list', 'AppController@index')->name('advertise.app');
+
         //编辑
         Route::get('{id?}', 'AppController@edit')->name('advertise.app.edit')->middleware('permission:advertise.app')
             ->where('id', '\d+');
@@ -131,6 +132,9 @@ Route::group(['namespace'=>'Advertise','prefix'=>'advertise','middleware'=>['aut
         Route::post('{app_id}/channel/{channel_id}/enable', 'ChannelController@enable')->name('advertise.campaign.channel.enable')->middleware('permission:advertise.campaign.edit');
         Route::post('{app_id}/channel/{channel_id}/disable', 'ChannelController@disable')->name('advertise.campaign.channel.disable')->middleware('permission:advertise.campaign.edit');
 
+        Route::group(['prefix' => '{app_id}/campaign', 'middleware'=> 'permission:advertise.campaign'], function (){
+            Route::get('list', 'CampaignController@appBelonglist')->name('advertise.campaign');
+        });
 
         //删除
 //        Route::delete('destroy', 'AppController@destroy')->name('advertise.app.destroy')->middleware('permission:advertise.app.destroy');

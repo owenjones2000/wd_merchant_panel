@@ -25,15 +25,18 @@
                     {{--@can('advertise.app.destroy')--}}
                         {{--<a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">Remove</a>--}}
                     {{--@endcan--}}
+                    @can('advertise.campaign')
+                        <a class="layui-btn layui-btn-sm" lay-event="campaign">Campaigns</a>
+                    @endcan
                 </div>
             </script>
             <script type="text/html" id="nameTpl">
                 <img width="24px" height="24px" src="@{{ d.icon_url ? d.icon_url : '/image/none.png' }}" />
                 @can('advertise.app')
                 <a class="layui-table-link" lay-event="edit" href="javascript:;">
-                    @endcan
+                @endcan
                     @{{ d.name }}
-                    @can('advertise.app')
+                @can('advertise.app')
                 </a>
                 @endcan
             </script>
@@ -145,6 +148,18 @@
                                         layer.msg(result.msg);
                                         dataTable.reload();
                                     });
+                            });
+                            break;
+                        case 'campaign':
+                            layer.open({
+                                type: 2,
+                                title: 'App: ' + data.name,
+                                shadeClose: true,
+                                area: ['95%', '95%'],
+                                content: '/advertise/app/' + data.id + '/campaign/list',
+                                end: function () {
+                                    // dataTable.reload();
+                                }
                             });
                             break;
                     }
