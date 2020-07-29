@@ -181,7 +181,7 @@ class CampaignController extends Controller
             'clicks' => 'Clicks',
             'installs' => 'Installs',
             'ctr' => 'CTR',
-            // 'cvr' => 'Cvr',
+            'cvr' => 'CVR',
             'ir' => 'IR',
             'ecpi' => 'eCPI',
             // 'ecpm' => 'Ecpm',
