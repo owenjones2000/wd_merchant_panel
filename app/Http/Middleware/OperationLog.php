@@ -26,7 +26,7 @@ class OperationLog
                 'user_id' => auth()->id(),
                 'username' => $op_user->username,
                 'realname' => $op_user->realname,
-                'ip' => $request->getClientIp(),
+                'ip' => isset($_SERVER["HTTP_X_FORWARDED_FOR"]) ? $_SERVER["HTTP_X_FORWARDED_FOR"] : $request->getClientIp(),
                 'method' => $request->method(),
                 'uri' => $request->path(),
                 'query' => http_build_query($request->except(['password','_token'])),
