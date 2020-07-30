@@ -46,6 +46,19 @@ class Ad extends Model
         }
     }
 
+    public function cloneAd()
+    {
+        $newAd = $this->replicate();
+        $newAd->status = false;
+        $newAd->name = $newAd->name.'_copy';
+        $newAd->save();
+        foreach ($this->assets as  $asset) {
+            $newAsset = $asset->replicate();
+            $newAsset ->ad_id = $newAd->id;
+            $newAsset->save();
+        }
+        
+    }
     /**
      * 广告活动
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

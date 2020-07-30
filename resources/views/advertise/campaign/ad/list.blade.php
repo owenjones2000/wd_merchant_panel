@@ -30,6 +30,11 @@
                         {{--<a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">Remove</a>--}}
                     {{--@endcan--}}
                 </div>
+                <div class="layui-btn-group">
+                    @can('advertise.campaign.ad.edit')
+                        <a class="layui-btn layui-btn-warm layui-btn-sm" lay-event="clone">Clone</a>
+                    @endcan
+                </div>
             </script>
             <script type="text/html" id="nameTpl">
                 @can('advertise.campaign.ad')
@@ -144,7 +149,7 @@
                         ,{field: 'kpi.ecpi', title: 'eCPI', sort: true, templet: function(d){return d.kpi ? '$' + (d.kpi.ecpi || '0.00') : '-';}}
                         ,{field: 'kpi.ecpm', title: 'eCPM', sort: true, templet: function(d){return d.kpi ? '$' + (d.kpi.ecpm || '0.00') : '-';}, width:80}
                         ,{field: 'created', title: 'Created', width:110, templet: function(d){return util.toDateString(d.created_at, "yyyy-MM-dd");}}
-                        // ,{fixed: 'right', width: 220, align:'center', toolbar: '#options'}
+                        ,{fixed: 'right', width: 100, align:'center', toolbar: '#options'}
                     ]]
                 });
 
@@ -192,6 +197,19 @@
                         case 'disable':
                             layer.confirm('Confirm pause [ '+data.name+' ] ?', function(index){
                                 $.post('/advertise/campaign/{{$campaign['id']}}/ad/'+data.id+'/disable',
+                                    {},
+                                    function (result) {
+                                        if (result.code==0){
+                                        }
+                                        layer.close(index);
+                                        layer.msg(result.msg);
+                                        dataTable.reload();
+                                    });
+                            });
+                            break;
+                        case 'clone':
+                            layer.confirm('Clone [ '+data.name+' ] ?', function(index){
+                                $.post('/advertise/campaign/{{$campaign['id']}}/ad/'+data.id+'/clone',
                                     {},
                                     function (result) {
                                         if (result.code==0){

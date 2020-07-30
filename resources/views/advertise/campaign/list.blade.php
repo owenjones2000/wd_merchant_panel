@@ -207,7 +207,7 @@
                                 type: 2,
                                 title: 'Campaign: ' + data.name,
                                 shadeClose: true,
-                                area: ['90%', '90%'],
+                                area: ['95%', '95%'],
                                 content: '/advertise/campaign/' + data.id + '/ad/list?rangedate=' + rangedate,
                                 end: function () {
                                     // dataTable.reload();
@@ -219,7 +219,7 @@
                                 type: 2,
                                 title: 'Campaign: ' + data.name,
                                 shadeClose: true,
-                                area: ['90%', '90%'],
+                                area: ['95%', '95%'],
                                 content: '/advertise/campaign/' + data.id + '/channel/list?rangedate=' + rangedate,
                                 end: function () {
                                     // dataTable.reload();
@@ -231,7 +231,7 @@
                                 type: 2,
                                 title: 'Campaign: ' + data.name,
                                 shadeClose: true,
-                                area: ['90%', '90%'],
+                                area: ['95%', '95%'],
                                 content: '/advertise/campaign/' + data.id + '/region/list?rangedate=' + rangedate,
                                 end: function () {
                                     // dataTable.reload();

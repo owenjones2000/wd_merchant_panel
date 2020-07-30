@@ -195,6 +195,13 @@ class AdController extends Controller
         return response()->json(['code'=>0,'msg'=>'Disabled']);
     }
 
+    public function cloneAd($campaign_id, $id)
+    {
+        /** @var Ad $ad */
+        $ad = Ad::query()->where(['id' => $id, 'campaign_id' => $campaign_id])->firstOrFail();
+        $ad->cloneAd();
+        return response()->json(['code' => 0, 'msg' => 'Clone finish']);
+    }
     /**
      * Remove the specified resource from storage.
      *
