@@ -208,16 +208,26 @@
                             });
                             break;
                         case 'clone':
-                            layer.confirm('Clone [ '+data.name+' ] ?', function(index){
-                                $.post('/advertise/campaign/{{$campaign['id']}}/ad/'+data.id+'/clone',
-                                    {},
-                                    function (result) {
-                                        if (result.code==0){
-                                        }
-                                        layer.close(index);
-                                        layer.msg(result.msg);
-                                        dataTable.reload();
-                                    });
+                            // layer.confirm('Clone [ '+data.name+' ] ?', function(index){
+                            //     $.post('/advertise/campaign/{{$campaign['id']}}/ad/'+data.id+'/clone',
+                            //         {},
+                            //         function (result) {
+                            //             if (result.code==0){
+                            //             }
+                            //             layer.close(index);
+                            //             layer.msg(result.msg);
+                            //             dataTable.reload();
+                            //         });
+                            // });
+                            // break;
+                            layer.open({
+                                type: 2,
+                                title: 'Clone',
+                                area: ['95%', '95%'],
+                                content: '/advertise/campaign/{{$campaign['id']}}/ad/'+data.id + '/editclone',
+                                end: function () {
+                                    dataTable.reload();
+                                }
                             });
                             break;
                         case 'preview':

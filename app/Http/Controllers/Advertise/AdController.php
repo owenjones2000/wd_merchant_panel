@@ -195,12 +195,29 @@ class AdController extends Controller
         return response()->json(['code'=>0,'msg'=>'Disabled']);
     }
 
-    public function cloneAd($campaign_id, $id)
+    public function cloneAd(Request $request, $campaign_id, $id)
     {
+        $this->validate($request, [
+            'campaigns' => 'required|string'
+        ]);
+        $campaignids = $request->input('campaigns');
+        $campaignids = explode(',', $campaignids);
         /** @var Ad $ad */
         $ad = Ad::query()->where(['id' => $id, 'campaign_id' => $campaign_id])->firstOrFail();
-        $ad->cloneAd();
-        return response()->json(['code' => 0, 'msg' => 'Clone finish']);
+        foreach ($campaignids as $key => $campaignId) {
+            $ad->cloneAd($campaignId); 
+        }
+
+        return redirect(route('advertise.campaign.ad', [$ad['campaign_id']]))
+            ->with(['status' => 'successfully' ]);
+    }
+
+    public function editClone($campaign_id, $id)
+    {
+        $campaign = Campaign::where('id', $campaign_id)->firstOrFail();
+        $campaigns = Campaign::where('app_id', $campaign->app_id)->get();
+
+        return view('advertise.campaign.ad.editClone', compact('campaign', 'campaigns', 'id'));
     }
     /**
      * Remove the specified resource from storage.

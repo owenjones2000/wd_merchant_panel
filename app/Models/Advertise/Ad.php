@@ -46,11 +46,16 @@ class Ad extends Model
         }
     }
 
-    public function cloneAd()
+    public function cloneAd($campaign_id = null)
     {
         $newAd = $this->replicate();
         $newAd->status = false;
         $newAd->name = $newAd->name.'_copy';
+        if($campaign_id){
+            $campaign = Campaign::findOrFail($campaign_id);
+            $newAd->campaign_id = $campaign_id;
+            $newAd->app_id = $campaign->app_id;
+        }
         $newAd->save();
         foreach ($this->assets as  $asset) {
             $newAsset = $asset->replicate();
