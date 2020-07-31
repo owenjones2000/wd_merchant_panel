@@ -89,7 +89,7 @@ class CampaignController extends Controller
         if ($groupby) {
             $advertise_kpi_query->groupBy(...$groupby);
         }
-        $advertise_kpi_list = $advertise_kpi_query->orderBy('spend', 'desc')->paginate($request->get('limit', 30))->toArray();
+        $advertise_kpi_list = $advertise_kpi_query->orderBy('date', 'asc')->orderBy('spend', 'desc')->paginate($request->get('limit', 30))->toArray();
         $campaigns = Campaign::all()->pluck('name', 'id');
         $ads = Ad::query()->whereIn('campaign_id', $campaign_id_query)->pluck('name', 'id');
         $apps = App::query()->get()->pluck('name', 'id');
@@ -156,7 +156,7 @@ class CampaignController extends Controller
         if ($groupby){
             $advertise_kpi_query->groupBy(...$groupby);
         }
-        $advertise_kpi_list = $advertise_kpi_query->orderBy('spend', 'desc')->get()->toArray();
+        $advertise_kpi_list = $advertise_kpi_query->orderBy('date', 'asc')->orderBy('spend', 'desc')->get()->toArray();
         $campaigns = Campaign::all()->pluck('name', 'id');
         $ads = Ad::query()->whereIn('campaign_id', $campaign_id_query)->pluck('name', 'id');
         $apps = App::query()->get()->pluck('name', 'id');
