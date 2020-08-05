@@ -44,8 +44,14 @@
                 </div>   
                 </div>
                 <div class="layui-form-item">
-                <div class="layui-input-block">
-                    <input type="checkbox" name="app_id" value="app_id" id="ad_id" title="App">
+                <div class="layui-inline layui-input-block">
+                    <div class="layui-input-inline" style="width: 200px;">
+                    <input type="checkbox" name="app_id" value="app_id" id="ad_id" title="App"  class="layui-input">
+                    </div>
+                    <div class="layui-input-inline" style="width:800px">
+                    <div id="app" class="xm-select-demo"  class="layui-input"></div>
+                    </div>
+                    
                 </div>   
                 </div>
                 
@@ -84,7 +90,9 @@
     @can('advertise.campaign')
         <script>
         
-            layui.use(['layer','table','form','laydate','util'],function () {
+            layui.extend({
+                xmSelect: 'lib/extend/xm-select' // 多选组件
+            }).use(['layer','table','form','laydate','util', 'xmSelect'],function () {
                 var layer = layui.layer;
                 var form = layui.form;
                 var table = layui.table;
@@ -100,6 +108,16 @@
                     // {field: 'ecpm', title: 'Ecpm'},
                     {field: 'spend', title: 'Spend'},
                 ];
+                var apps = {!! $apps  !!}
+                console.log(apps)
+                var appSelect = xmSelect.render({
+                    el: '#app', 
+                    language: 'zn',
+                    tips: '',
+                    data: apps,
+                    name: 'app_select',
+                    filterable: true,
+                })
                 //日期范围选择
                 var laydate = layui.laydate;
                 laydate.render({
@@ -163,6 +181,7 @@
                         // {field: 'ecpm', title: 'Ecpm'},
                         {field: 'spend', title: 'Spend'},
                     ];
+                    var selectArr  = appSelect.getValue('value');
                     var rangedate = $("#rangedate").val();
                     // group = document.getElementsByClassName('group');
                     // $('input[type="checkbox"]:checked').each(function(index,value) {
@@ -196,6 +215,7 @@
                         
                     });
                     console.log(mycols);
+                    console.log(selectArr);
                     // check_val = [];
                     // for(let i=0; i<obj.length; i++) {
                     //     console.log(obj[i]);

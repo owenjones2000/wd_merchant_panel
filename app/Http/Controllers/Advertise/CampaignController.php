@@ -35,7 +35,8 @@ class CampaignController extends Controller
 
     public function performance()
     {
-        return view('advertise.campaign.performance');
+        $apps = App::where('status', 1)->select('id as value', 'name' )->get()->toJson();
+        return view('advertise.campaign.performance', compact('apps'));
     }
 
     public function performanceData(Request $request)
@@ -47,7 +48,12 @@ class CampaignController extends Controller
         }
         $start_date = date('Ymd', strtotime($range_date[0] ?? 'now'));
         $end_date = date('Ymd', strtotime($range_date[1] ?? 'now'));
+        $appSelect  = $data['app_select'];
+        if ($appSelect) {
+            $appSelect  = explode(',', $appSelect);
+        }
         unset($data['rangedate']);
+        unset($data['app_select']);
         
         $groupby = [];
         if (in_array('app_id', $data)) {
@@ -61,9 +67,13 @@ class CampaignController extends Controller
         
         // dd($data,$start_date, $end_date,$groupby);
         $campaign_id_query = Campaign::query()->select('id');
+        if ($appSelect) {
+            $campaign_id_query->whereIn('app_id',  $appSelect);
+        }
         $advertise_kpi_query = AdvertiseKpi::multiTableQuery(function ($query) use ($start_date, $end_date, $campaign_id_query) {
             $query->whereBetween('date', [$start_date, $end_date])
                 ->whereIn('campaign_id', $campaign_id_query);
+            
             return $query;
         }, $start_date, $end_date);
 
@@ -117,9 +127,13 @@ class CampaignController extends Controller
         if (!empty($request->get('rangedate'))) {
             $range_date = explode(' ~ ', $request->get('rangedate'));
         }
+        $appSelect =  $request->input('app_select');
+        if ($appSelect) {
+            $appSelect  = explode(',', $appSelect);
+        }
         $start_date = date('Ymd', strtotime($range_date[0] ?? 'now'));
         $end_date = date('Ymd', strtotime($range_date[1] ?? 'now'));
-        $group = $request->except('rangedate');
+        $group = $request->except('rangedate', 'app_select');
         $groupby = [];
         if ($group){
             $groupby =  array_keys($group);
@@ -127,6 +141,10 @@ class CampaignController extends Controller
         
         // dd($start_date, $end_date,$groupby);
         $campaign_id_query = Campaign::query()->select('id');
+        if ($appSelect) {
+            $campaign_id_query->whereIn('app_id',  $appSelect);
+        }
+
         $advertise_kpi_query = AdvertiseKpi::multiTableQuery(function ($query) use ($start_date, $end_date, $campaign_id_query) {
             $query->whereBetween('date', [$start_date, $end_date])
                 ->whereIn('campaign_id', $campaign_id_query)

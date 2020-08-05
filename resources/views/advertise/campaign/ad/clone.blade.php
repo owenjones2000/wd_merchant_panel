@@ -43,7 +43,7 @@
         // 多选初始化
         formSelects.render('selectRegions', {placeholder:'Campaigns'});
 
-        // 初始化分国列表
+        // 初始化
         var regions = formSelects.value('selectRegions');
 
         formSelects.on('selectRegions', function(id, vals, val, isAdd, isDisabled){
