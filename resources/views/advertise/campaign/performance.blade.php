@@ -248,7 +248,7 @@
                         ,url: "{{ route('advertise.campaign.performance-data') }}" //数据接口
                         ,page: true //开启分页
                         ,limit:50
-                        ,where: {params:obj}
+                        ,where: obj
                         ,done: function(res, curr, count){
                             //接口回调，处理一些和表格相关的辅助事项
                             if(res.data.length==0 && count>0){

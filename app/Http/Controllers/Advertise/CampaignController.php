@@ -42,25 +42,22 @@ class CampaignController extends Controller
     public function performanceData(Request $request)
     {
         // dd($request->all());
-        $data = $request->input('params', []);
-        if (isset($data['rangedate'])) {
-            $range_date = explode(' ~ ', $data['rangedate']);
+        if (!empty($request->get('rangedate'))) {
+            $range_date = explode(' ~ ', $request->get('rangedate'));
         }
-        $start_date = date('Ymd', strtotime($range_date[0] ?? 'now'));
-        $end_date = date('Ymd', strtotime($range_date[1] ?? 'now'));
-        $appSelect  = $data['app_select'];
+        $appSelect =  $request->input('app_select');
         if ($appSelect) {
             $appSelect  = explode(',', $appSelect);
         }
-        unset($data['rangedate']);
-        unset($data['app_select']);
-        
+        $start_date = date('Ymd', strtotime($range_date[0] ?? 'now'));
+        $end_date = date('Ymd', strtotime($range_date[1] ?? 'now'));
+        $group = $request->except('rangedate', 'app_select','page', 'limit');
+
         $groupby = [];
-        if (in_array('app_id', $data)) {
-            unset($data['app_id']);
-            $data['z_sub_tasks.app_id'] = 1;
+        if (in_array('app_id', $group)) {
+            unset($group['app_id']);
+            $group['z_sub_tasks.app_id'] = 1;
         }
-        $group = $data;
         if ($group) {
             $groupby =  array_keys($group);
         }
@@ -99,7 +96,9 @@ class CampaignController extends Controller
         if ($groupby) {
             $advertise_kpi_query->groupBy(...$groupby);
         }
-        $advertise_kpi_list = $advertise_kpi_query->orderBy('date', 'asc')->orderBy('spend', 'desc')->paginate($request->get('limit', 30))->toArray();
+        $advertise_kpi_list = $advertise_kpi_query->orderBy('date', 'asc')->orderBy('spend', 'desc')
+        ->paginate($request->get('limit', 30))
+        ->toArray();
         $campaigns = Campaign::all()->pluck('name', 'id');
         $ads = Ad::query()->whereIn('campaign_id', $campaign_id_query)->pluck('name', 'id');
         $apps = App::query()->get()->pluck('name', 'id');
