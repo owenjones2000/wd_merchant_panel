@@ -1,6 +1,11 @@
 @extends('layout.base')
 
 @section('content')
+    <style>
+        .layui-form-checkbox span {
+            min-width: 88px;
+        }
+    </style>
     <div class="layui-card">
 
     <form class="layui-form" action="{{route('advertise.campaign.export')}}" id="performance">
