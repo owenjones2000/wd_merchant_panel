@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Advertise\Ad;
 use FFMpeg\FFMpeg;
 use FFMpeg\FFProbe;
 use Illuminate\Console\Command;
@@ -101,5 +102,15 @@ class TestCommand extends Command
         // dd($objects);
         $res = DB::table('a_asset')->select('id', 'spec')->whereIn('file_path', $objects)->get()->toArray();
         dd($res);
+    }
+
+    public function test4()
+    {
+        $ad_id = DB::select('select id from a_ad a left JOIN a_ad_country b on a.id=b.ad_id where country is null;');
+        foreach ($ad_id as $key => $value) {
+            $ad = Ad::find($value->id);
+            $ad->regions()->syncWithoutDetaching(['ALL']);
+        }
+        dump($ad_id);
     }
 }
