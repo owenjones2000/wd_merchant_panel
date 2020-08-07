@@ -49,6 +49,7 @@ class Ad extends Model
     public function cloneAd($campaign_id = null)
     {
         $newAd = $this->replicate();
+        
         $newAd->status = false;
         $newAd->name = $newAd->name.'_copy';
         if($campaign_id){
@@ -57,6 +58,7 @@ class Ad extends Model
             $newAd->app_id = $campaign->app_id;
         }
         $newAd->save();
+        $newAd->regions()->syncWithoutDetaching(['ALL']);
         foreach ($this->assets as  $asset) {
             $newAsset = $asset->replicate();
             $newAsset ->ad_id = $newAd->id;
