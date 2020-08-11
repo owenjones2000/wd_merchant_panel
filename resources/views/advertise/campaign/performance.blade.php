@@ -11,7 +11,7 @@
     <form class="layui-form" action="{{route('advertise.campaign.export')}}" id="performance">
                 <label class="layui-form-label">Controls</label>
                 <div class="layui-form-item">
-                <div class="layui-input-block">
+                <div class=" layui-input-block">
                      <input type="text" name="rangedate" id="rangedate" class="layui-input" autocomplete="off" placeholder="default today" style="min-width: 15rem">
                 </div>   
                 </div>
@@ -21,8 +21,17 @@
                 </div>   
                 </div>
                 <div class="layui-form-item">
-                <div class="layui-input-block">
-                    <input type="checkbox" name="os" value="os"  id="os"title="Platform">
+                <div class="layui-input-block layui-inline">
+                    <div class="layui-input-inline" style="width: 200px;">
+                        <input type="checkbox" name="os" value="os"  id="os"title="Platform">
+                    </div>
+                    <div class="layui-input-inline" style="width:800px">
+                        <select name="os_select" lay-verify="" >
+                            <option value=""> </option>
+                            <option value="ios">IOS</option>
+                            <option value="android">Android</option>
+                        </select>
+                    </div>
                 </div>   
                 </div>
                 <div class="layui-form-item">
@@ -179,17 +188,17 @@
                 // console.log(dataTable)
                 //搜索
                 $("#reportBtn").click(function () {
-                        var mycols = [
-                        {field: 'impressions', title: 'Impressions'},
-                        {field: 'clicks', title: 'Clicks'},
-                        {field: 'installs', title: 'Installs'},
-                        {field: 'ctr', title: 'Ctr'},
-                        {field: 'cvr', title: 'CVR'},
-                        {field: 'ir', title: 'Ir'},
-                        {field: 'ecpi', title: 'Ecpi'},
-                        // {field: 'ecpm', title: 'Ecpm'},
-                        {field: 'spend', title: 'Spend'},
-                    ];
+                    //     var mycols = [
+                    //     {field: 'impressions', title: 'Impressions'},
+                    //     {field: 'clicks', title: 'Clicks'},
+                    //     {field: 'installs', title: 'Installs'},
+                    //     {field: 'ctr', title: 'CTR'},
+                    //     {field: 'cvr', title: 'CVR'},
+                    //     {field: 'ir', title: 'IR'},
+                    //     {field: 'ecpi', title: 'eCPI'},
+                    //     // {field: 'ecpm', title: 'Ecpm'},
+                    //     {field: 'spend', title: 'Spend'},
+                    // ];
                     var selectArr  = appSelect.getValue('value');
                     var rangedate = $("#rangedate").val();
                     // group = document.getElementsByClassName('group');

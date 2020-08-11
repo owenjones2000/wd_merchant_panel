@@ -29,16 +29,16 @@ class CampaignController extends Controller
     }
     public function appBelonglist(Request $request, $app_id)
     {
-        
+
         return view('advertise.app.campaign.list', compact('app_id'));
     }
 
     public function performance()
     {
-        $apps = App::where('status', 1)->select('id as value', 'name', 'os' )->get();
+        $apps = App::where('status', 1)->select('id as value', 'name', 'os')->get();
         foreach ($apps as $key => $app) {
-            
-            $app->name = $app ->name.' ( '.$app->os.' ) ';
+
+            $app->name = $app->name . ' ( ' . $app->os . ' ) ';
         }
         // dd($apps);
         return view('advertise.campaign.performance', compact('apps'));
@@ -50,13 +50,15 @@ class CampaignController extends Controller
         if (!empty($request->get('rangedate'))) {
             $range_date = explode(' ~ ', $request->get('rangedate'));
         }
+        $osSelect =  $request->input('os_select');
+        // dd($osSelect);
         $appSelect =  $request->input('app_select');
         if ($appSelect) {
             $appSelect  = explode(',', $appSelect);
         }
         $start_date = date('Ymd', strtotime($range_date[0] ?? 'now'));
         $end_date = date('Ymd', strtotime($range_date[1] ?? 'now'));
-        $group = $request->except('rangedate', 'app_select','page', 'limit');
+        $group = $request->except('rangedate', 'app_select', 'page', 'limit', 'os_select');
 
         $groupby = [];
         if (in_array('app_id', $group)) {
@@ -66,44 +68,53 @@ class CampaignController extends Controller
         if ($group) {
             $groupby =  array_keys($group);
         }
-        
+
         // dd($data,$start_date, $end_date,$groupby);
         $campaign_id_query = Campaign::query()->select('id');
         if ($appSelect) {
             $campaign_id_query->whereIn('app_id',  $appSelect);
         }
+        if ($osSelect) {
+            $campaign_id_query->whereHas('app', function($query) use($osSelect){
+                $query->where('os', $osSelect);
+            });
+        }
         $advertise_kpi_query = AdvertiseKpi::multiTableQuery(function ($query) use ($start_date, $end_date, $campaign_id_query) {
             $query->whereBetween('date', [$start_date, $end_date])
                 ->whereIn('campaign_id', $campaign_id_query);
-            
+
             return $query;
         }, $start_date, $end_date);
 
         $advertise_kpi_query->join('a_app', 'a_app.id', '=', 'z_sub_tasks.app_id')
-        ->select([
-            DB::raw('sum(impressions) as impressions'),
-            DB::raw('sum(clicks) as clicks'),
-            DB::raw('sum(installations) as installs'),
-            DB::raw('round(sum(clicks) * 100 / sum(impressions), 2) as ctr'),
-            DB::raw('round(sum(installations) * 100 / sum(clicks), 2) as cvr'),
-            DB::raw('round(sum(installations) * 100 / sum(impressions), 2) as ir'),
-            DB::raw('round(sum(spend), 2) as spend'),
-            DB::raw('round(sum(spend) / sum(installations), 2) as ecpi'),
-            DB::raw('round(sum(spend) * 1000 / sum(impressions), 2) as ecpm'),
-            'z_sub_tasks.campaign_id',
-            'ad_id',
-            'z_sub_tasks.app_id',
-            'z_sub_tasks.target_app_id',
-            'date',
-            'country',
-            'a_app.os'
-        ]);
+
+            ->select([
+                DB::raw('sum(impressions) as impressions'),
+                DB::raw('sum(clicks) as clicks'),
+                DB::raw('sum(installations) as installs'),
+                DB::raw('round(sum(clicks) * 100 / sum(impressions), 2) as ctr'),
+                DB::raw('round(sum(installations) * 100 / sum(clicks), 2) as cvr'),
+                DB::raw('round(sum(installations) * 100 / sum(impressions), 2) as ir'),
+                DB::raw('round(sum(spend), 2) as spend'),
+                DB::raw('round(sum(spend) / sum(installations), 2) as ecpi'),
+                DB::raw('round(sum(spend) * 1000 / sum(impressions), 2) as ecpm'),
+                'z_sub_tasks.campaign_id',
+                'ad_id',
+                'z_sub_tasks.app_id',
+                'z_sub_tasks.target_app_id',
+                'date',
+                'country',
+                'a_app.os'
+            ]);
+            // ->when($osSelect, function ($query) use ($osSelect) {
+            //     $query->where('a_app.os', $osSelect);
+            // });
         if ($groupby) {
             $advertise_kpi_query->groupBy(...$groupby);
         }
         $advertise_kpi_list = $advertise_kpi_query->orderBy('date', 'asc')->orderBy('spend', 'desc')
-        ->paginate($request->get('limit', 30))
-        ->toArray();
+            ->paginate($request->get('limit', 30))
+            ->toArray();
         $campaigns = Campaign::all()->pluck('name', 'id');
         $ads = Ad::query()->whereIn('campaign_id', $campaign_id_query)->pluck('name', 'id');
         $apps = App::query()->get()->pluck('name', 'id');
@@ -132,50 +143,54 @@ class CampaignController extends Controller
             $range_date = explode(' ~ ', $request->get('rangedate'));
         }
         $appSelect =  $request->input('app_select');
+        $osSelect =  $request->input('os_select');
         if ($appSelect) {
             $appSelect  = explode(',', $appSelect);
         }
         $start_date = date('Ymd', strtotime($range_date[0] ?? 'now'));
         $end_date = date('Ymd', strtotime($range_date[1] ?? 'now'));
-        $group = $request->except('rangedate', 'app_select');
+        $group = $request->except('rangedate', 'app_select', 'os_select');
         $groupby = [];
-        if ($group){
+        if ($group) {
             $groupby =  array_keys($group);
         }
-        
+
         // dd($start_date, $end_date,$groupby);
         $campaign_id_query = Campaign::query()->select('id');
         if ($appSelect) {
             $campaign_id_query->whereIn('app_id',  $appSelect);
         }
-
+        if ($osSelect) {
+            $campaign_id_query->whereHas('app', function ($query) use ($osSelect) {
+                $query->where('os', $osSelect);
+            });
+        }
         $advertise_kpi_query = AdvertiseKpi::multiTableQuery(function ($query) use ($start_date, $end_date, $campaign_id_query) {
             $query->whereBetween('date', [$start_date, $end_date])
-                ->whereIn('campaign_id', $campaign_id_query)
-                ;
+                ->whereIn('campaign_id', $campaign_id_query);
             return $query;
         }, $start_date, $end_date);
 
         $advertise_kpi_query->join('a_app', 'a_app.id', '=', 'z_sub_tasks.app_id')
-        ->select([
-            DB::raw('sum(impressions) as impressions'),
-            DB::raw('sum(clicks) as clicks'),
-            DB::raw('sum(installations) as installs'),
-            DB::raw('round(sum(clicks) * 100 / sum(impressions), 2) as ctr'),
-            DB::raw('round(sum(installations) * 100 / sum(clicks), 2) as cvr'),
-            DB::raw('round(sum(installations) * 100 / sum(impressions), 2) as ir'),
-            DB::raw('round(sum(spend), 2) as spend'),
-            DB::raw('round(sum(spend) / sum(installations), 2) as ecpi'),
-            DB::raw('round(sum(spend) * 1000 / sum(impressions), 2) as ecpm'),
-            'z_sub_tasks.campaign_id',
-            'ad_id',
-            'z_sub_tasks.app_id',
-            'z_sub_tasks.target_app_id',
-            'date',
-            'country',
-            'a_app.os'
-        ]);
-        if ($groupby){
+            ->select([
+                DB::raw('sum(impressions) as impressions'),
+                DB::raw('sum(clicks) as clicks'),
+                DB::raw('sum(installations) as installs'),
+                DB::raw('round(sum(clicks) * 100 / sum(impressions), 2) as ctr'),
+                DB::raw('round(sum(installations) * 100 / sum(clicks), 2) as cvr'),
+                DB::raw('round(sum(installations) * 100 / sum(impressions), 2) as ir'),
+                DB::raw('round(sum(spend), 2) as spend'),
+                DB::raw('round(sum(spend) / sum(installations), 2) as ecpi'),
+                DB::raw('round(sum(spend) * 1000 / sum(impressions), 2) as ecpm'),
+                'z_sub_tasks.campaign_id',
+                'ad_id',
+                'z_sub_tasks.app_id',
+                'z_sub_tasks.target_app_id',
+                'date',
+                'country',
+                'a_app.os'
+            ]);
+        if ($groupby) {
             $advertise_kpi_query->groupBy(...$groupby);
         }
         $advertise_kpi_list = $advertise_kpi_query->orderBy('date', 'asc')->orderBy('spend', 'desc')->get()->toArray();
@@ -188,9 +203,9 @@ class CampaignController extends Controller
             $kpi['ad'] = $ads[$kpi['ad_id']];
             $kpi['app'] = $apps[$kpi['app_id']];
             $kpi['target_app'] = $channels[$kpi['target_app_id']];
-            $kpi['ir'] = $kpi['ir'].'%';
-            $kpi['ctr'] = $kpi['ctr'].'%';
-            $kpi['cvr'] = $kpi['cvr'].'%';
+            $kpi['ir'] = $kpi['ir'] . '%';
+            $kpi['ctr'] = $kpi['ctr'] . '%';
+            $kpi['cvr'] = $kpi['cvr'] . '%';
         }
 
         $headings = [
@@ -210,63 +225,64 @@ class CampaignController extends Controller
             'spend' => 'Spend',
         ];
         $headings = array_reverse($headings);
-        if (in_array('country', $groupby)){
+        if (in_array('country', $groupby)) {
             $headings['country'] = 'Country';
         }
-        if (in_array('os', $groupby)){
+        if (in_array('os', $groupby)) {
             $headings['os'] = 'Platform';
         }
-        if (in_array('ad_id', $groupby)){
+        if (in_array('ad_id', $groupby)) {
             $headings['ad'] = 'Ad';
         }
-        if (in_array('campaign_id', $groupby)){
+        if (in_array('campaign_id', $groupby)) {
             $headings['campaign'] = 'Campaign';
         }
-        if (in_array('target_app_id', $groupby)){
+        if (in_array('target_app_id', $groupby)) {
             $headings['target_app'] = 'Sub Site Id';
         }
-        if (in_array('app_id', $groupby)){
+        if (in_array('app_id', $groupby)) {
             $headings['app'] = 'App';
         }
-        if (in_array('date', $groupby)){
+        if (in_array('date', $groupby)) {
             $headings['date'] = 'Day';
         }
         $headings = array_reverse($headings);
         // dd($advertise_kpi_list);
-        Excel::export($advertise_kpi_list)->headings($headings)->download('wudiads_report_'.$request->get('rangedate').'.csv');
+        Excel::export($advertise_kpi_list)->headings($headings)->download('wudiads_report_' . $request->get('rangedate') . '.csv');
     }
     public function data(Request $request)
     {
-        if(!empty($request->get('rangedate'))){
-            $range_date = explode(' ~ ',$request->get('rangedate'));
+        if (!empty($request->get('rangedate'))) {
+            $range_date = explode(' ~ ', $request->get('rangedate'));
         }
-        $start_date = date('Ymd', strtotime($range_date[0]??'now'));
-        $end_date = date('Ymd', strtotime($range_date[1]??'now'));
+        $start_date = date('Ymd', strtotime($range_date[0] ?? 'now'));
+        $end_date = date('Ymd', strtotime($range_date[1] ?? 'now'));
         $order_by = explode('.', $request->get('field', 'status'));
         $order_sort = $request->get('order', 'desc') ?: 'desc';
 
 
         $campaign_base_query = Campaign::query();
-        if(!empty($request->get('keyword'))){
-            $like_keyword = '%'.$request->get('keyword').'%';
+        if (!empty($request->get('keyword'))) {
+            $like_keyword = '%' . $request->get('keyword') . '%';
             $campaign_base_query->where('name', 'like', $like_keyword);
         }
-        if(!empty($request->get('app_id'))){
+        if (!empty($request->get('app_id'))) {
             $campaign_base_query->where('app_id', $request->get('app_id'));
         }
-        if(!empty($request->get('platform'))){
+        if (!empty($request->get('platform'))) {
             $platform  = $request->get('platform');
-            $campaign_base_query->whereHas('app', function($query)use ($platform){
+            $campaign_base_query->whereHas('app', function ($query) use ($platform) {
                 $query->where('os', $platform);
             });
         }
 
         $campaign_id_query = clone $campaign_base_query;
         $campaign_id_query->select('id');
-        $advertise_kpi_query = AdvertiseKpi::multiTableQuery(function($query) use($start_date, $end_date, $campaign_id_query){
+        $advertise_kpi_query = AdvertiseKpi::multiTableQuery(function ($query) use ($start_date, $end_date, $campaign_id_query) {
             $query->whereBetween('date', [$start_date, $end_date])
                 ->whereIn('campaign_id', $campaign_id_query)
-                ->select(['impressions', 'clicks', 'installations', 'spend',
+                ->select([
+                    'impressions', 'clicks', 'installations', 'spend',
                     'date', 'campaign_id',
                 ]);
             return $query;
@@ -285,29 +301,29 @@ class CampaignController extends Controller
             'campaign_id',
         ]);
         $advertise_kpi_query->groupBy('campaign_id');
-        if($order_by[0] === 'kpi' && isset($order_by[1])){
+        if ($order_by[0] === 'kpi' && isset($order_by[1])) {
             $advertise_kpi_query->orderBy($order_by[1], $order_sort);
         }
 
         $advertise_kpi_list = $advertise_kpi_query
-            ->orderBy('spend','desc')
+            ->orderBy('spend', 'desc')
             ->get()
             ->keyBy('campaign_id')
             ->toArray();
         $order_by_ids = implode(',', array_reverse(array_keys($advertise_kpi_list)));
         $campaign_query = clone $campaign_base_query;
         $campaign_query->with('app');
-        if(!empty($order_by_ids)){
+        if (!empty($order_by_ids)) {
             $campaign_query->orderByRaw(DB::raw("FIELD(id,{$order_by_ids}) desc"));
         }
-        if($order_by[0] !== 'kpi'){
+        if ($order_by[0] !== 'kpi') {
             $campaign_query->orderBy($order_by[0], $order_sort);
         }
-        $campaign_list = $campaign_query->paginate($request->get('limit',30))
+        $campaign_list = $campaign_query->paginate($request->get('limit', 30))
             ->toArray();
 
-        foreach($campaign_list['data'] as &$campaign){
-            if(isset($advertise_kpi_list[$campaign['id']])){
+        foreach ($campaign_list['data'] as &$campaign) {
+            if (isset($advertise_kpi_list[$campaign['id']])) {
                 $campaign['kpi'] = $advertise_kpi_list[$campaign['id']];
             }
         }
@@ -387,7 +403,7 @@ class CampaignController extends Controller
             $campaign_query->orderBy($order_by[0], $order_sort);
         }
         $campaign_list = $campaign_query->get()
-        ->toArray();
+            ->toArray();
 
         foreach ($campaign_list as &$campaign) {
             if (isset($advertise_kpi_list[$campaign['id']])) {
@@ -419,9 +435,9 @@ class CampaignController extends Controller
      */
     public function edit($id = null)
     {
-        if(empty($id)){
+        if (empty($id)) {
             $campaign = new Campaign();
-        }else{
+        } else {
             /** @var Campaign $campaign */
             $campaign = Campaign::findOrFail($id);
         }
@@ -431,7 +447,7 @@ class CampaignController extends Controller
             ->get();
         $regions = Region::query()->orderBy('sort', 'desc')->get();
         $states = State::query()->get();
-        return view('advertise.campaign.edit',compact('campaign', 'apps', 'regions', 'states', 'mainUserId'));
+        return view('advertise.campaign.edit', compact('campaign', 'apps', 'regions', 'states', 'mainUserId'));
     }
 
     /**
@@ -443,8 +459,8 @@ class CampaignController extends Controller
      */
     public function save(Request $request, $id = null)
     {
-        $this->validate($request,[
-            'name'  => ['required','string','max:100','unique:a_campaign,name,'.$id, new AdvertiseName()],
+        $this->validate($request, [
+            'name'  => ['required', 'string', 'max:100', 'unique:a_campaign,name,' . $id, new AdvertiseName()],
             'app_id' => 'exists:a_app,id',
             'regions' => 'string',
             'budget' => 'array',
@@ -460,11 +476,11 @@ class CampaignController extends Controller
         ]);
         $params = $request->all();
         $params['id'] = $id;
-//        $params['status'] = isset($params['status']) ? 1 : 0;
-        if (Campaign::Make(Auth::user(), $params)){
-            return redirect(route('advertise.campaign.edit', [$id]))->with(['status'=>'Save successfully.']);
+        //        $params['status'] = isset($params['status']) ? 1 : 0;
+        if (Campaign::Make(Auth::user(), $params)) {
+            return redirect(route('advertise.campaign.edit', [$id]))->with(['status' => 'Save successfully.']);
         }
-        return redirect(route('advertise.campaign.edit', [$id]))->withErrors(['status'=>'Error']);
+        return redirect(route('advertise.campaign.edit', [$id]))->withErrors(['status' => 'Error']);
     }
 
     /**
@@ -496,7 +512,7 @@ class CampaignController extends Controller
         /** @var Campaign $campaign */
         $campaign = Campaign::findOrFail($id);
         $campaign->disable();
-        return response()->json(['code'=>0,'msg'=>'Disabled']);
+        return response()->json(['code' => 0, 'msg' => 'Disabled']);
     }
 
     /**
@@ -505,15 +521,15 @@ class CampaignController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-//    public function destroy(Request $request)
-//    {
-//        $ids = $request->get('ids');
-//        if (empty($ids)){
-//            return response()->json(['code'=>1,'msg'=>'请选择删除项']);
-//        }
-//        if (Campaign::destroy($ids)){
-//            return response()->json(['code'=>0,'msg'=>'删除成功']);
-//        }
-//        return response()->json(['code'=>1,'msg'=>'删除失败']);
-//    }
+    //    public function destroy(Request $request)
+    //    {
+    //        $ids = $request->get('ids');
+    //        if (empty($ids)){
+    //            return response()->json(['code'=>1,'msg'=>'请选择删除项']);
+    //        }
+    //        if (Campaign::destroy($ids)){
+    //            return response()->json(['code'=>0,'msg'=>'删除成功']);
+    //        }
+    //        return response()->json(['code'=>1,'msg'=>'删除失败']);
+    //    }
 }
