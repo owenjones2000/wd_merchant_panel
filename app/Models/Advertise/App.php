@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models\Advertise;
 
 use App\Exceptions\BizException;
@@ -16,8 +17,14 @@ class App extends Model
     protected $table = 'a_app';
     protected $appends = ['track'];
 
-    protected $fillable = ['name', 'description', 'icon_url', 'bundle_id',
-        'os', 'track_platform_id', 'track_code', 'status', 'app_id'];
+    protected $fillable = [
+        'name', 'description',
+        'icon_url', 'bundle_id',
+        'os',
+        'track_platform_id', 'track_code', 'track_url',
+        'status',
+        'app_id',
+    ];
 
     /**
      * 构造App
@@ -25,8 +32,9 @@ class App extends Model
      * @param $params
      * @return mixed
      */
-    public static function Make($user, $params){
-        $apps = DB::transaction(function () use($user, $params) {
+    public static function Make($user, $params)
+    {
+        $apps = DB::transaction(function () use ($user, $params) {
             $main_user_id = $user->getMainId();
             if (empty($params['id'])) {
                 $apps = new self();
@@ -38,7 +46,7 @@ class App extends Model
                     'main_user_id' => $main_user_id
                 ])->firstOrFail();
             }
-            if($params['track_platform_id'] == TrackPlatform::Adjust && empty($params['track_code'])){
+            if ($params['track_platform_id'] == TrackPlatform::Adjust && empty($params['track_code'])) {
                 throw new BizException('Track code required.');
             }
             $apps->fill($params);
@@ -53,8 +61,9 @@ class App extends Model
      * 启用
      * @throws \Throwable
      */
-    public function enable(){
-        if(!$this->status){
+    public function enable()
+    {
+        if (!$this->status) {
             $this->status = true;
             $this->saveOrFail();
         }
@@ -64,8 +73,9 @@ class App extends Model
      * 停用
      * @throws \Throwable
      */
-    public function disable(){
-        if($this->status){
+    public function disable()
+    {
+        if ($this->status) {
             $this->status = false;
             $this->saveOrFail();
         }
@@ -76,7 +86,8 @@ class App extends Model
         return $this->hasMany(Ad::class, 'app_id', 'id');
     }
 
-    public function getTrackAttribute(){
+    public function getTrackAttribute()
+    {
         return TrackPlatform::get($this['track_platform_id']);
     }
 
@@ -84,9 +95,16 @@ class App extends Model
      * 禁用投放渠道
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function disableChannels(){
-        return $this->belongsToMany(Channel::class, 'a_app_target_app_disabled',
-            'app_id','target_app_id', 'id', 'id');
+    public function disableChannels()
+    {
+        return $this->belongsToMany(
+            Channel::class,
+            'a_app_target_app_disabled',
+            'app_id',
+            'target_app_id',
+            'id',
+            'id'
+        );
     }
 
     /**

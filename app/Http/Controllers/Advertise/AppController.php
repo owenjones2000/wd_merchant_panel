@@ -94,8 +94,13 @@ class AppController extends Controller
         ]);
         try{
             $params = $request->all();
-            if($request->input('os') == 'ios' && $request->input('app_id') == ''){
-                return back()->withInput()->withErrors(['app_id is required']);
+            if($request->input('os') == 'ios'){
+                if (strlen($request->input('app_id')) != 10){
+                    return back()->withInput()->withErrors(['app_id is wrong']);
+                }else{
+                    $params['app_id'] = 'id'.$params['app_id'];
+                }
+                
             }
             $params['id'] = $id;
             App::Make(Auth::user(), $params);
