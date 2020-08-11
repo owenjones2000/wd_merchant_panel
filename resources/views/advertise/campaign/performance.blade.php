@@ -120,6 +120,10 @@
                     language: 'zn',
                     tips: '',
                     data: apps,
+                    prop:{
+                        name: 'name',
+                        value: 'value'
+                    },
                     name: 'app_select',
                     filterable: true,
                 })

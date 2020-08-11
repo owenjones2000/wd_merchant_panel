@@ -90,9 +90,13 @@ class AppController extends Controller
             'bundle_id'  => 'required|unique:a_app,bundle_id,'.$id.',id,os,'.$request->input('os'),
             'description' => 'string|max:200',
             'icon_url' => 'string|max:200',
+            'app_id' => 'string|',
         ]);
         try{
             $params = $request->all();
+            if($request->input('os') == 'ios' && $request->input('app_id') == ''){
+                return back()->withInput()->withErrors(['app_id is required']);
+            }
             $params['id'] = $id;
             App::Make(Auth::user(), $params);
             return redirect(route('advertise.app.edit', [$id]))->with(['status'=>'Update successfully']);

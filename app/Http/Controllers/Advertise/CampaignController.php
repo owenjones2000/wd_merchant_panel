@@ -35,7 +35,12 @@ class CampaignController extends Controller
 
     public function performance()
     {
-        $apps = App::where('status', 1)->select('id as value', 'name' )->get()->toJson();
+        $apps = App::where('status', 1)->select('id as value', 'name', 'os' )->get();
+        foreach ($apps as $key => $app) {
+            
+            $app->name = $app ->name.' ( '.$app->os.' ) ';
+        }
+        // dd($apps);
         return view('advertise.campaign.performance', compact('apps'));
     }
 

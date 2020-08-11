@@ -40,6 +40,13 @@
 </div>
 
 <div class="layui-form-item">
+    <label class="layui-form-label">App Id (IOS Required)</label>
+    <div class="layui-input-block">
+        <input type="text" name="app_id" value="{{ $apps->app_id ?? old('app_id') }}" lay-verify="" placeholder="e.g.:id1493269988" autocomplete="off" class="layui-input">
+    </div>
+</div>
+
+<div class="layui-form-item">
     <label class="layui-form-label">Tracking</label>
     <div class="layui-input-inline">
         <select name="track_platform_id" lay-filter="track">
@@ -71,7 +78,7 @@
 
 @section('script')
     <script>
-        layui.use('upload', function() {
+        layui.use(['upload', 'form'], function() {
             layui.upload.render({
                 url: '{{ route('advertise.app.icon') }}'
                 , elem: '#upload-icon' //指定原始元素，默认直接查找class="layui-upload-file"
