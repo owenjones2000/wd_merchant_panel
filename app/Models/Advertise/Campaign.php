@@ -50,7 +50,7 @@ class Campaign extends Model
             if($campaign->app->is_audience??0){
                 $audience['gender'] = $params['audience']['gender'] ?? 0;
                 $audience['adult'] = $params['audience']['adult'] ?? false;
-                $audience['states'] =  ($params['audience']['states'] ?? '') . ',';
+                $audience['states'] =  ','.($params['audience']['states'] ?? '') . ',';
             }
             $audience->saveOrFail();
 
