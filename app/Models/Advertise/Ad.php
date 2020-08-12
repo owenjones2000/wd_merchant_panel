@@ -29,7 +29,7 @@ class Ad extends Model
             if($this->need_review){
                 throw new \Exception('Need review by administrator.');
             }
-            $this->is_cold = true;
+            // $this->is_cold = true;
             $this->status = true;
             $this->saveOrFail();
         }
