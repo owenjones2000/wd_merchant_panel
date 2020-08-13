@@ -32,7 +32,7 @@
     </div>
 </div>
 
-<div class="layui-form-item">
+{{-- <div class="layui-form-item">
     <label class="layui-form-label">Put Mode</label>
     <div class="layui-input-block">
         <select name="put_mode" lay-filter="put_mode">
@@ -41,7 +41,7 @@
             @endforeach
         </select>
     </div>
-</div>
+</div> --}}
 
 {{--<div class="layui-form-item">--}}
     {{--<label class="layui-form-label">Status</label>--}}
