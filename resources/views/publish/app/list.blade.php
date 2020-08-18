@@ -157,10 +157,10 @@
                                     {},
                                     function (result) {
                                     if (result.code==0){
+                                        layer.close(index);
+                                        dataTable.reload();
                                     }
-                                    layer.close(index);
                                     layer.msg(result.msg);
-                                    dataTable.reload();
                                 });
                             });
                             break;
@@ -170,10 +170,10 @@
                                     {},
                                     function (result) {
                                         if (result.code==0){
+                                            layer.close(index);
+                                            dataTable.reload();
                                         }
-                                        layer.close(index);
                                         layer.msg(result.msg);
-                                        dataTable.reload();
                                     });
                             });
                             break;

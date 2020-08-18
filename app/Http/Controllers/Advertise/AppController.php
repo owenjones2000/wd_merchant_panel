@@ -156,10 +156,14 @@ class AppController extends Controller
      */
     public function enable($id)
     {
-        /** @var App $apps */
-        $apps = App::findOrFail($id);
-        $apps->enable();
-        return response()->json(['code'=>0,'msg'=>'Successful']);
+        /** @var App $app */
+        $app = App::findOrFail($id);
+        if ($app->is_admin_disable == 1){
+            return response()->json(['code' => 100, 'msg' => 'Under review by administrator,please contact the administrator']);
+        }else {
+            $app->enable();
+            return response()->json(['code' => 0, 'msg' => 'Successful']);
+        }
     }
 
     /**
@@ -170,9 +174,9 @@ class AppController extends Controller
      */
     public function disable($id)
     {
-        /** @var App $apps */
-        $apps = App::findOrFail($id);
-        $apps->disable();
+        /** @var App $app */
+        $app = App::findOrFail($id);
+        $app->disable();
         return response()->json(['code'=>0,'msg'=>'Successful']);
     }
 
