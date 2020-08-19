@@ -39,10 +39,10 @@
     </div>
 </div>
 
-<div class="layui-form-item">
+<div class="layui-form-item" id="appid">
     <label class="layui-form-label">App Id (IOS Required)</label>
     <div class="layui-input-block">
-        <input type="text" name="app_id" value="{{ $apps->app_id ?? old('app_id') }}" lay-verify=""  @if($apps->id) disabled @endif placeholder="e.g.:149****988" autocomplete="off" class="layui-input">
+        <input type="text" name="app_id" value="{{ $apps->app_id ?? old('app_id') }}"  @if($apps->id) disabled @endif placeholder="e.g.:149****988" autocomplete="off" lay-verify="" class="layui-input">
     </div>
 </div>
 
@@ -55,7 +55,7 @@
             @endforeach
         </select>
     </div>
-    <div class="layui-input-inline" style="width: 300px;">
+    <div class="layui-input-inline" style="width: 500px;">
         <input type="text" name="track_code" value="{{ $apps['track_code'] ?? old('track_code') }}" @if($apps->id) disabled @endif placeholder="track code (or package name,or kochava campaign_id)" lay-verify="required" autocomplete="off" class="layui-input" >
     </div>
 </div>
@@ -84,6 +84,7 @@
 @section('script')
     <script>
         layui.use(['upload', 'form'], function() {
+            var form = layui.form;
             layui.upload.render({
                 url: '{{ route('advertise.app.icon') }}'
                 , elem: '#upload-icon' //指定原始元素，默认直接查找class="layui-upload-file"
@@ -95,6 +96,16 @@
                     $('#input_icon').val(res.url);
                 }
             });
+            form.on('select(os)', function(data){
+                // console.log(data.elem); //得到select原始DOM对象
+                console.log(data.value); //得到被选中的值
+                // console.log(data.othis); //得到美化后的DOM对象
+                if (data.value == 'android') {
+                    document.getElementById('appid').style.display="none";
+                }else {
+                    document.getElementById('appid').style.display="block";
+                }
+            }); 
         });
     </script>
     @include('layout.common_edit')
