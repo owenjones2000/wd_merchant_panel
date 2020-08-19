@@ -9,7 +9,7 @@
 <div class="layui-form-item">
     <label class="layui-form-label">Package Name</label>
     <div class="layui-input-block">
-        <input type="text" name="bundle_id" value="{{ $apps->bundle_id ?? old('bundle_id') }}" lay-verify="required" placeholder="please input package name" autocomplete="off" class="layui-input" @if($apps->id) disabled @endif>
+        <input type="text" name="bundle_id" value="{{ $apps->bundle_id ?? old('bundle_id') }}" lay-verify="required" placeholder="please input package name" autocomplete="off" class="layui-input" @if($apps->id) readonly @endif>
     </div>
 </div>
 
@@ -56,7 +56,7 @@
         </select>
     </div>
     <div class="layui-input-inline" style="width: 500px;">
-        <input type="text" name="track_code" value="{{ $apps['track_code'] ?? old('track_code') }}" @if($apps->id) disabled @endif placeholder="track code (or package name,or kochava campaign_id)" lay-verify="required" autocomplete="off" class="layui-input" >
+        <input type="text" name="track_code"  id="track_code" value="{{ $apps['track_code'] ?? old('track_code') }}" @if($apps->id) disabled @endif placeholder="eg.id1234567890" lay-verify="required" autocomplete="off" class="layui-input" >
     </div>
 </div>
 <div class="layui-form-item">
@@ -96,16 +96,35 @@
                     $('#input_icon').val(res.url);
                 }
             });
-            form.on('select(os)', function(data){
+            form.on('select', function(data){
                 // console.log(data.elem); //得到select原始DOM对象
                 console.log(data.value); //得到被选中的值
                 // console.log(data.othis); //得到美化后的DOM对象
-                if (data.value == 'android') {
+                osval = form.val('appform');
+                console.log(osval);
+                if (osval.os == 'android') {
                     document.getElementById('appid').style.display="none";
                 }else {
                     document.getElementById('appid').style.display="block";
                 }
+                if(osval.track_platform_id == 3){
+                    $('#track_code').attr('placeholder','the campaign id in click url');
+                } else if(osval.track_platform_id == 2){
+                    $('#track_code').attr('placeholder','the trackcode in click url');
+                }else if (osval.track_platform_id==1 && osval.os == 'android'){
+                    $('#track_code').attr('placeholder','bundle id, eg.com.xxx.xxxx');
+                }else if (osval.track_platform_id==1 && osval.os == 'ios'){
+                    $('#track_code').attr('placeholder','eg.id1234567890');
+                }
+
             }); 
+            // form.on('select(track)', function(data){
+            //     if (data.value == 1) {
+            //         $('#track_code').attr('placeholder','id145678*****');
+            //     }else {
+            //         document.getElementById('appid').style.display="block";
+            //     }
+            // }); 
         });
     </script>
     @include('layout.common_edit')

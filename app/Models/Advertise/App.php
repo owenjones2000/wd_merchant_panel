@@ -41,15 +41,16 @@ class App extends Model
                 $apps->main_user_id = $main_user_id;
                 $apps->is_admin_disable = true;
                 $apps['status'] = false;
+                if ($params['track_platform_id'] == TrackPlatform::Adjust && empty($params['track_code'])) {
+                    throw new BizException('Track code required.');
+                }
             } else {
                 $apps = self::query()->where([
                     'id' => $params['id'],
                     'main_user_id' => $main_user_id
                 ])->firstOrFail();
             }
-            if ($params['track_platform_id'] == TrackPlatform::Adjust && empty($params['track_code'])) {
-                throw new BizException('Track code required.');
-            }
+            
             $apps->fill($params);
             $apps->saveOrFail();
 
