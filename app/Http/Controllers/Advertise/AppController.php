@@ -95,7 +95,7 @@ class AppController extends Controller
         try{
             $params = $request->all();
             if($request->input('os') == 'ios'){
-                if (strlen($request->input('app_id')) != 10){
+                if (strlen($request->input('app_id')) > 10 || strlen($request->input('app_id')) < 8){
                     return back()->withInput()->withErrors(['app_id is wrong']);
                 }else{
                     $params['app_id'] = 'id'.$params['app_id'];
