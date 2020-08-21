@@ -119,7 +119,7 @@
                     {field: 'cvr', title: 'CVR'},
                     {field: 'ir', title: 'IR'},
                     {field: 'ecpi', title: 'eCPI'},
-                    // {field: 'ecpm', title: 'Ecpm'},
+                    {field: 'ecpm', title: 'eCPM'},
                     {field: 'spend', title: 'Spend'},
                 ];
                 var apps = {!! $apps  !!}

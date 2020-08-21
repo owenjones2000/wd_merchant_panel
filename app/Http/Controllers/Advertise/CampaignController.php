@@ -221,7 +221,7 @@ class CampaignController extends Controller
             'cvr' => 'CVR',
             'ir' => 'IR',
             'ecpi' => 'eCPI',
-            // 'ecpm' => 'Ecpm',
+            'ecpm' => 'eCPM',
             'spend' => 'Spend',
         ];
         $headings = array_reverse($headings);

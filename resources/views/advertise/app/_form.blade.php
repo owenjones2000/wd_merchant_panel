@@ -42,7 +42,7 @@
 <div class="layui-form-item" id="appid">
     <label class="layui-form-label">App Id (IOS Required)</label>
     <div class="layui-input-block">
-        <input type="text" name="app_id" value="{{ $apps->app_id ?? old('app_id') }}"  @if($apps->id) disabled @endif placeholder="e.g.:149****988" autocomplete="off" lay-verify="" class="layui-input">
+        <input type="text" name="app_id" value="{{ $apps->app_id ?? old('app_id') }}"  @if($apps->id) readonly @endif placeholder="e.g.:149****988" autocomplete="off" lay-verify="" class="layui-input">
     </div>
 </div>
 
@@ -56,13 +56,13 @@
         </select>
     </div>
     <div class="layui-input-inline" style="width: 500px;">
-        <input type="text" name="track_code"  id="track_code" value="{{ $apps['track_code'] ?? old('track_code') }}" @if($apps->id) disabled @endif placeholder="eg.id1234567890" lay-verify="required" autocomplete="off" class="layui-input" >
+        <input type="text" name="track_code"  id="track_code" value="{{ $apps['track_code'] ?? old('track_code') }}" @if($apps->id) readonly @endif placeholder="eg.id1234567890" lay-verify="required" autocomplete="off" class="layui-input" >
     </div>
 </div>
 <div class="layui-form-item">
     <label class="layui-form-label">Tracking Url</label>
     <div class="layui-input-block">
-        <input type="text" name="track_url" value="{{ $apps->track_url ?? old('track_url') }}" lay-verify="" @if($apps->id) disabled @endif placeholder="" autocomplete="off" class="layui-input">
+        <input type="text" name="track_url" value="{{ $apps->track_url ?? old('track_url') }}" lay-verify="" @if($apps->id) readonly @endif placeholder="" autocomplete="off" class="layui-input">
     </div>
 </div>
 {{--<div class="layui-form-item">--}}
