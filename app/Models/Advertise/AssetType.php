@@ -14,6 +14,7 @@ class AssetType
     const Landscape_Interstitial_Image = 5;
     const Portrait_Interstitial_Image = 6;
     const Html = 7;
+    const Playable_Html = 8;
 
     public static function get($asset_type_id){
         return self::$list[$asset_type_id];
@@ -115,6 +116,11 @@ class AssetType
         self::Html => [
             'id' => self::Html,
             'name' => 'HTML File',
+            'mime_type' => 'html'
+        ],
+        self::Playable_Html => [
+            'id' => self::Playable_Html,
+            'name' => 'Playable Html File',
             'mime_type' => 'html'
         ],
     ];

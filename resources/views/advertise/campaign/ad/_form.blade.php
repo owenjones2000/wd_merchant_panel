@@ -20,6 +20,15 @@
         <input type="text" name="name" value="{{ $ad->name ?? old('name') }}" lay-verify="required" placeholder="" autocomplete="off" class="layui-input" >
     </div>
 </div>
+<div class="layui-form-item">
+    <label for="" class="layui-form-label">Playable</label>
+    <div class="layui-input-block">
+        <select name="playable" lay-verify="">
+        <option value="0">false</option>
+        <option value="1" @if($ad->assets->pluck('type_id')->contains(8)) selected @endif>true</option>
+        </select> 
+    </div>
+</div>
 
 {{--<div class="layui-form-item">--}}
     {{--<label class="layui-form-label">Status</label>--}}

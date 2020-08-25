@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models\Advertise;
 
 use App\Scopes\TenantScope;
@@ -25,8 +26,9 @@ class Campaign extends Model
      * @param $params
      * @return mixed
      */
-    public static function Make($user, $params){
-        $campaign = DB::transaction(function () use($user, $params) {
+    public static function Make($user, $params)
+    {
+        $campaign = DB::transaction(function () use ($user, $params) {
             $main_user_id = $user->getMainId();
             if (empty($params['id'])) {
                 $campaign = new self();
@@ -40,23 +42,23 @@ class Campaign extends Model
             }
             $campaign->fill($params);
             $campaign->saveOrFail();
-            if(empty($campaign['audience'])){
+            if (empty($campaign['audience'])) {
                 $audience = new Audience([
                     'campaign_id' => $campaign['id']
                 ]);
-            }else{
+            } else {
                 $audience = $campaign['audience'];
             }
-            if($campaign->app->is_audience??0){
+            if ($campaign->app->is_audience ?? 0) {
                 $audience['gender'] = $params['audience']['gender'] ?? 0;
                 $audience['adult'] = $params['audience']['adult'] ?? false;
-                $audience['states'] =  ','.($params['audience']['states'] ?? '') . ',';
+                $audience['states'] =  ',' . ($params['audience']['states'] ?? '') . ',';
             }
             $audience->saveOrFail();
 
-            if(empty($params['regions'])){
+            if (empty($params['regions'])) {
                 $campaign->regions()->sync([]);
-            }else{
+            } else {
                 $region_code_list = is_array($params['regions']) ?
                     $params['regions'] : explode(',', $params['regions']);
                 $regions = Region::query()
@@ -65,48 +67,48 @@ class Campaign extends Model
                 $campaign->regions()->sync($regions);
             }
 
-            if(/*isset($params['budget_by_region']) &&*/ isset($params['budget'])){
+            if (/*isset($params['budget_by_region']) &&*/isset($params['budget'])) {
                 $campaign->budgets()->updateOrCreate([
-                        'country' => 'ALL',
-                    ],[
-                        'amount' => $params['budget'][0]['amount'] ?? 0,
-                    ]);
-                if($params['budget_by_region']??false){
-                    foreach($params['budget'] as $budget_info){
-                        if(!empty($budget_info['region_code']) && !empty($budget_info['amount'])) {
+                    'country' => 'ALL',
+                ], [
+                    'amount' => $params['budget'][0]['amount'] ?? 0,
+                ]);
+                if ($params['budget_by_region'] ?? false) {
+                    foreach ($params['budget'] as $budget_info) {
+                        if (!empty($budget_info['region_code']) && !empty($budget_info['amount'])) {
                             $campaign->budgets()->updateOrCreate([
                                 'country' => $budget_info['region_code'],
-                            ],[
+                            ], [
                                 'amount' => $budget_info['amount'],
                                 'deleted_at' => null,
                             ]);
                         }
                     }
-                }else{
+                } else {
                     $campaign->budgets()->where('country', '!=', 'ALL')
                         ->update([
-                        'deleted_at' => Carbon::now(),
-                    ]);
+                            'deleted_at' => Carbon::now(),
+                        ]);
                 }
             }
 
-            if(isset($params['bid_by_region']) && isset($params['bid'])){
+            if (isset($params['bid_by_region']) && isset($params['bid'])) {
                 $campaign->bids()->updateOrCreate([
                     'country' => 'ALL',
-                ],[
+                ], [
                     'amount' => $params['bid'][0]['amount'] ?? 1,
                 ]);
-                if($params['bid_by_region']){
-                    foreach($params['bid'] as $bid_info){
-                        if(!empty($bid_info['region_code'])) {
-                            if(!empty($bid_info['amount']) && $bid_info['amount'] > 0) {
+                if ($params['bid_by_region']) {
+                    foreach ($params['bid'] as $bid_info) {
+                        if (!empty($bid_info['region_code'])) {
+                            if (!empty($bid_info['amount']) && $bid_info['amount'] > 0) {
                                 $campaign->bids()->updateOrCreate([
                                     'country' => $bid_info['region_code'],
                                 ], [
                                     'amount' => $bid_info['amount'],
                                     'deleted_at' => null,
                                 ]);
-                            }else{
+                            } else {
                                 $campaign->bids()->where([
                                     'country' => $bid_info['region_code'],
                                 ])->update([
@@ -115,7 +117,7 @@ class Campaign extends Model
                             }
                         }
                     }
-                }else{
+                } else {
                     $campaign->bids()->where('country', '!=', 'ALL')
                         ->update([
                             'deleted_at' => Carbon::now(),
@@ -132,11 +134,12 @@ class Campaign extends Model
      * 启用
      * @throws \Throwable
      */
-    public function enable(){
-        if($this->is_admin_disable){
+    public function enable()
+    {
+        if ($this->is_admin_disable) {
             throw new \Exception('This campaign has been disabled by the administrator.');
         }
-        if(!$this->status){
+        if (!$this->status) {
             $this->status = true;
             $this->saveOrFail();
         }
@@ -146,8 +149,9 @@ class Campaign extends Model
      * 停用
      * @throws \Throwable
      */
-    public function disable(){
-        if($this->status){
+    public function disable()
+    {
+        if ($this->status) {
             $this->status = false;
             $this->saveOrFail();
         }
@@ -159,8 +163,9 @@ class Campaign extends Model
      * @param $params
      * @return Ad
      */
-    public function makeAd($user, $params){
-        $ad = DB::transaction(function () use($user, $params) {
+    public function makeAd($user, $params)
+    {
+        $ad = DB::transaction(function () use ($user, $params) {
             if (empty($params['id'])) {
                 $ad = new Ad();
                 $ad['campaign_id'] = $this['id'];
@@ -173,15 +178,14 @@ class Campaign extends Model
             }
             $ad->fill($params);
             $ad->saveOrFail();
-
-            if(empty($params['id'])){
+            if (empty($params['id'])) {
                 $ad->regions()->syncWithoutDetaching(['ALL']);
             }
 
-            if(isset($params['asset'])){
+            if (isset($params['asset'])) {
                 $asset_id_list = array_column($params['asset'], 'type', 'id');
                 $ad->assets()
-                    ->where(function($query) use($ad, $asset_id_list){
+                    ->where(function ($query) use ($ad, $asset_id_list) {
                         $query->whereNotIn('id', array_keys($asset_id_list))
                             ->orWhereNotIn('type_id', $ad['type']['support_asset_type']);
                     })
@@ -189,20 +193,29 @@ class Campaign extends Model
                         'ad_id' => null
                     ]);
                 $append_asset_query = Asset::query()
-                    ->where(function($query) use($ad, $asset_id_list){
+                    ->where(function ($query) use ($ad, $asset_id_list) {
                         $query->whereIn('id', array_keys($asset_id_list))
-                            ->whereIn('type_id', $ad['type']['support_asset_type'])
-                        ;
-                    })
-                    ->whereNull('ad_id');
-                if ((clone $append_asset_query)->where('type_id', AssetType::Html)->exists()) {
+                            ->whereIn('type_id', $ad['type']['support_asset_type']);
+                    });
+                    // ->whereNull('ad_id');
+                $html_asset_query = clone $append_asset_query;
+                $html_asset = $html_asset_query->whereIn('type_id', [AssetType::Html, AssetType::Playable_Html])->first();
+                // dd($html_asset, $asset_id_list);
+                if ($html_asset) {
                     $ad['need_review'] = true;
                     $ad['status'] = false;
                     $ad->saveOrFail();
+                    if ($params['playable'] == 1){
+                        $html_asset->type_id = AssetType::Playable_Html;
+                        $html_asset->save();
+                    }else {
+                        $html_asset->type_id = AssetType::Html;
+                        $html_asset->save();
+                    }
                 }
                 $append_asset_query->update([
-                        'ad_id' => $ad['id']
-                    ]);
+                    'ad_id' => $ad['id']
+                ]);
             }
 
             return $ad;
@@ -214,11 +227,12 @@ class Campaign extends Model
      * 默认预算
      * @return int
      */
-    public function getDefaultBudgetAttribute(){
+    public function getDefaultBudgetAttribute()
+    {
         $default_budget = $this->budgets->where('country', 'ALL')->first();
-        if(empty($default_budget)){
+        if (empty($default_budget)) {
             return 0;
-        }else{
+        } else {
             return $default_budget['amount'];
         }
     }
@@ -227,11 +241,12 @@ class Campaign extends Model
      * 默认出价
      * @return int
      */
-    public function getDefaultBidAttribute(){
+    public function getDefaultBidAttribute()
+    {
         $default_bid = $this->bids->where('country', 'ALL')->first();
-        if(empty($default_bid)){
+        if (empty($default_bid)) {
             return 0;
-        }else{
+        } else {
             return $default_bid['amount'];
         }
     }
@@ -240,7 +255,8 @@ class Campaign extends Model
      * 所属应用
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function app(){
+    public function app()
+    {
         return $this->belongsTo(App::class, 'app_id', 'id');
     }
 
@@ -248,7 +264,8 @@ class Campaign extends Model
      * 广告
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function ads(){
+    public function ads()
+    {
         return $this->hasMany(Ad::class, 'campaign_id', 'id');
     }
 
@@ -256,16 +273,24 @@ class Campaign extends Model
      * 投放国家
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function regions(){
-        return $this->belongsToMany(Region::class, 'a_campaign_country',
-            'campaign_id','country', 'id', 'code');
+    public function regions()
+    {
+        return $this->belongsToMany(
+            Region::class,
+            'a_campaign_country',
+            'campaign_id',
+            'country',
+            'id',
+            'code'
+        );
     }
 
     /**
      * 受众
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function audience(){
+    public function audience()
+    {
         return $this->hasOne(Audience::class, 'campaign_id', 'id');
     }
 
@@ -273,14 +298,16 @@ class Campaign extends Model
      * 三方跟踪
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function track(){
+    public function track()
+    {
         return $this->hasOne(Track::class, 'campaign_id', 'id');
     }
 
     /**
      * 预算
      */
-    public function budgets(){
+    public function budgets()
+    {
         return $this->hasMany(CampaignBudget::class, 'campaign_id', 'id');
     }
 
@@ -288,7 +315,8 @@ class Campaign extends Model
      * 出价
      *
      */
-    public function bids(){
+    public function bids()
+    {
         return $this->hasMany(CampaignBid::class, 'campaign_id', 'id');
     }
 
