@@ -196,10 +196,10 @@ class Campaign extends Model
                     ->where(function ($query) use ($ad, $asset_id_list) {
                         $query->whereIn('id', array_keys($asset_id_list))
                             ->whereIn('type_id', $ad['type']['support_asset_type']);
-                    });
-                    // ->whereNull('ad_id');
+                    })
+                    ->whereNull('ad_id');
                 $html_asset_query = clone $append_asset_query;
-                $html_asset = $html_asset_query->whereIn('type_id', [AssetType::Html, AssetType::Playable_Html])->first();
+                $html_asset = $html_asset_query->where('type_id', AssetType::Html)->first();
                 // dd($html_asset, $asset_id_list);
                 if ($html_asset) {
                     $ad['need_review'] = true;
