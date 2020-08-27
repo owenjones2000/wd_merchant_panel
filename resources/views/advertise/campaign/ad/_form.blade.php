@@ -26,7 +26,7 @@
         <select name="playable" lay-verify="">
         <option value="0">not playable(normal end card)</option>
         <option value="0">fake playable(html end card, but user can not play)</option>
-        <option value="1" @if($ad->assets->pluck('type_id')->contains(8)) selected @endif>real playable(html end card, and user can play, testing for now)</option>
+        <option value="1" @if($ad->assets->pluck('type_id')->contains(8)) selected @endif>real playable(html end card, and user can play)</option>
         </select> 
     </div>
 </div>
