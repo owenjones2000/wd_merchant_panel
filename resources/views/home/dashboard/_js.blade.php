@@ -9,6 +9,7 @@
                     $('#clicks').text(toThousands(kpi['clicks']));
                     $('#installs').text(toThousands(kpi['installs']));
                     $('#spends').text(kpi['spend']);
+                    $('#credit').text(kpi['credit']);
                     $('#ir').text(kpi['ir'] ? (kpi['ir'] + '%') : '-');
                     $('#ctr').text(kpi['ctr'] ? (kpi['ctr'] + '%') : '-');
                     $('#cvr').text(kpi['cvr'] ? (kpi['cvr'] + '%') : '-');

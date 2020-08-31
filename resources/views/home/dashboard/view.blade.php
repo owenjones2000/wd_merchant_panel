@@ -127,6 +127,33 @@
             </div>
 
         </div>
+        <div class="layui-col-sm6 layui-col-md3">
+
+            <div class="layui-card">
+
+                <div class="layui-card-header">
+
+                    Available credit
+
+                    <span class="layui-badge layui-bg-green layuiadmin-badge">Today</span>
+
+                </div>
+
+                <div class="layui-card-body layuiadmin-card-list">
+                    <p id="credit" class="layuiadmin-big-font">-</p>
+                    {{-- <p>
+
+                        eCPM
+
+                        <span class="layuiadmin-span-color"><span id="ecpm">-</span> <i class="layui-inline layui-icon layui-icon-dollar"></i></span>
+
+                    </p> --}}
+
+                </div>
+
+            </div>
+
+        </div>
 
 
         <div class="layui-col-sm12">

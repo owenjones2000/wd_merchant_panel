@@ -6,6 +6,8 @@ use App\Models\Advertise\AdvertiseKpi;
 use App\Models\Advertise\Campaign;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class DashBoardController extends Controller
@@ -60,7 +62,9 @@ class DashBoardController extends Controller
             ->get()
             ->toArray();
         if ($range_date == 'now') {
+            $account = User::where('id', Auth::user()->getMainId())->first();
             $result = $advertise_kpi_list[count($advertise_kpi_list) - 1] ?? [];
+            $result['credit'] = $account->ava_credit;
         } else {
             $result = $advertise_kpi_list;
         }
