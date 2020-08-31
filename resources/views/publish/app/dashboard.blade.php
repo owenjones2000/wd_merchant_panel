@@ -17,7 +17,7 @@
 
                 <div class="layui-card-body layuiadmin-card-list">
 
-                    <p id="impressions" class="layuiadmin-big-font">-</p>
+                    <p id="impressions1" class="layuiadmin-big-font">-</p>
 
                     <p>
 
@@ -46,13 +46,13 @@
 
                 <div class="layui-card-body layuiadmin-card-list">
 
-                    <p id="clicks" class="layuiadmin-big-font">-</p>
+                    <p id="clicks1" class="layuiadmin-big-font">-</p>
 
                     <p>
 
                         CTR
 
-                        <span class="layuiadmin-span-color"><span id="ctr">-</span> <i class="layui-inline layui-icon layui-icon-username"></i></span>
+                        <span class="layuiadmin-span-color"><span id="ctr1">-</span> <i class="layui-inline layui-icon layui-icon-username"></i></span>
 
                     </p>
 
@@ -75,12 +75,12 @@
                 </div>
 
                 <div class="layui-card-body layuiadmin-card-list">
-                    <p id="spends" class="layuiadmin-big-font">-</p>
+                    <p id="spends1" class="layuiadmin-big-font">-</p>
                     <p>
 
                         eCPM
 
-                        <span class="layuiadmin-span-color"><span id="ecpm">-</span> <i class="layui-inline layui-icon layui-icon-dollar"></i></span>
+                        <span class="layuiadmin-span-color"><span id="ecpm1">-</span> <i class="layui-inline layui-icon layui-icon-dollar"></i></span>
 
                     </p>
 
@@ -99,14 +99,6 @@
 
                     Trends
 
-                    {{-- <div class="layui-btn-group layuiadmin-btn-group">
-
-                        <a href="javascript:;" class="layui-btn layui-btn-primary layui-btn-xs">去年</a>
-
-                        <a href="javascript:;" class="layui-btn layui-btn-primary layui-btn-xs">今年</a>
-
-                    </div> --}}
-
                 </div>
 
                 <div class="layui-card-body">
@@ -116,7 +108,7 @@
                         <div class="layui-col-sm12">
 
 
-                                <div class="layadmin-dataview" id="chart">
+                                <div class="layadmin-dataview" id="chart1">
 
                                     <div><i class="layui-icon layui-icon-loading1 layadmin-loading"></i></div>
 
@@ -127,7 +119,7 @@
                         <div class="layui-col-sm12">
 
 
-                                <div class="layadmin-dataview" id="chart1">
+                                <div class="layadmin-dataview" id="chart2">
 
                                     <div><i class="layui-icon layui-icon-loading1 layadmin-loading"></i></div>
 
@@ -152,41 +144,41 @@
             function (result) {
                 if (result.code==0){
                     var kpi = result['data'];
-                    $('#impressions').text(toThousands(kpi['impressions']));
-                    $('#clicks').text(toThousands(kpi['clicks']));
-                    $('#spends').text(kpi['revenue']);
-                    $('#ctr').text(kpi['ctr'] ? (kpi['ctr'] + '%') : '-');
-                    $('#ecpm').text(kpi['ecpm'] ? kpi['ecpm'] : '-');
+                    $('#impressions1').text(toThousands(kpi['impressions']));
+                    $('#clicks1').text(toThousands(kpi['clicks']));
+                    $('#spends1').text(kpi['revenue']);
+                    $('#ctr1').text(kpi['ctr'] ? (kpi['ctr'] + '%') : '-');
+                    $('#ecpm1').text(kpi['ecpm'] ? kpi['ecpm'] : '-');
                 }
 
         });
 
-        var myChart = echarts.init(document.getElementById('chart'));
         var myChart1 = echarts.init(document.getElementById('chart1'));
-        myChart.showLoading();
+        // var myChart2 = echarts.init(document.getElementById('chart2'));
         myChart1.showLoading();
+        // myChart2.showLoading();
         $.get(
             '{{ route('publish.app.dashboard.data') }}',
             {},
             function (data, status) {
                 if (data != null) {
-                    var option = {
-                        title: {
-                            text: '无数据',
-                            left: 'center'
-                        },
-                        textStyle:{
-                            fontSize:32,
-                            fontWeight:'bold'
-                        }
-                    };
+                    // var option = {
+                    //     title: {
+                    //         text: '无数据',
+                    //         left: 'center'
+                    //     },
+                    //     textStyle:{
+                    //         fontSize:32,
+                    //         fontWeight:'bold'
+                    //     }
+                    // };
 
-                    option = buildLineChartOptions(data.data, ['impressions', 'clicks'], 'date', null);
-                    option1 = buildLineChartOptions(data.data, ['revenue'], 'date', null);
+                    option1 = buildLineChartOptions(data.data, ['impressions', 'clicks', 'revenue'], 'date', null);
+                    // option2 = buildLineChartOptions(data.data, ['revenue'], 'date', null);
                     myChart1.hideLoading();
-                    myChart.hideLoading();
-                    myChart.setOption(option, true);
+                    // myChart2.hideLoading();
                     myChart1.setOption(option1, true);
+                    // myChart2.setOption(option1, true);
                 }
             }, "json");
 

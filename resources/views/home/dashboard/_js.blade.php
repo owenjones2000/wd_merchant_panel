@@ -18,6 +18,10 @@
         });
 
         var myChart = echarts.init(document.getElementById('chart'));
+        var myChart1 = echarts.init(document.getElementById('chart1'));
+        // var myChart2 = echarts.init(document.getElementById('chart2'));
+        myChart1.showLoading();
+        // myChart2.showLoading();
         myChart.showLoading();
         $.get(
             '{{ route('home.dashboard.data') }}',
@@ -36,11 +40,44 @@
                     };
 
                     option = buildLineChartOptions(data.data, ['impressions', 'clicks', 'installs'], 'date', null);
+                    console.log(option)
                     myChart.hideLoading();
                     myChart.setOption(option, true);
                 }
             }, "json");
+        
 
+        $.get('{{ route('publish.app.dashboard.data', ['range_date' => 'now']) }}',
+            {},
+            function (result) {
+                if (result.code==0){
+                    var kpi = result['data'];
+                    $('#impressions1').text(toThousands(kpi['impressions']));
+                    $('#clicks1').text(toThousands(kpi['clicks']));
+                    $('#spends1').text(kpi['revenue']);
+                    $('#ctr1').text(kpi['ctr'] ? (kpi['ctr'] + '%') : '-');
+                    $('#ecpm1').text(kpi['ecpm'] ? kpi['ecpm'] : '-');
+                }
+
+        });
+
+        
+        $.get(
+            '{{ route('publish.app.dashboard.data') }}',
+            {},
+            function (data, status) {
+                if (data != null) {
+
+                    option1 = buildLineChartOptions(data.data, ['impressions', 'clicks', 'revenue'], 'date', null);
+                    // option2 = buildLineChartOptions(data.data, ['revenue'], 'date', null);
+                    console.log(option1)
+                    myChart1.hideLoading();
+                    // myChart2.hideLoading();
+                    myChart1.setOption(option, true);
+                    // myChart2.setOption(option1, true);
+                }
+            }, "json");
+            
         function buildLineChartOptions(data, selects, group, subgroup){
             var {legend_data, xAxis_data, series} = buildBarOrLineData('line', data, selects, group, subgroup);
 

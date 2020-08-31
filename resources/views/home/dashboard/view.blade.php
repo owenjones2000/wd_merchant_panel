@@ -1,7 +1,14 @@
 @extends('layout.base')
 
 @section('content')
-    <div class="layui-row layui-col-space15">
+<div class="layui-tab" lay-filter="dash">
+  <ul class="layui-tab-title">
+    <li class="layui-this layui-bg-blue">User Acquisition</li>
+    <li class="layui-bg-green">Ad Monetization</li>
+  </ul>
+  <div class="layui-tab-content">
+    <div class="layui-tab-item layui-show">
+        <div class="layui-row layui-col-space15">
 
         <div class="layui-col-sm6 layui-col-md3">
 
@@ -130,13 +137,130 @@
 
                     Trends
 
-                    {{-- <div class="layui-btn-group layuiadmin-btn-group">
+                </div>
 
-                        <a href="javascript:;" class="layui-btn layui-btn-primary layui-btn-xs">去年</a>
+                <div class="layui-card-body">
 
-                        <a href="javascript:;" class="layui-btn layui-btn-primary layui-btn-xs">今年</a>
+                    <div class="layui-row">
 
-                    </div> --}}
+                        <div class="layui-col-sm12">
+
+                                 <div class="layadmin-dataview" id="chart">
+
+                                    <div><i class="layui-icon layui-icon-loading1 layadmin-loading"></i></div>
+
+                                </div>
+
+                                
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    </div>
+    <div class="layui-tab-item layui-show">
+         <div class="layui-row layui-col-space15">
+
+        <div class="layui-col-sm6 layui-col-md4">
+
+            <div class="layui-card">
+
+                <div class="layui-card-header">
+
+                    Impressions
+
+                    <span class="layui-badge layui-bg-blue layuiadmin-badge">Today</span>
+
+                </div>
+
+                <div class="layui-card-body layuiadmin-card-list">
+
+                    <p id="impressions1" class="layuiadmin-big-font">-</p>
+
+                    <p>
+
+                        Impressions 
+
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="layui-col-sm6 layui-col-md4">
+
+            <div class="layui-card">
+
+                <div class="layui-card-header">
+
+                    Clicks
+
+                    <span class="layui-badge layui-bg-orange layuiadmin-badge">Today</span>
+
+                </div>
+
+                <div class="layui-card-body layuiadmin-card-list">
+
+                    <p id="clicks1" class="layuiadmin-big-font">-</p>
+
+                    <p>
+
+                        CTR
+
+                        <span class="layuiadmin-span-color"><span id="ctr1">-</span> <i class="layui-inline layui-icon layui-icon-username"></i></span>
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="layui-col-sm6 layui-col-md4">
+
+            <div class="layui-card">
+
+                <div class="layui-card-header">
+
+                    Revenue
+
+                    <span class="layui-badge layui-bg-green layuiadmin-badge">Today</span>
+
+                </div>
+
+                <div class="layui-card-body layuiadmin-card-list">
+                    <p id="spends1" class="layuiadmin-big-font">-</p>
+                    <p>
+
+                        eCPM
+
+                        <span class="layuiadmin-span-color"><span id="ecpm1">-</span> <i class="layui-inline layui-icon layui-icon-dollar"></i></span>
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="layui-col-sm12">
+
+            <div class="layui-card">
+
+                <div class="layui-card-header">
+
+                    Trends
 
                 </div>
 
@@ -147,59 +271,13 @@
                         <div class="layui-col-sm12">
 
 
-                                <div class="layadmin-dataview" id="chart">
+                                <div class="layadmin-dataview" id="chart1">
 
                                     <div><i class="layui-icon layui-icon-loading1 layadmin-loading"></i></div>
 
                                 </div>
 
                         </div>
-
-                        {{--<div class="layui-col-sm4">--}}
-
-                            {{--<div class="layuiadmin-card-list">--}}
-
-                                {{--<p class="layuiadmin-normal-font">月访问数</p>--}}
-
-                                {{--<span>同上期增长</span>--}}
-
-                                {{--<div class="layui-progress layui-progress-big" lay-showPercent="yes">--}}
-
-                                    {{--<div class="layui-progress-bar" lay-percent="30%"></div>--}}
-
-                                {{--</div>--}}
-
-                            {{--</div>--}}
-
-                            {{--<div class="layuiadmin-card-list">--}}
-
-                                {{--<p class="layuiadmin-normal-font">月下载数</p>--}}
-
-                                {{--<span>同上期增长</span>--}}
-
-                                {{--<div class="layui-progress layui-progress-big" lay-showPercent="yes">--}}
-
-                                    {{--<div class="layui-progress-bar" lay-percent="20%"></div>--}}
-
-                                {{--</div>--}}
-
-                            {{--</div>--}}
-
-                            {{--<div class="layuiadmin-card-list">--}}
-
-                                {{--<p class="layuiadmin-normal-font">月收入</p>--}}
-
-                                {{--<span>同上期增长</span>--}}
-
-                                {{--<div class="layui-progress layui-progress-big" lay-showPercent="yes">--}}
-
-                                    {{--<div class="layui-progress-bar" lay-percent="25%"></div>--}}
-
-                                {{--</div>--}}
-
-                            {{--</div>--}}
-
-                        {{--</div>--}}
 
                     </div>
 
@@ -209,6 +287,10 @@
 
         </div>
     </div>
+    </div>
+  </div>
+</div>
+    
 @endsection
 
 @section('script')
