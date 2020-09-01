@@ -1,5 +1,6 @@
 <script>
     layui.use(['index', "carousel", "echarts"],function () {
+        @can('advertise.manage')
         $.get('{{ route('home.dashboard.data', ['range_date' => 'now']) }}',
             {},
             function (result) {
@@ -19,10 +20,6 @@
         });
 
         var myChart = echarts.init(document.getElementById('chart'));
-        var myChart1 = echarts.init(document.getElementById('chart1'));
-        // var myChart2 = echarts.init(document.getElementById('chart2'));
-        myChart1.showLoading();
-        // myChart2.showLoading();
         myChart.showLoading();
         $.get(
             '{{ route('home.dashboard.data') }}',
@@ -39,15 +36,17 @@
                             fontWeight:'bold'
                         }
                     };
-
                     option = buildLineChartOptions(data.data, ['impressions', 'clicks', 'installs'], 'date', null);
                     console.log(option)
                     myChart.hideLoading();
                     myChart.setOption(option, true);
                 }
             }, "json");
-        
+        @endcan
 
+        @can('publish.manage')
+        var myChart1 = echarts.init(document.getElementById('chart1'));
+        myChart1.showLoading();
         $.get('{{ route('publish.app.dashboard.data', ['range_date' => 'now']) }}',
             {},
             function (result) {
@@ -60,9 +59,7 @@
                     $('#ecpm1').text(kpi['ecpm'] ? kpi['ecpm'] : '-');
                 }
 
-        });
-
-        
+        }); 
         $.get(
             '{{ route('publish.app.dashboard.data') }}',
             {},
@@ -78,7 +75,7 @@
                     // myChart2.setOption(option1, true);
                 }
             }, "json");
-            
+        @endcan
         function buildLineChartOptions(data, selects, group, subgroup){
             var {legend_data, xAxis_data, series} = buildBarOrLineData('line', data, selects, group, subgroup);
 

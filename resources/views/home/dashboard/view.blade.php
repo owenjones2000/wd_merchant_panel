@@ -3,10 +3,15 @@
 @section('content')
 <div class="layui-tab" lay-filter="dash">
   <ul class="layui-tab-title">
+    @can('advertise.manage')
     <li class="layui-this layui-bg-blue">User Acquisition</li>
+    @endcan
+    @can('publish.manage')
     <li class="layui-bg-green">Ad Monetization</li>
+    @endcan
   </ul>
   <div class="layui-tab-content">
+    @can('advertise.manage')
     <div class="layui-tab-item layui-show">
         <div class="layui-row layui-col-space15">
 
@@ -190,6 +195,8 @@
         </div>
     </div>
     </div>
+     @endcan
+    @can('publish.manage')
     <div class="layui-tab-item layui-show">
          <div class="layui-row layui-col-space15">
 
@@ -315,6 +322,7 @@
         </div>
     </div>
     </div>
+    @endcan
   </div>
 </div>
     
