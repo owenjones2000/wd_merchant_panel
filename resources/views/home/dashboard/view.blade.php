@@ -1,6 +1,10 @@
 @extends('layout.base')
 
 @section('content')
+{{-- <ul class="layui-nav" lay-filter="">
+  <li class="layui-nav-item layui-this"><a href="">User Acquisition</a></li>
+<li class="layui-nav-item "><a lay-href="{{route('publish.app.dashboard')}}">Ad Monetization</a></li>
+</ul> --}}
 <div class="layui-tab" lay-filter="dash">
   <ul class="layui-tab-title">
     @can('advertise.manage')
@@ -146,13 +150,6 @@
 
                 <div class="layui-card-body layuiadmin-card-list">
                     <p id="credit" class="layuiadmin-big-font">-</p>
-                    {{-- <p>
-
-                        eCPM
-
-                        <span class="layuiadmin-span-color"><span id="ecpm">-</span> <i class="layui-inline layui-icon layui-icon-dollar"></i></span>
-
-                    </p> --}}
 
                 </div>
 
@@ -325,7 +322,6 @@
     @endcan
   </div>
 </div>
-    
 @endsection
 
 @section('script')
