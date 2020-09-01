@@ -188,17 +188,17 @@
                 // console.log(dataTable)
                 //搜索
                 $("#reportBtn").click(function () {
-                    //     var mycols = [
-                    //     {field: 'impressions', title: 'Impressions'},
-                    //     {field: 'clicks', title: 'Clicks'},
-                    //     {field: 'installs', title: 'Installs'},
-                    //     {field: 'ctr', title: 'CTR'},
-                    //     {field: 'cvr', title: 'CVR'},
-                    //     {field: 'ir', title: 'IR'},
-                    //     {field: 'ecpi', title: 'eCPI'},
-                    //     // {field: 'ecpm', title: 'Ecpm'},
-                    //     {field: 'spend', title: 'Spend'},
-                    // ];
+                    mycols = [
+                        {field: 'impressions', title: 'Impressions'},
+                        {field: 'clicks', title: 'Clicks'},
+                        {field: 'installs', title: 'Installs'},
+                        {field: 'ctr', title: 'CTR'},
+                        {field: 'cvr', title: 'CVR'},
+                        {field: 'ir', title: 'IR'},
+                        {field: 'ecpi', title: 'eCPI'},
+                        {field: 'ecpm', title: 'eCPM'},
+                        {field: 'spend', title: 'Spend'},
+                    ];
                     var selectArr  = appSelect.getValue('value');
                     var rangedate = $("#rangedate").val();
                     // group = document.getElementsByClassName('group');
