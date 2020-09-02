@@ -158,7 +158,7 @@ class AppController extends Controller
     {
         /** @var App $app */
         $app = App::findOrFail($id);
-        if ($app->is_admin_disable == 1){
+        if ($app->is_admin_disable == 1 || $app->is_remove == 1){
             return response()->json(['code' => 100, 'msg' => 'Under review by administrator,please contact the administrator']);
         }else {
             $app->enable();
