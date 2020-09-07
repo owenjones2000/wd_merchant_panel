@@ -33,7 +33,7 @@ class AdController extends Controller
         }
         $start_date = date('Ymd', strtotime($range_date[0]??'now'));
         $end_date = date('Ymd', strtotime($range_date[1]??'now'));
-        $order_by = explode('.', $request->get('field', 'status'));
+        $order_by = explode('.', $request->get('field'));
         $order_sort = $request->get('order', 'desc') ?: 'desc';
 
         $ad_base_query = Ad::query()->where('campaign_id', $campaign_id);
