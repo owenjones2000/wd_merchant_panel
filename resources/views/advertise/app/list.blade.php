@@ -89,7 +89,7 @@
                         ,{field: 'description', title: 'Description'}
                         ,{field: 'track', title: 'Track', templet: '#track'}
                         ,{field: 'track_code', title: 'Track Code'}
-                        ,{field: 'status', title: 'Status', templet: '#status', align:'center', width:70}
+                        ,{field: 'status', title: 'Status', templet: '#status', align:'center',}
                         // ,{field: 'created_at', title: 'Created'}
                         // ,{field: 'updated_at', title: 'Updated'}
                         ,{fixed: 'right', width: 220, align:'center', toolbar: '#options'}

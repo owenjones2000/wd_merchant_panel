@@ -250,6 +250,8 @@ class CampaignController extends Controller
         // dd($advertise_kpi_list);
         Excel::export($advertise_kpi_list)->headings($headings)->download('wudiads_report_' . $request->get('rangedate') . '.csv');
     }
+
+
     public function data(Request $request)
     {
         if (!empty($request->get('rangedate'))) {
@@ -257,7 +259,7 @@ class CampaignController extends Controller
         }
         $start_date = date('Ymd', strtotime($range_date[0] ?? 'now'));
         $end_date = date('Ymd', strtotime($range_date[1] ?? 'now'));
-        $order_by = explode('.', $request->get('field', 'status'));
+        $order_by = explode('.', $request->get('field'));
         $order_sort = $request->get('order', 'desc') ?: 'desc';
 
 
@@ -301,12 +303,14 @@ class CampaignController extends Controller
             'campaign_id',
         ]);
         $advertise_kpi_query->groupBy('campaign_id');
+        // dd($order_by[0]);
         if ($order_by[0] === 'kpi' && isset($order_by[1])) {
             $advertise_kpi_query->orderBy($order_by[1], $order_sort);
         }
 
         $advertise_kpi_list = $advertise_kpi_query
             ->orderBy('spend', 'desc')
+            // ->orderBy('id', )
             ->get()
             ->keyBy('campaign_id')
             ->toArray();
@@ -316,7 +320,7 @@ class CampaignController extends Controller
         if (!empty($order_by_ids)) {
             $campaign_query->orderByRaw(DB::raw("FIELD(id,{$order_by_ids}) desc"));
         }
-        if ($order_by[0] !== 'kpi') {
+        if ($order_by[0] && $order_by[0] !== 'kpi') {
             $campaign_query->orderBy($order_by[0], $order_sort);
         }
         $campaign_list = $campaign_query->paginate($request->get('limit', 30))
