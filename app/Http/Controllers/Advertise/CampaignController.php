@@ -75,7 +75,7 @@ class CampaignController extends Controller
             $campaign_id_query->whereIn('app_id',  $appSelect);
         }
         if ($osSelect) {
-            $campaign_id_query->whereHas('app', function($query) use($osSelect){
+            $campaign_id_query->whereHas('app', function ($query) use ($osSelect) {
                 $query->where('os', $osSelect);
             });
         }
@@ -106,9 +106,9 @@ class CampaignController extends Controller
                 'country',
                 'a_app.os'
             ]);
-            // ->when($osSelect, function ($query) use ($osSelect) {
-            //     $query->where('a_app.os', $osSelect);
-            // });
+        // ->when($osSelect, function ($query) use ($osSelect) {
+        //     $query->where('a_app.os', $osSelect);
+        // });
         if ($groupby) {
             $advertise_kpi_query->groupBy(...$groupby);
         }
@@ -323,7 +323,9 @@ class CampaignController extends Controller
         if ($order_by[0] && $order_by[0] !== 'kpi') {
             $campaign_query->orderBy($order_by[0], $order_sort);
         }
-        $campaign_list = $campaign_query->paginate($request->get('limit', 30))
+        $campaign_list = $campaign_query
+            ->orderBy('id', 'desc')
+            ->paginate($request->get('limit', 30))
             ->toArray();
 
         foreach ($campaign_list['data'] as &$campaign) {
