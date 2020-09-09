@@ -88,6 +88,11 @@ class App extends Model
         return $this->hasMany(Ad::class, 'app_id', 'id');
     }
 
+    public function tags()
+    {
+        return $this->belongsToMany(AppTag::class, 'a_app_tags', 'app_id', 'tag_id', 'id', 'id');
+    }
+    
     public function getTrackAttribute()
     {
         return TrackPlatform::get($this['track_platform_id']);

@@ -122,4 +122,9 @@ class Ad extends Model
     public function assets(){
         return $this->hasMany(Asset::class, 'ad_id', 'id');
     }
+
+    public function tags()
+    {
+        return $this->belongsToMany(AdTag::class, 'a_ad_tags', 'ad_id', 'tag_id', 'id', 'id');
+    }
 }
