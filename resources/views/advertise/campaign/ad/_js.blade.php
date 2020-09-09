@@ -1,10 +1,28 @@
 <script>
     layui.extend({
-        //formSelects: 'lib/extend/formSelects-v4' // 多选组件
-    }).use(['upload', 'form', 'element'],function () {
+        xmSelect: 'lib/extend/xm-select' // 多选组件
+    }).use(['upload', 'form', 'element','xmSelect'],function () {
         var upload = layui.upload;
         var form = layui.form;
         var element = layui.element;
+
+        var tags = {!! $tags  !!}
+        var adtags = {!! $adtags  !!}
+            console.log(tags)
+            console.log(adtags)
+            var appSelect = xmSelect.render({
+                el: '#tag', 
+                language: 'zn',
+                tips: '',
+                data: tags,
+                prop:{
+                    name: 'name',
+                    value: 'id'
+                },
+                initValue: adtags,
+                name: 'tags',
+                filterable: true,
+            })
 
         //多文件列表示例
         var fileList = $('#fileList');

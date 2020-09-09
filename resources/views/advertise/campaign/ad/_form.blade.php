@@ -30,7 +30,12 @@
         </select> 
     </div>
 </div>
-
+<div class="layui-form-item">
+    <label class="layui-form-label">Ad Tag</label>
+    <div class="layui-input-block">
+        <div id="tag" class="xm-select-demo"  class="layui-input"></div>
+    </div>
+</div>
 {{--<div class="layui-form-item">--}}
     {{--<label class="layui-form-label">Status</label>--}}
     {{--<div class="layui-input-block">--}}

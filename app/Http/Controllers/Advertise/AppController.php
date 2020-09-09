@@ -7,6 +7,7 @@ use App\Models\Advertise\App;
 use App\Rules\AdvertiseName;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Advertise\AppTag;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
@@ -68,7 +69,13 @@ class AppController extends Controller
             /** @var App $apps */
             $apps = App::findOrFail($id);
         }
-        return view('advertise.app.edit',compact('apps'));
+        $tags = AppTag::where('status', 1)->select([
+            'id',
+            'name'
+        ])
+        ->get();
+        $apptags = $apps->tags()->pluck('id');
+        return view('advertise.app.edit',compact('apps', 'tags', 'apptags'));
     }
 
     /**

@@ -65,6 +65,12 @@
         <input type="text" name="track_url" value="{{ $apps->track_url ?? old('track_url') }}" lay-verify="" @if($apps->id) readonly @endif placeholder="" autocomplete="off" class="layui-input">
     </div>
 </div>
+<div class="layui-form-item">
+    <label class="layui-form-label">App Tag</label>
+    <div class="layui-input-block">
+        <div id="tag" class="xm-select-demo"  class="layui-input"></div>
+    </div>
+</div>
 {{--<div class="layui-form-item">--}}
     {{--<label class="layui-form-label">Status</label>--}}
     {{--<div class="layui-input-block">--}}
@@ -83,7 +89,9 @@
 
 @section('script')
     <script>
-        layui.use(['upload', 'form'], function() {
+        layui.extend({
+                xmSelect: 'lib/extend/xm-select' // 多选组件
+            }).use(['upload', 'form','xmSelect'], function() {
             var form = layui.form;
             layui.upload.render({
                 url: '{{ route('advertise.app.icon') }}'
@@ -96,6 +104,23 @@
                     $('#input_icon').val(res.url);
                 }
             });
+            var tags = {!! $tags  !!}
+            var apptags = {!! $apptags  !!}
+                console.log(tags)
+                console.log(apptags)
+                var appSelect = xmSelect.render({
+                    el: '#tag', 
+                    language: 'zn',
+                    tips: '',
+                    data: tags,
+                    prop:{
+                        name: 'name',
+                        value: 'id'
+                    },
+                    initValue: apptags,
+                    name: 'tags',
+                    filterable: true,
+                })
             form.on('select', function(data){
                 // console.log(data.elem); //得到select原始DOM对象
                 console.log(data.value); //得到被选中的值
