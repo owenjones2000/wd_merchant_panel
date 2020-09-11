@@ -152,18 +152,31 @@ class CompressCommand extends Command
                         // && isset($asset['spec']['size_i'])
                         // && $asset['spec']['size_i'] > 200000
                     ) {
-
-                        $oldfile = Storage::disk('local')->path($asset['file_path']);
-                        // $ext = strpos($asset->url, 'png')? 'png':'jpg';
-                        $file_name = date('Ymd') . time() . uniqid() . "." . pathinfo($oldfile)['extension'];
-                        $path = Storage::disk('local')->path('') . 'asset/';
-                        $dir = 'asset/';
-                        $newfile = $path . $file_name;
                         try {
+                            $oldfile = Storage::disk('local')->path($asset['file_path']);
+                            // $ext = strpos($asset->url, 'png')? 'png':'jpg';
+                            $file_name = date('Ymd') . time() . uniqid() . "." . pathinfo($oldfile)['extension'];
+                            $path = Storage::disk('local')->path('') . 'asset/';
+                            $dir = 'asset/';
+                            $newfile = $path . $file_name;
+
                             $tinifykey = config('app.tinify_key');
                             \Tinify\setKey($tinifykey);
                             $source = \Tinify\fromFile($oldfile);
                             $source->toFile($newfile);
+
+                            $upload = Storage::put($dir . $file_name, file_get_contents($newfile));
+                            // dump($video_info['bit_rate'], $upload);
+                            $asset['hash'] = md5_file($newfile);
+                            $asset['url'] = Storage::url($dir . $file_name);
+                            $asset['spec'] =  array_merge($asset['spec'], [
+                                'size_compress' => $this->fileSizeConvert(filesize($newfile)),
+                                'file_path_compress' => $dir . $file_name,
+                            ]);
+                            $asset->save();
+                            Log::info('compress jpg' . $asset['id']);
+                            dump($asset->toArray());
+                            $n++;
                         }
                         /* catch (\Tinify\AccountException $e) {
                             print("The error message is: " . $e->getMessage());
@@ -178,20 +191,6 @@ class CompressCommand extends Command
                             Log::error($asset);
                             Log::error($e);
                         }
-
-
-                        $upload = Storage::put($dir . $file_name, file_get_contents($newfile));
-                        // dump($video_info['bit_rate'], $upload);
-                        $asset['hash'] = md5_file($newfile);
-                        $asset['url'] = Storage::url($dir . $file_name);
-                        $asset['spec'] =  array_merge($asset['spec'], [
-                            'size_compress' => $this->fileSizeConvert(filesize($newfile)),
-                            'file_path_compress' => $dir . $file_name,
-                        ]);
-                        $asset->save();
-                        Log::info('compress jpg' . $asset['id']);
-                        dump($asset->toArray());
-                        $n++;
                     }
                 }
             }
