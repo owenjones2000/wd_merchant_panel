@@ -152,17 +152,34 @@ class CompressCommand extends Command
                         // && isset($asset['spec']['size_i'])
                         // && $asset['spec']['size_i'] > 200000
                     ) {
+                        
                         $oldfile = Storage::disk('local')->path($asset['file_path']);
                         // $ext = strpos($asset->url, 'png')? 'png':'jpg';
                         $file_name = date('Ymd') . time() . uniqid() . ".". pathinfo($oldfile)['extension'];
                         $path = Storage::disk('local')->path('') . 'asset/';
                         $dir = 'asset/';
                         $newfile = $path . $file_name;
-
-                        $tinifykey = config('app.tinify_key');
-                        \Tinify\setKey($tinifykey);
-                        $source = \Tinify\fromFile($oldfile);
-                        $source->toFile($newfile);
+                        try {
+                            $tinifykey = config('app.tinify_key');
+                            \Tinify\setKey($tinifykey);
+                            $source = \Tinify\fromFile($oldfile);
+                            $source->toFile($newfile);
+                        } 
+                        /* catch (\Tinify\AccountException $e) {
+                            print("The error message is: " . $e->getMessage());
+                            // Verify your API key and account limit.
+                        } catch (\Tinify\ClientException $e) {
+                            // Check your source image and request options.
+                        } catch (\Tinify\ServerException $e) {
+                            // Temporary issue with the Tinify API.
+                        } catch (\Tinify\ConnectionException $e) {
+                            // A network connection error occurred.
+                        }  */ 
+                        catch (\Exception $e) {
+                            Log::error($asset);
+                            Log::error($e);
+                        }
+                        
 
                         $upload = Storage::put($dir . $file_name, file_get_contents($newfile));
                         // dump($video_info['bit_rate'], $upload);
