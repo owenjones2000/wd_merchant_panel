@@ -28,8 +28,8 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')
         //          ->hourly();
         $schedule->command(CompressCommand::class)->everyTenMinutes()->runInBackground()->withoutOverlapping();
-        // $schedule->command(CompressCommand::class,['compress'])->cron('0 1-10 * * *')->runInBackground()->withoutOverlapping();
-        $schedule->command(CompressCommand::class,['compress'])->cron('*/20 1-10 * * *')->runInBackground()->withoutOverlapping();
+        // $schedule->command(CompressCommand::class,['compress'])->cron('*/20 1-10 * * *')->runInBackground()->withoutOverlapping();
+        $schedule->command(CompressCommand::class,['compress'])->everyTenMinutes()->runInBackground()->withoutOverlapping();
     }
 
     /**
