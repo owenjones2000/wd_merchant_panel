@@ -45,13 +45,13 @@ class CompressCommand extends Command
     public function handle()
     {
         //
-        
+
         $action = $this->argument('action');
-        if ($action == 'detect'){
+        if ($action == 'detect') {
             Log::info('detect start');
             $assets = Asset::where('id', '>=', 30)
-            // ->whereNull('spec->size')
-            ->get();
+                // ->whereNull('spec->size')
+                ->get();
             $n = 0;
             foreach ($assets as $key => $asset) {
                 // if ($n >= 100) {
@@ -106,9 +106,9 @@ class CompressCommand extends Command
         } elseif ($action == 'compress') {
             Log::info('compress start');
             $assets = Asset::where('id', '>=', 30)
-            // ->where('spec->size_per_second', '>', 250000)
-            // ->whereNull('spec->size_compress')
-            ->get();
+                // ->where('spec->size_per_second', '>', 250000)
+                // ->whereNull('spec->size_compress')
+                ->get();
             // dd( $assets->count(), app()->environment());
             $n = 0;
             foreach ($assets as $key => $asset) {
@@ -122,7 +122,7 @@ class CompressCommand extends Command
                         && $asset['spec']['size_per_second'] > 180000
                     ) {
                         $oldfile = Storage::disk('local')->path($asset['file_path']);
-                        $file_name = date('Ymd') . time() . uniqid() ."." . pathinfo($oldfile)['extension'];
+                        $file_name = date('Ymd') . time() . uniqid() . "." . pathinfo($oldfile)['extension'];
                         $path = Storage::disk('local')->path('') . 'asset/';
                         $dir = 'asset/';
                         $newfile = $path . $file_name;
@@ -146,23 +146,39 @@ class CompressCommand extends Command
                     }
                 }
 
-                if (strpos($asset->url, 'png') || strpos($asset->url, 'jpg')){
+                if (strpos($asset->url, 'png') || strpos($asset->url, 'jpg')) {
                     if (
                         !isset($asset['spec']['size_compress'])
                         // && isset($asset['spec']['size_i'])
                         // && $asset['spec']['size_i'] > 200000
                     ) {
+
                         $oldfile = Storage::disk('local')->path($asset['file_path']);
                         // $ext = strpos($asset->url, 'png')? 'png':'jpg';
-                        $file_name = date('Ymd') . time() . uniqid() . ".". pathinfo($oldfile)['extension'];
+                        $file_name = date('Ymd') . time() . uniqid() . "." . pathinfo($oldfile)['extension'];
                         $path = Storage::disk('local')->path('') . 'asset/';
                         $dir = 'asset/';
                         $newfile = $path . $file_name;
+                        try {
+                            $tinifykey = config('app.tinify_key');
+                            \Tinify\setKey($tinifykey);
+                            $source = \Tinify\fromFile($oldfile);
+                            $source->toFile($newfile);
+                        }
+                        /* catch (\Tinify\AccountException $e) {
+                            print("The error message is: " . $e->getMessage());
+                            // Verify your API key and account limit.
+                        } catch (\Tinify\ClientException $e) {
+                            // Check your source image and request options.
+                        } catch (\Tinify\ServerException $e) {
+                            // Temporary issue with the Tinify API.
+                        } catch (\Tinify\ConnectionException $e) {
+                            // A network connection error occurred.
+                        }  */ catch (\Exception $e) {
+                            Log::error($asset);
+                            Log::error($e);
+                        }
 
-                        $tinifykey = config('app.tinify_key');
-                        \Tinify\setKey($tinifykey);
-                        $source = \Tinify\fromFile($oldfile);
-                        $source->toFile($newfile);
 
                         $upload = Storage::put($dir . $file_name, file_get_contents($newfile));
                         // dump($video_info['bit_rate'], $upload);
@@ -181,7 +197,6 @@ class CompressCommand extends Command
             }
             Log::info('compress end');
         }
-        
     }
 
     public function  fileSizeConvert($bytes)
