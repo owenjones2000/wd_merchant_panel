@@ -51,6 +51,7 @@ class Ad extends Model
         $newAd = $this->replicate();
         
         $newAd->status = false;
+        $newAd->is_cold = 1;
         $newAd->name = $newAd->name.'_copy';
         if($campaign_id){
             $campaign = Campaign::findOrFail($campaign_id);
