@@ -181,4 +181,16 @@ class RegionController extends Controller
         }
         return response()->json(['code' => 100]);
     }
+
+    public function channelResetBid(Request $request, $campaign_id)
+    {
+        $res = ChannelBid::where('campaign_id', $campaign_id)
+        ->where('target_app_id', $request->input('target_app_id'))
+        ->where('country', $request->input('country'))
+        ->delete();
+        if ($res) {
+            return response()->json(['code' => 0, 'msg' => 'Successful']);
+        }
+        return response()->json(['code' => 100, 'msg' => 'Try Later']);
+    }
 }

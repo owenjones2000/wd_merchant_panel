@@ -187,6 +187,7 @@ Route::group(['namespace'=>'Advertise','prefix'=>'advertise','middleware'=>['aut
             Route::get('list', 'RegionController@list')->name('advertise.campaign.region');
             Route::get('channel/list', 'RegionController@channelList')->name('advertise.campaign.region.channel');
             Route::post('channel', 'RegionController@channelBid')->name('advertise.campaign.region.channel.bid');
+            Route::post('channel/reset', 'RegionController@channelResetBid')->name('advertise.campaign.region.channel.bid.reset');
         });
     });
 

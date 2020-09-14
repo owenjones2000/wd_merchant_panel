@@ -21,6 +21,11 @@
                         {{--<a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">Remove</a>--}}
                     {{--@endcan--}}
                 </div>
+                <div class="layui-btn-group">
+                    @{{#  if(d.bid){ }}
+                        <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="reset">Reset Default</a>
+                    @{{#  } }}
+                </div>
             </script>
             <script type="text/html" id="nameTpl">
                     @{{ d.channel.name_hash }}
@@ -93,7 +98,7 @@
                         ,{field: 'kpi.spend', title: 'Spend', sort: true, templet: function(d){return '$' + (d.spend || '0.00');}}
                         ,{field: 'kpi.ecpi', title: 'eCPI', sort: true, templet: function(d){return '$' + (d.ecpi || '0.00');}}
                         ,{field: 'kpi.ecpm', title: 'eCPM', sort: true, templet: function(d){return '$' + (d.ecpm || '0.00');} }
-                        // ,{fixed: 'right', width: 100, align:'center', toolbar: '#options'}
+                        ,{fixed: 'right', width: 150, align:'center', toolbar: '#options'}
                     ]]
                 });
 
@@ -102,10 +107,13 @@
                     var data = obj.data //获得当前行数据
                         ,layEvent = obj.event; //获得 lay-event 对应的值
                     switch(layEvent) {
-                        case 'enable':
-                            layer.confirm('Confirm activate [ '+data.channel.name_hash+' ] for ' + data.app.name + '?', function(index){
-                                $.post('/advertise/campaign/'+data.campaign_id+'/channel/' + data.target_app_id + '/enable',
-                                    {},
+                        case 'reset':
+                            layer.confirm('Confirm reset [ '+data.channel.name_hash+' ] bid ?', function(index){
+                                $.post("{{ route('advertise.campaign.region.channel.bid.reset', [$campaign['id']])}}",
+                                    {
+                                        country: '{{$country}}',
+                                        target_app_id:data.target_app_id
+                                    },
                                     function (result) {
                                         layer.msg(result.msg);
                                         layer.close(index);
@@ -117,8 +125,11 @@
                             break;
                         case 'disable':
                             layer.confirm('Confirm pause [ '+data.channel.name_hash+' ] for ' + data.app.name + '?', function(index){
-                                $.post('/advertise/campaign/'+data.campaign_id+'/channel/' + data.target_app_id + '/disable',
-                                    {},
+                                $.post("{{ route('advertise.campaign.region.channel.bid.reset', [$campaign['id']])}}",
+                                    {
+                                        country: '{{$country}}',
+                                        target_app_id:data.target_app_id
+                                    },
                                     function (result) {
                                         if (result.code==0){
                                         }
