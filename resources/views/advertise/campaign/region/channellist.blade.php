@@ -156,6 +156,7 @@
                         function (result) {
                             if (result.code === 0){
                                 layer.msg('Bid change into '+ value);
+                                dataTable.reload();
                             }else {
                                 layer.msg('Bid Illegal')
                             }
