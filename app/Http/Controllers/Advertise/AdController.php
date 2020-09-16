@@ -9,6 +9,7 @@ use App\Models\Advertise\Campaign;
 use App\Rules\AdvertiseName;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Advertise\AdTag;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -123,7 +124,13 @@ class AdController extends Controller
         }else{
             $ad = Ad::query()->where(['id' => $id, 'campaign_id' => $campaign_id])->firstOrFail();
         }
-        return view('advertise.campaign.ad.edit',compact('ad'));
+        $tags = AdTag::where('status', 1)->select([
+            'id',
+            'name'
+        ])
+        ->get();
+        $adtags = $ad->tags()->pluck('id');
+        return view('advertise.campaign.ad.edit',compact('ad', 'tags', 'adtags'));
     }
     
     /**

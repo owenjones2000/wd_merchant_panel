@@ -53,7 +53,11 @@ class App extends Model
             
             $apps->fill($params);
             $apps->saveOrFail();
-
+            $tags = [];
+            if ($params['tags']){
+                $tags = explode(',', $params['tags']);
+            }
+            $apps->tags()->sync($tags);
             return $apps;
         }, 3);
         return $apps;
@@ -92,7 +96,7 @@ class App extends Model
     {
         return $this->belongsToMany(AppTag::class, 'a_app_tags', 'app_id', 'tag_id', 'id', 'id');
     }
-    
+
     public function getTrackAttribute()
     {
         return TrackPlatform::get($this['track_platform_id']);
