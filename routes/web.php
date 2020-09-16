@@ -183,7 +183,11 @@ Route::group(['namespace'=>'Advertise','prefix'=>'advertise','middleware'=>['aut
         // 区域
         Route::group(['prefix'=>'{campaign_id}/region', 'middleware' => 'permission:advertise.campaign'], function () {
             Route::get('data', 'RegionController@data')->name('advertise.campaign.region.data');
+            Route::get('channle/data', 'RegionController@channelData')->name('advertise.campaign.region.channel.data');
             Route::get('list', 'RegionController@list')->name('advertise.campaign.region');
+            Route::get('channel/list', 'RegionController@channelList')->name('advertise.campaign.region.channel');
+            Route::post('channel', 'RegionController@channelBid')->name('advertise.campaign.region.channel.bid');
+            Route::post('channel/reset', 'RegionController@channelResetBid')->name('advertise.campaign.region.channel.bid.reset');
         });
     });
 

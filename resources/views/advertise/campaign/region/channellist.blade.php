@@ -4,36 +4,31 @@
     <div class="layui-card">
         <div class="layui-card-header layuiadmin-card-header-auto">
             <div class="layui-form" >
-                <div class="layui-input-inline">
-                    <input type="text" name="keyword" id="keyword" placeholder="Keyword" class="layui-input">
-                </div>
+                {{--<div class="layui-input-inline">--}}
+                    {{--<input type="text" name="keyword" id="keyword" placeholder="Keyword" class="layui-input">--}}
+                {{--</div>--}}
                 <div class="layui-input-inline">
                     <input type="text" name="rangedate" id="rangedate" class="layui-input" autocomplete="off" placeholder="default today" style="min-width: 15rem">
                 </div>
-                <button class="layui-btn" id="regionSearchBtn">Run Report</button>
+                <button class="layui-btn" id="channelSearchBtn">Run Report</button>
             </div>
         </div>
         <div class="layui-card-body">
             <table id="dataTable" lay-filter="dataTable"></table>
             <script type="text/html" id="options">
                 <div class="layui-btn-group">
-                    {{--@can('advertise.campaign.region.destroy')--}}
+                    {{--@can('advertise.campaign.channel.destroy')--}}
                         {{--<a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">Remove</a>--}}
                     {{--@endcan--}}
-                    @can('advertise.campaign.edit')
-                        <a class="layui-btn layui-btn-sm" lay-event="channel">Sources</a>
-                    @endcan
+                </div>
+                <div class="layui-btn-group">
+                    @{{#  if(d.bid){ }}
+                        <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="reset">Reset Default</a>
+                    @{{#  } }}
                 </div>
             </script>
             <script type="text/html" id="nameTpl">
-                    @{{ d.region.name }}
-            </script>
-            <script type="text/html" id="status">
-                @{{# if(d.status){ }}
-                    <span class="layui-bg-green">Enabled</span>
-                @{{# } else { }}
-                    <span class="layui-bg-red">Disabled</span>
-                @{{# } }}
+                    @{{ d.channel.name_hash }}
             </script>
         </div>
     </div>
@@ -75,8 +70,8 @@
                     elem: '#dataTable'
                     ,autoSort: false
                     ,height: 500
-                    ,url: "{{ route('advertise.campaign.region.data', [$campaign['id']]) }}" //数据接口
-                    ,where: {rangedate: '{{$rangedate}}'}
+                    ,url: "{{ route('advertise.campaign.region.channel.data', [$campaign['id']]) }}" //数据接口
+                    ,where: {rangedate: '{{$rangedate}}', country: '{{$country}}'}
                     ,page: true //开启分页
                     ,done: function(res, curr, count){
                         //接口回调，处理一些和表格相关的辅助事项
@@ -91,40 +86,83 @@
                     ,cols: [[ //表头
                         //{checkbox: true,fixed: true}
                         // ,{field: 'id', title: 'ID', sort: true,width:80}
-                        {field: 'name', title: 'Country', templet: '#nameTpl',}
+                        {field: 'name', title: 'App', templet: '#nameTpl', width:300}
                         // ,{field: 'app.name', title: 'App', templet: '#appTpl'}
-                        ,{field: 'kpi.impressions', title: 'Impressions', sort: true, templet: function(d){return d.impressions || 0;}, width:80}
-                        ,{field: 'kpi.clicks', title: 'Clicks', sort: true, templet: function(d){return d.clicks || 0;}, width:80}
-                        ,{field: 'kpi.installs', title: 'Installs', sort: true, templet: function(d){return d.installs || 0;}, width:80}
-                        ,{field: 'kpi.ctr', title: 'CTR', sort: true, templet: function(d){return (d.ctr || '0.00') + '%';}, width:80}
-                        ,{field: 'kpi.cvr', title: 'CVR', sort: true, templet: function(d){return (d.cvr || '0.00') + '%';}, width:80}
-                        ,{field: 'kpi.ir', title: 'IR', sort: true, templet: function(d){return (d.ir || '0.00') + '%';}, width:80}
+                        ,{field: 'bid', title: 'Bid(Editable)', templet: function(d){return d.bid || 'default';}, width:150,edit:'text'}
+                        ,{field: 'kpi.impressions', title: 'Impressions', sort: true, templet: function(d){return d.impressions || 0;} }
+                        ,{field: 'kpi.clicks', title: 'Clicks', sort: true, templet: function(d){return d.clicks || 0;} }
+                        ,{field: 'kpi.installs', title: 'Installs', sort: true, templet: function(d){return d.installs || 0;} }
+                        ,{field: 'kpi.ctr', title: 'CTR', sort: true, templet: function(d){return (d.ctr || '0.00') + '%';} }
+                        ,{field: 'kpi.cvr', title: 'CVR', sort: true, templet: function(d){return (d.cvr || '0.00') + '%';} }
+                        ,{field: 'kpi.ir', title: 'IR', sort: true, templet: function(d){return (d.ir || '0.00') + '%';} }
                         ,{field: 'kpi.spend', title: 'Spend', sort: true, templet: function(d){return '$' + (d.spend || '0.00');}}
                         ,{field: 'kpi.ecpi', title: 'eCPI', sort: true, templet: function(d){return '$' + (d.ecpi || '0.00');}}
-                        ,{field: 'kpi.ecpm', title: 'eCPM', sort: true, templet: function(d){return '$' + (d.ecpm || '0.00');}, width:80}
-                        //,{field: 'status', title: 'Status', templet: '#status', width:90}
-                        ,{fixed: 'right', width: 100, align:'center', toolbar: '#options'}
+                        ,{field: 'kpi.ecpm', title: 'eCPM', sort: true, templet: function(d){return '$' + (d.ecpm || '0.00');} }
+                        ,{fixed: 'right', width: 150, align:'center', toolbar: '#options'}
                     ]]
                 });
+
                 //监听工具条
                 table.on('tool(dataTable)', function(obj){ //注：tool是工具条事件名，dataTable是table原始容器的属性 lay-filter="对应的值"
                     var data = obj.data //获得当前行数据
                         ,layEvent = obj.event; //获得 lay-event 对应的值
-                    var rangedate = $("#rangedate").val();
                     switch(layEvent) {
-                        case 'channel':
-                            layer.open({
-                                type: 2,
-                                title: 'Country: ' + data.country,
-                                shadeClose: true,
-                                area: ['100%', '100%'],
-                                content: '/advertise/campaign/' + data.campaign_id + '/region/channel/list?country=' + data.country,
-                                end: function () {
-                                    // dataTable.reload();
-                                }
+                        case 'reset':
+                            layer.confirm('Confirm reset [ '+data.channel.name_hash+' ] bid ?', function(index){
+                                $.post("{{ route('advertise.campaign.region.channel.bid.reset', [$campaign['id']])}}",
+                                    {
+                                        country: '{{$country}}',
+                                        target_app_id:data.target_app_id
+                                    },
+                                    function (result) {
+                                        layer.msg(result.msg);
+                                        layer.close(index);
+                                        if (result.code==0){
+                                            dataTable.reload();
+                                        }
+                                    });
+                            });
+                            break;
+                        case 'disable':
+                            layer.confirm('Confirm pause [ '+data.channel.name_hash+' ] for ' + data.app.name + '?', function(index){
+                                $.post("{{ route('advertise.campaign.region.channel.bid.reset', [$campaign['id']])}}",
+                                    {
+                                        country: '{{$country}}',
+                                        target_app_id:data.target_app_id
+                                    },
+                                    function (result) {
+                                        if (result.code==0){
+                                        }
+                                        layer.close(index);
+                                        layer.msg(result.msg);
+                                        dataTable.reload();
+                                    });
                             });
                             break;
                     }
+                });
+                //监听单元格编辑
+                table.on('edit(dataTable)', function(obj){
+                    var value = obj.value //得到修改后的值
+                    ,data = obj.data //得到所在行所有键值
+                    ,field = obj.field; //得到字段
+                    $.post("{{ route('advertise.campaign.region.channel.bid', [$campaign['id']])  }}",
+                        {
+                            bid: value,
+                            campaign_id: data.campaign_id,
+                            country: '{{$country}}',
+                            target_app_id:data.target_app_id
+                        },
+                        function (result) {
+                            if (result.code === 0){
+                                layer.msg('Bid change into '+ value);
+                                dataTable.reload();
+                            }else {
+                                layer.msg('Bid Illegal')
+                            }
+                    });
+                    
+
                 });
                 //监听排序事件
                 table.on('sort(dataTable)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
@@ -141,11 +179,14 @@
                 });
 
                 //搜索
-                $("#regionSearchBtn").click(function () {
-                    var keyword = $("#keyword").val();
+                $("#channelSearchBtn").click(function () {
+                    // var keyword = $("#keyword").val();
                     var rangedate = $("#rangedate").val();
                     dataTable.reload({
-                        where:{keyword:keyword, rangedate:rangedate},
+                        where:{
+                            // keyword:keyword,
+                            rangedate:rangedate
+                        },
                         page:{curr:1}
                     })
                 })
