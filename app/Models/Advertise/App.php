@@ -54,10 +54,10 @@ class App extends Model
             $apps->fill($params);
             $apps->saveOrFail();
             $tags = [];
-            if ($params['tags']){
+            if ($params['tags'] ?? null){
                 $tags = explode(',', $params['tags']);
+                $apps->tags()->sync($tags);
             }
-            $apps->tags()->sync($tags);
             return $apps;
         }, 3);
         return $apps;
