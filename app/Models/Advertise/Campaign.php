@@ -221,8 +221,9 @@ class Campaign extends Model
             $tags = [];
             if ($params['tags']??null) {
                 $tags = explode(',', $params['tags']);
+                $ad->tags()->sync($tags);
             }
-            $ad->tags()->sync($tags);
+            
             return $ad;
         }, 3);
         return $ad;
