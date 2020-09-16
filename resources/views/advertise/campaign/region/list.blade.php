@@ -20,7 +20,7 @@
                     {{--@can('advertise.campaign.region.destroy')--}}
                         {{--<a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">Remove</a>--}}
                     {{--@endcan--}}
-                    @can('advertise.campaign.edit')
+                    @can('advertise.campaign.optimization')
                         <a class="layui-btn layui-btn-sm" lay-event="channel">Sources</a>
                     @endcan
                 </div>
