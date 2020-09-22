@@ -97,6 +97,7 @@ class AppController extends Controller
             'bundle_id'  => 'required|unique:a_app,bundle_id,'.$id.',id,os,'.$request->input('os'),
             'description' => 'string|max:200',
             'icon_url' => 'string|max:200',
+            'track_url' => 'string|required',
             'app_id' => 'string|',
         ]);
         try{
