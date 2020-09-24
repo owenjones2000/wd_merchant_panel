@@ -62,7 +62,7 @@
 <div class="layui-form-item">
     <label class="layui-form-label">Tracking Url</label>
     <div class="layui-input-block">
-        <input type="text" name="track_url" value="{{ $apps->track_url ?? old('track_url') }}"  lay-verify="required" @if($apps->id) readonly @endif placeholder="" autocomplete="off" class="layui-input">
+        <input type="text" name="track_url" value="{{ $apps->track_url ?? old('track_url') }}"  lay-verify="required" @if($apps->track_url) readonly @endif placeholder="" autocomplete="off" class="layui-input">
     </div>
 </div>
 @can('advertise.tag')
