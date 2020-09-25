@@ -129,7 +129,7 @@ class AdController extends Controller
             'name'
         ])
         ->get();
-        $adtags = $ad->tags()->pluck('id');
+        $adtags = $ad->tags()->pluck('a_ad_tag.id');
         return view('advertise.campaign.ad.edit',compact('ad', 'tags', 'adtags'));
     }
     
