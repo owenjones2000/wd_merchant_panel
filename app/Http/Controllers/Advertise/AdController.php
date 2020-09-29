@@ -154,12 +154,14 @@ class AdController extends Controller
             'asset.*.id' => 'required|numeric',
             'asset.*.type' => 'required|numeric',
         ]);
+        
         /** @var Campaign $campaign */
         $campaign = Campaign::query()->where([
             'id' => $campaign_id,
             'main_user_id' => Auth::user()->getMainId(),
         ])->firstOrFail();
         $params = $request->all();
+        // dd(json_encode($params));
         $params['id'] = $id;
 //        $params['status'] = isset($params['status']) ? 1 : 0;
         $ad = $campaign->makeAd(Auth::user(), $params);

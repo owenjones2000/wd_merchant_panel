@@ -46,7 +46,7 @@ class CampaignController extends Controller
 
     public function performanceData(Request $request)
     {
-        // dd($request->all());
+        // dd(json_encode($request->all()));
         if (!empty($request->get('rangedate'))) {
             $range_date = explode(' ~ ', $request->get('rangedate'));
         }
@@ -481,6 +481,7 @@ class CampaignController extends Controller
 
         ]);
         $params = $request->all();
+        // dd(json_encode($params));
         $params['id'] = $id;
         //        $params['status'] = isset($params['status']) ? 1 : 0;
         if (Campaign::Make(Auth::user(), $params)) {
