@@ -80,7 +80,8 @@ class CampaignController extends Controller
             });
         }
         $advertise_kpi_query = AdvertiseKpi::multiTableQuery(function ($query) use ($start_date, $end_date, $campaign_id_query) {
-            $query->whereBetween('date', [$start_date, $end_date])
+            $query
+            ->whereBetween('date', [$start_date, $end_date])
                 ->whereIn('campaign_id', $campaign_id_query);
 
             return $query;
@@ -166,7 +167,8 @@ class CampaignController extends Controller
             });
         }
         $advertise_kpi_query = AdvertiseKpi::multiTableQuery(function ($query) use ($start_date, $end_date, $campaign_id_query) {
-            $query->whereBetween('date', [$start_date, $end_date])
+            $query
+            ->whereBetween('date', [$start_date, $end_date])
                 ->whereIn('campaign_id', $campaign_id_query);
             return $query;
         }, $start_date, $end_date);
@@ -281,7 +283,8 @@ class CampaignController extends Controller
         $campaign_id_query = clone $campaign_base_query;
         $campaign_id_query->select('id');
         $advertise_kpi_query = AdvertiseKpi::multiTableQuery(function ($query) use ($start_date, $end_date, $campaign_id_query) {
-            $query->whereBetween('date', [$start_date, $end_date])
+            $query
+            ->whereBetween('date', [$start_date, $end_date])
                 ->whereIn('campaign_id', $campaign_id_query)
                 ->select([
                     'impressions', 'clicks', 'installations', 'spend',
@@ -368,7 +371,8 @@ class CampaignController extends Controller
         $campaign_id_query = clone $campaign_base_query;
         $campaign_id_query->select('id');
         $advertise_kpi_query = AdvertiseKpi::multiTableQuery(function ($query) use ($start_date, $end_date, $campaign_id_query) {
-            $query->whereBetween('date', [$start_date, $end_date])
+            $query
+            ->whereBetween('date', [$start_date, $end_date])
                 ->whereIn('campaign_id', $campaign_id_query)
                 ->select([
                     'impressions', 'clicks', 'installations', 'spend',
