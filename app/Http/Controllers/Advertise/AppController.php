@@ -74,7 +74,7 @@ class AppController extends Controller
             'name'
         ])
         ->get();
-        $apptags = $apps->tags()->pluck('id');
+        $apptags = $apps->tags()->pluck('a_app_tag.id');
         return view('advertise.app.edit',compact('apps', 'tags', 'apptags'));
     }
 
