@@ -14,7 +14,6 @@
                 <select name="campaigns" xm-select="selectRegions" xm-select-search="", lay-filter="selectRegions">
                     @foreach($campaigns as $value)
                         <option
-                                @if($value->id == $campaign->id)) selected @endif
                         value="{{ $value->id }}">{{ $value->name }}</option>
                     @endforeach
                 </select>
