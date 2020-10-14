@@ -181,13 +181,19 @@ class CompressCommand extends Command
                         /* catch (\Tinify\AccountException $e) {
                             print("The error message is: " . $e->getMessage());
                             // Verify your API key and account limit.
-                        } catch (\Tinify\ClientException $e) {
-                            // Check your source image and request options.
-                        } catch (\Tinify\ServerException $e) {
+                         catch (\Tinify\ServerException $e) {
                             // Temporary issue with the Tinify API.
                         } catch (\Tinify\ConnectionException $e) {
                             // A network connection error occurred.
-                        }  */ catch (\Exception $e) {
+                        }  */ 
+                        catch (\Tinify\ClientException $e) {
+                            $asset['spec'] =  array_merge($asset['spec'], [
+                                'size_compress' => $asset['spec']['size_i'],
+                                
+                            ]);
+                            $asset->save();
+                            // Check your source image and request options.
+                        }catch (\Exception $e) {
                             Log::error($asset);
                             Log::error($e);
                         }
