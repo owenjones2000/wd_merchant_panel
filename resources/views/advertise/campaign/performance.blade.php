@@ -141,8 +141,8 @@
                 laydate.render({
                     elem: '#rangedate'
                     ,lang: 'en'
-                    ,min: -30
-                    ,max:0
+                    // ,min: -60
+                    // ,max:0
                     ,range: '~' //或 range: '~' 来自定义分割字符
                     ,value: util.toDateString(new Date(), 'yyyy-MM-dd ~ yyyy-MM-dd')
                     ,extrabtns: [
