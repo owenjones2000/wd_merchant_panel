@@ -204,8 +204,8 @@ Route::group(['namespace'=>'Publish','prefix'=>'publish','middleware'=>['auth','
         Route::get('list', 'AppController@list')->name('publish.app');
         Route::get('listdata', 'AppController@listdata')->name('publish.app.listdata');
         Route::get('performance', 'AppController@performance')->name('publish.app.performance');
-        Route::get('dashboard-data', 'AppController@dashboardData')->name('publish.app.dashboard.data')->middleware('permission:publish.app.dashboard');
-        Route::get('dashboard', 'AppController@dashboard')->name('publish.app.dashboard')->middleware('permission:publish.app.dashboard');
+        Route::get('dashboard-data', 'AppController@dashboardData')->name('publish.app.dashboard.data')->middleware('permission:publish.manage');
+        Route::get('dashboard', 'AppController@dashboard')->name('publish.app.dashboard')->middleware('permission:publish.manage');
         //编辑
         Route::get('{id?}', 'AppController@edit')->name('publish.app.edit')->middleware('permission:publish.app')
             ->where('id', '\d+');

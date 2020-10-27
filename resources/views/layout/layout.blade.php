@@ -133,7 +133,9 @@
                             </a>
                         </dd>
                     </li>
-                    {{-- {{dd($menus->toArray())}} --}}
+                    {{-- {{dd(auth()->user()->getAllPermissions()->toArray())}} --}}
+                    {{-- {{dd(auth()->user()->can('advertise.manage'))}} --}}
+                    // {{-- {{dd($menus->toArray())}} --}}
                     @foreach($menus as $menu)
                         @can($menu->name)
                         <li data-name="{{$menu->name}}" class="layui-nav-item">
