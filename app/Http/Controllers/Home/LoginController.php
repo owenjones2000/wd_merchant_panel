@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class LoginController extends Controller
 {
@@ -94,6 +95,7 @@ class LoginController extends Controller
             'realname' => $user->realname,
             'ip' => $request->getClientIp()
         ];
+        Log::info('login user' . $user['realname']);
         LoginLog::create($data);
     }
 
