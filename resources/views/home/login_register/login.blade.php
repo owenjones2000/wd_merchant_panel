@@ -16,6 +16,9 @@
             <div class="layui-form-item">
                 <button type="submit" class="layui-btn layui-btn-fluid" lay-submit lay-filter="">Log in</button>
             </div>
+            <div class="layui-form-item">
+                <a href="http://uatest.wudiads.com/" class="layui-btn layui-btn-warm layui-btn-fluid" target="_blank">Try The New Web</a>
+            </div>
         </form>
     </div>
 @endsection
