@@ -7,8 +7,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable
+class User extends Authenticatable implements JWTSubject
 {
     use Notifiable,HasRoles,SoftDeletes;
 
@@ -22,6 +23,22 @@ class User extends Authenticatable
         return empty($this->main_user_id);
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
+    
     /**
      * 广告主
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany

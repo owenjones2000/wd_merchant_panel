@@ -3,11 +3,13 @@
 namespace App\Console\Commands;
 
 use App\Models\Advertise\Ad;
+use App\User;
 use FFMpeg\FFMpeg;
 use FFMpeg\FFProbe;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Dcat\EasyExcel\Excel;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class TestCommand extends Command
 {
@@ -112,5 +114,12 @@ class TestCommand extends Command
             $ad->regions()->syncWithoutDetaching(['ALL']);
         }
         dump($ad_id);
+    }
+
+    public function test5()
+    {
+        $user = User::find(3);
+        $token = JWTAuth::fromUser($user);
+        dd($token);
     }
 }

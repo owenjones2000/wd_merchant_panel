@@ -16,6 +16,7 @@
         "league/flysystem-aws-s3-v3": "~1.0",
         "php-ffmpeg/php-ffmpeg": "^0.14.0",
         "spatie/laravel-permission": "^3.2",
+        "tymon/jwt-auth": "^1.0",
         "tinify/tinify": "^1.5"
     },
     "require-dev": {

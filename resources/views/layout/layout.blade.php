@@ -35,6 +35,12 @@
                         <cite>Refresh</cite>
                     </a>
                 </li>
+                <li class="layui-nav-item" lay-unselect>
+                    <a href="http://uatest.wudiads.com/"  title="Try the new version" target="_blank">
+                        <i class="layui-icon layui-icon-website layui-bg-red"></i>
+                        <cite class="layui-bg-red" >Try the new version</cite>
+                    </a>
+                </li>
               {{--  <li class="layui-nav-item layui-hide-xs" lay-unselect>
                     <input type="text" placeholder="搜索..." autocomplete="off" class="layui-input layui-input-search" layadmin-event="serach" lay-action="template/search.html?keywords=">
                 </li>--}}
