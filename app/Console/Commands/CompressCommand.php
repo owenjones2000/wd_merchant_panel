@@ -149,7 +149,7 @@ class CompressCommand extends Command
                 if (strpos($asset->url, 'png') || strpos($asset->url, 'jpg')) {
                     if (
                         !isset($asset['spec']['size_compress'])
-                        // && isset($asset['spec']['size_i'])
+                        && isset($asset['spec']['size_i'])
                         // && $asset['spec']['size_i'] > 200000
                     ) {
                         try {
