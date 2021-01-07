@@ -58,6 +58,7 @@ class CompressCommand extends Command
                 //     break;
                 // }
                 if (strpos($asset->url, 'mp4') && !isset($asset['spec']['size_per_second'])) {
+                    dump($asset->toArray());
                     $exist = Storage::disk('local')->exists($asset['file_path']);
                     $oldfile = Storage::disk('local')->path($asset['file_path']);
                     if (!$exist) {
@@ -76,7 +77,7 @@ class CompressCommand extends Command
                     }
                     $asset->save();
                     Log::info('detect  mp4' . $asset['id']);
-                    dump($asset->toArray());
+                    
                     $n++;
                 }
                 if ((strpos($asset->url, 'jpg') || strpos($asset->url, 'png')) && !isset($asset['spec']['size_i'])) {
