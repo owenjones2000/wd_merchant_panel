@@ -90,7 +90,7 @@ class AssetOrderCommand extends Command
                 ->get();
             foreach ($assets as $key => $asset) {
 
-                if (!isset($asset['spec']['clear'])) {
+                if (!isset($asset['spec']['clear']) && is_array($asset['spec'])) {
 
                     $exist = Storage::disk('local')->exists($asset['file_path']);
                     // $oldfile = Storage::disk('local')->path($asset['file_path']);
@@ -108,6 +108,7 @@ class AssetOrderCommand extends Command
                             dump('new');
                         }
                     }
+                    dd($asset['spec']);
                     $asset['spec'] =  array_merge($asset['spec'], [
                         'clear' => 1,
                     ]);
