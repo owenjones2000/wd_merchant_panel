@@ -81,7 +81,43 @@ class AssetOrderCommand extends Command
                 }
 
             }
-            Log::info('detect end');
+            Log::info('order end');
+        }elseif($action == 'clear') {
+            # code...9328
+            Log::info('clear start');
+            $assets = Asset::where('id', '<', 9328 )
+                // ->whereNull('spec->size')
+                ->get();
+            foreach ($assets as $key => $asset) {
+
+                if (!isset($asset['spec']['clear'])) {
+
+                    $exist = Storage::disk('local')->exists($asset['file_path']);
+                    // $oldfile = Storage::disk('local')->path($asset['file_path']);
+                    if ($exist) {
+                        $delete = Storage::disk('local')->delete($asset['file_path']);
+                        dump($delete);
+                        dump('old');
+                    }
+
+                    if (isset($asset['spec']['file_path_compress'])) {
+                        $newExist = Storage::disk('local')->exists($asset['spec']['file_path_compress']);
+                        if ($newExist) {
+                            $delete = Storage::disk('local')->delete($asset['spec']['file_path_compress']);
+                            dump($delete);
+                            dump('new');
+                        }
+                    }
+                    $asset['spec'] =  array_merge($asset['spec'], [
+                        'clear' => 1,
+                    ]);
+                    $asset->save();
+                    Log::info('delete' . $asset['id']);
+                    dump('delete');
+                    dump($asset->toArray());
+                }
+            }
+            Log::info('clear end');
         }
     }
 
