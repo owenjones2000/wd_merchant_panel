@@ -108,7 +108,6 @@ class AssetOrderCommand extends Command
                             dump('new');
                         }
                     }
-                    dd($asset['spec']);
                     $asset['spec'] =  array_merge($asset['spec'], [
                         'clear' => 1,
                     ]);
