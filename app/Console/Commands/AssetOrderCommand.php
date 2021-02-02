@@ -126,9 +126,9 @@ class AssetOrderCommand extends Command
 
                 if (strpos($asset->url, 'png') || strpos($asset->url, 'jpg') || strpos($asset->url, 'mp4')) {
 
-                    $asset['width'] =   $file_info['width'] ?? 0;
-                    $asset['height'] =   $file_info['height'] ?? 0;
-                    $asset['duration'] =   $file_info['duration'] ?? 0;
+                    $asset['width'] =   $asset['spec']['width'] ?? 0;
+                    $asset['height'] =   $asset['spec']['height'] ?? 0;
+                    $asset['duration'] =   $asset['spec']['duration'] ?? 0;
                     $asset->save();
                     Log::info('wh' . $asset['id']);
                     dump('wh');
