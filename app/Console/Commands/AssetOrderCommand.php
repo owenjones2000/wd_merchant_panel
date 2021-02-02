@@ -112,12 +112,30 @@ class AssetOrderCommand extends Command
                         'clear' => 1,
                     ]);
                     $asset->save();
-                    Log::info('delete' . $asset['id']);
                     dump('delete');
                     dump($asset->toArray());
                 }
             }
             Log::info('clear end');
+        }elseif ($action = "wh") {
+            Log::info('wh start');
+            $assets = Asset::where('id', '>=', 30)
+            // ->whereNull('spec->size')
+            ->get();
+            foreach ($assets as $key => $asset) {
+
+                if (strpos($asset->url, 'png') || strpos($asset->url, 'jpg') || strpos($asset->url, 'mp4')) {
+
+                    $asset['width'] =   $file_info['width'] ?? 0;
+                    $asset['height'] =   $file_info['height'] ?? 0;
+                    $asset['duration'] =   $file_info['duration'] ?? 0;
+                    $asset->save();
+                    Log::info('wh' . $asset['id']);
+                    dump('wh');
+                    dump($asset->id);
+                }
+            }
+            Log::info('wh end');
         }
     }
 
