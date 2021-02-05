@@ -50,7 +50,9 @@ class App extends Model
                     'main_user_id' => $main_user_id
                 ])->firstOrFail();
             }
-            
+            if ($user->currentMainUser->is_agency) {
+                $apps->is_agency = 1;
+            }
             $apps->fill($params);
             $apps->saveOrFail();
             $tags = [];
