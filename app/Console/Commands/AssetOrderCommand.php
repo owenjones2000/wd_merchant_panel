@@ -45,7 +45,6 @@ class AssetOrderCommand extends Command
     public function handle()
     {
         //
-
         $action = $this->argument('action');
         if ($action == 'order') {
             Log::info('order start');
