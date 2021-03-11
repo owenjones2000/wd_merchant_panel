@@ -52,9 +52,9 @@ class AssetOrderCommand extends Command
                 // ->whereNull('spec->size')
                 ->get();
             foreach ($assets as $key => $asset) {
-                
+
                 if (strpos($asset->url, 'mp4') || strpos($asset->url, 'jpg') || strpos($asset->url, 'png')) {
-                    
+
                     $exist = Storage::disk('local')->exists($asset['file_path']);
                     // $oldfile = Storage::disk('local')->path($asset['file_path']);
                     if ($exist) {
@@ -71,20 +71,18 @@ class AssetOrderCommand extends Command
                             dump('new');
                         }
                     }
-               
+
                     $asset->delete();
                     Log::info('delete' . $asset['id']);
                     dump('delete');
                     dump($asset->toArray());
-
                 }
-
             }
             Log::info('order end');
-        }elseif($action == 'clear') {
+        } elseif ($action == 'clear') {
             # code...9328
             Log::info('clear start');
-            $assets = Asset::where('id', '<', 9328 )
+            $assets = Asset::where('id', '<', 9328)
                 // ->whereNull('spec->size')
                 ->get();
             foreach ($assets as $key => $asset) {
@@ -116,11 +114,11 @@ class AssetOrderCommand extends Command
                 }
             }
             Log::info('clear end');
-        }elseif ($action = "wh") {
+        } elseif ($action = "wh") {
             Log::info('wh start');
             $assets = Asset::where('id', '>=', 30)
-            // ->whereNull('spec->size')
-            ->get();
+                // ->whereNull('spec->size')
+                ->get();
             foreach ($assets as $key => $asset) {
 
                 if (strpos($asset->url, 'png') || strpos($asset->url, 'jpg') || strpos($asset->url, 'mp4')) {
@@ -137,5 +135,4 @@ class AssetOrderCommand extends Command
             Log::info('wh end');
         }
     }
-
 }
