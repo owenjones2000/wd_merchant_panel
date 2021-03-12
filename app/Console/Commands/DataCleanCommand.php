@@ -62,7 +62,7 @@ class DataCleanCommand extends Command
 
         dump($dirArray);
         foreach ($dirArray as $key => $value) {
-            $delete = Storage::deleteDirectory($value);
+            $delete = Storage::disk('s3')->deleteDirectory($value);
             dump($delete);
             Log::info('delete dir');
             Log::info($value);
