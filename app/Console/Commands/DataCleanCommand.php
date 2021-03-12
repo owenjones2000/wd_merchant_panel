@@ -49,15 +49,15 @@ class DataCleanCommand extends Command
         $day = $this->argument('day');
         Log::info('clean start');
         $date = Carbon::now()->subDays($day)->format('Ym/d');
-        $directoryoutput12 = 'wudiapps/stay-prediction-pipeline/lucky-money/12h-2d-stay/predset-emr-output/' . $date;
-        $directoryoutput24 = 'wudiapps/stay-prediction-pipeline/lucky-money/24h-2d-stay/predset-emr-output/' . $date;
-        $directoryoutpredresult12 = 'wudiapps/stay-prediction-pipeline/lucky-money/12h-2d-stay/predresult/' . $date;
-        $directoryoutpredresult24 = 'wudiapps/stay-prediction-pipeline/lucky-money/24h-2d-stay/predresult/' . $date;
+        // $directory_output12 = 'wudiapps/stay-prediction-pipeline/lucky-money/12h-2d-stay/predset-emr-output/' . $date;
+        // $directory_output24 = 'wudiapps/stay-prediction-pipeline/lucky-money/24h-2d-stay/predset-emr-output/' . $date;
+        // $directory_outpredresult12 = 'wudiapps/stay-prediction-pipeline/lucky-money/12h-2d-stay/predresult/' . $date;
+        // $directory_outpredresult24 = 'wudiapps/stay-prediction-pipeline/lucky-money/24h-2d-stay/predresult/' . $date;
         $dirArray = [
-            $directoryoutput12,
-            $directoryoutput24,
-            $directoryoutpredresult12,
-            $directoryoutpredresult24,
+            'wudiapps/stay-prediction-pipeline/lucky-money/12h-2d-stay/predset-emr-output/' . $date,
+            'wudiapps/stay-prediction-pipeline/lucky-money/24h-2d-stay/predset-emr-output/' . $date,
+            'wudiapps/stay-prediction-pipeline/lucky-money/12h-2d-stay/predresult/' . $date,
+            'wudiapps/stay-prediction-pipeline/lucky-money/24h-2d-stay/predresult/' . $date,
         ];
 
         dump($dirArray);

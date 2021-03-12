@@ -4,11 +4,14 @@ namespace App\Console\Commands;
 
 use App\Models\Advertise\Ad;
 use App\User;
+use Carbon\Carbon;
 use FFMpeg\FFMpeg;
 use FFMpeg\FFProbe;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Dcat\EasyExcel\Excel;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class TestCommand extends Command
@@ -121,5 +124,41 @@ class TestCommand extends Command
         $user = User::find(3);
         $token = JWTAuth::fromUser($user);
         dd($token);
+    }
+
+    public function test6()
+    {
+        $day = $this->argument('day');
+        Log::info('clean start');
+        $date = Carbon::now()->subDays($day)->format('Ym/d');
+        // $directory_output12 = 'wudiapps/stay-prediction-pipeline/lucky-money/12h-2d-stay/predset-emr-output/' . $date;
+        // $directory_output24 = 'wudiapps/stay-prediction-pipeline/lucky-money/24h-2d-stay/predset-emr-output/' . $date;
+        // $directory_outpredresult12 = 'wudiapps/stay-prediction-pipeline/lucky-money/12h-2d-stay/predresult/' . $date;
+        // $directory_outpredresult24 = 'wudiapps/stay-prediction-pipeline/lucky-money/24h-2d-stay/predresult/' . $date;
+        $dirArray = [
+            'wudiapps/stay-prediction-pipeline/lucky-money/12h-2d-stay/predset-emr-output/' . $date,
+            'wudiapps/stay-prediction-pipeline/lucky-money/24h-2d-stay/predset-emr-output/' . $date,
+            'wudiapps/stay-prediction-pipeline/lucky-money/12h-2d-stay/predresult/' . $date,
+            'wudiapps/stay-prediction-pipeline/lucky-money/24h-2d-stay/predresult/' . $date,
+        ];
+
+        dump($dirArray);
+        foreach ($dirArray as $key => $value) {
+            $delete = Storage::deleteDirectory($value);
+            dump($delete);
+            Log::info('delete dir');
+            Log::info($value);
+            Log::info($delete);
+        }
+        // $directories = Storage::directories();
+        // $directories = Storage::allDirectories();
+        // $directories = Storage::files('log');
+        // $deletefile = Storage::delete();
+        // $delete = Storage::deleteDirectory('log');
+        // $directory1 = Storage::makeDirectory('test123');
+        // dump($directories);
+        // dump($deletefile);
+
+        Log::info('clean end');
     }
 }
