@@ -472,7 +472,7 @@ class CampaignController extends Controller
         $this->validate($request, [
             'name'  => ['required', 'string', 'max:100', 'unique:a_campaign,name,' . $id, new AdvertiseName()],
             'app_id' => 'exists:a_app,id',
-            'regions' => 'string',
+            'regions' => 'string|required',
             'budget' => 'array',
             'budget.*.region_code' => 'required|string|max:3',
             'budget.*.amount' => 'numeric',
@@ -483,6 +483,8 @@ class CampaignController extends Controller
             'audience.gender' => 'in:0,1,2',
             'audience.adult' => 'bool',
 
+        ],[
+            'regions.required'  => 'countries is required'
         ]);
         $params = $request->all();
         // dd(json_encode($params));
