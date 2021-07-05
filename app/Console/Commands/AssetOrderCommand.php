@@ -115,7 +115,7 @@ class AssetOrderCommand extends Command
             }
             Log::info('clear end');
         } elseif ($action = "wh") {
-            Log::info('wh start');
+            Log::info('宽高整理 start');
             $assets = Asset::where('id', '>=', 30)
                 // ->whereNull('spec->size')
                 ->get();
