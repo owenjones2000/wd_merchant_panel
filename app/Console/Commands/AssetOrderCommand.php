@@ -78,10 +78,10 @@ class AssetOrderCommand extends Command
                         }
                     }
 
-                    $asset->delete();
+                    // $asset->delete();
                     Log::info('delete' . $asset['id']);
-                    dump('delete');
-                    dump($asset->toArray());
+                    // dump('delete');
+                    dump($asset['id']);
                 }
             }
             Log::info('order end');
