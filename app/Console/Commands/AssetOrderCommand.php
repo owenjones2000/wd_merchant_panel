@@ -18,7 +18,7 @@ class AssetOrderCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'command:asset {action=order}';
+    protected $signature = 'command:asset {action=order} {id?}';
 
     /**
      * The console command description.
@@ -46,11 +46,17 @@ class AssetOrderCommand extends Command
     {
         //
         $action = $this->argument('action');
+        $id = $this->argument('id');
         if ($action == 'order') {
             Log::info('order start');
+            // $assets = Asset::whereNull('ad_id')
+            //     ->get();
             $assets = Asset::whereNull('ad_id')
-                // ->whereNull('spec->size')
                 ->get();
+            if ($id) {
+                $assets = Asset::where('id', '<=', $id)
+                    ->get();  
+            }
             foreach ($assets as $key => $asset) {
 
                 if (strpos($asset->url, 'mp4') || strpos($asset->url, 'jpg') || strpos($asset->url, 'png')) {
